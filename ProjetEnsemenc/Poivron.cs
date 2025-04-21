@@ -1,0 +1,45 @@
+public abstract class Poivron : PlanteAnnuelle
+{
+    public Poivron() : base() // Selon caractéristiques du poivron rouge
+    {
+        this.SaisondeSemis = Hiver;
+        this.SaisondeRecolte = Ete;
+        this.TerrainPref = Terre;
+        this.Espacement = 1;
+        this.Comestible = true;
+        this.QuotaCroissance = 15;
+        this.FrequenceRecolte = 4;
+        this.Taille = 1;
+        this.TailleMax = 3;
+        this.TempsCroissance = 2;
+        this.BesoinEau = 10;
+        this.SeuilHumidite = 80;
+        this.NiveauHumidite = 80;
+        this.SeuilLuminosite = 90;
+        this.NiveauLuminosite = 90;
+        this.TemperatureCible = new List<int> { 20, 28 };
+        this.NiveauTemperature = //Insérer Température Potager
+        this.MaladiesPotentielles = new List<Maladie> { Mildiou, Oidium }
+        this.ProbaMaladies = new int[] { 35, 25 };
+        this.Sante = 100;
+        this.QteProduite = 6;
+
+        if (TerrainPlant == TerrainPref)
+        {
+            this.ScoreTerrain = 100;
+        }
+        else if (TerrainPlant == Sable)
+        {
+            this.ScoreTerrain = 90;
+        }
+        else if (TerrainPlant == Calcaire)
+        {
+            this.ScoreTerrain = 60;
+        }
+        else
+            this.ScoreTerrain = 20;
+
+        // Il restera à initialiser les coordonnées
+
+    }
+}
