@@ -1,12 +1,13 @@
-public abstract class Oignon : PlanteBisannuelle
+public abstract class Oignon : PlanteAnnuelle
 {
-    public Oignon() : base()
+    public Oignon(Potager pot) : base(pot)
     {
         this.SaisondeSemis = Automne;
-        this.TerrainPref = Terre;
+        this.SaisondeRecolte = Ete;
         this.Espacement = 0;
         this.Comestible = true;
         this.QuotaCroissance = 20;
+        this.NbRecolte = 1;
         this.Taille = 1;
         this.TailleMax = 2;
         this.TempsCroissance = 3;
@@ -16,22 +17,22 @@ public abstract class Oignon : PlanteBisannuelle
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 5, 38 };
-        this.NiveauTemperature = //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou }
+        this.NiveauTemperature; //Insérer Température Potager
+        this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 20 };
         this.Sante = 100;
         this.QteProduite = 1;
 
-        if (TerrainPlant == TerrainPref)
+        if (TerrainPlant == "Terre")
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == Argile)
+        else if (TerrainPlant == "Argile")
         {
             this.ScoreTerrain = 75;
         }
         else
-            this.ScoreTerrain = 0;
+            this.ScoreTerrain = 0; // A corriger
 
         // Il restera à initialiser les coordonnées
 

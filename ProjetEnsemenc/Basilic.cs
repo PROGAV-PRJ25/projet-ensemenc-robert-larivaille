@@ -1,14 +1,13 @@
 public abstract class Basilic : PlanteAnnuelle
 {
-    public Basilic() : base()
+    public Basilic(Potager pot) : base(pot)
     {
         this.SaisondeSemis = Printemps;
         this.SaisondeRecolte = Ete;
-        this.TerrainPref = Terre;
         this.Espacement = 0;
         this.Comestible = true;
         this.QuotaCroissance = 18;
-        this.FrequenceRecolte = 3;
+        this.NbRecolte = 3;
         this.Taille = 1;
         this.TailleMax = 2;
         this.TempsCroissance = 3;
@@ -18,21 +17,21 @@ public abstract class Basilic : PlanteAnnuelle
         this.SeuilLuminosite = 85;
         this.NiveauLuminosite = 85;
         this.TemperatureCible = new List<int> { 20, 25 };
-        this.NiveauTemperature = //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Fusariose, Mildiou, Oidium }
+        this.NiveauTemperature; //Insérer Température Potager
+        this.MaladiesPotentielles = new List<Maladie> { Fusariose, Mildiou, Oidium };
         this.ProbaMaladies = new int[] { 35, 10, 20 };
         this.Sante = 100;
         this.QteProduite = 20;
 
-        if (TerrainPlant == TerrainPref)
+        if (TerrainPlant == "Terre")
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == Sable)
+        else if (TerrainPlant == "Sable")
         {
             this.ScoreTerrain = 85;
         }
-        else if (TerrainPlant == Calcaire)
+        else if (TerrainPlant == "Calcaire")
         {
             this.ScoreTerrain = 75;
         }
