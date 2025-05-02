@@ -25,7 +25,7 @@ public abstract class Plante
     public int QteProduite { get; set; } //Qté récupérée par récolte
     public int NbRecolte { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
     public int ScoreCondition { get; set; }
-    public int[] ScoreTerrain { get; set; }
+    public int ScoreTerrain { get; set; }
 
     // Faire en sorte que les objets et animaux sachent sur quelle plante ils sont plutôt
     // public List<Animaux> AnimauxPresents { get; set; }
