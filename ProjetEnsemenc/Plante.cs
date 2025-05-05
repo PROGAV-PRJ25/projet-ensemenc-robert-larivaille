@@ -26,7 +26,7 @@ public abstract class Plante
     public int FrequenceRecolte { get; set; }
     public int ScoreCondition { get; set; }
     public int[] ScoreTerrain { get; set; }
-    public List<Animaux> AnimauxPresents { get; set; }
+    public List<Animaux> AnimauxPresents { get; set; } // utiliser liste animaux potager comparer coordonnées
     public List<Achats> ObjetsPresents { get; set; }
 
     public int CoorX { get; set; }
