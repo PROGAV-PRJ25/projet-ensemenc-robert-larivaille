@@ -66,11 +66,6 @@ public abstract class Plante
         CoorY = -1;
     }
 
-    public void EstMalade(Maladie maladie)
-    {
-        Sante -= 5; //Ajouter criticité ?
-    }
-
     public void AmelioreSante()
     {
         Sante += 5;
