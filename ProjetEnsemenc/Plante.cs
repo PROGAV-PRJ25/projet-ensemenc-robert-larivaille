@@ -55,22 +55,9 @@ public abstract class Plante
         this.Pot = pot;
     }
 
-    // Pour la méthode est Mangé -> utiliser if (instance is Classe)
-    public void EstDetruit(Animaux animal)
-    {
-        if (animal is AnimauxDestructeurs)
-        {
-            CoorX = -1;
-            CoorY = -1;
-        }
-    }
-
     public void EstMange(Animaux animal)
     {
-        if (animal is AnimauxMangeurs)
-        {
-            Sante -= 5;
-        }
+        Sante -= 5;
     }
 
     public void EstMorte()
@@ -81,10 +68,17 @@ public abstract class Plante
 
     public void EstMalade(Maladie maladie)
     {
-        if (maladie is Maladie)
-        {
-            Sante -= 5; //Ajouter criticité ?
-        }
+        Sante -= 5; //Ajouter criticité ?
+    }
+
+    public void AmelioreSante()
+    {
+        ScoreTerrain += 5;
+    }
+
+    public void AmelioreTerrain()
+    {
+        Sante += 5;
     }
     public int CalculerScoreCondition()
     {
