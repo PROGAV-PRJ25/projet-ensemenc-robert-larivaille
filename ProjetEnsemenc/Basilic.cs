@@ -41,4 +41,12 @@ public abstract class Basilic : PlanteAnnuelle
         // Il restera à initialiser les coordonnées
 
     }
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Basilic : Taille :{Taille}, Santé {Sante}";
+
+        return message;
+    }
 }

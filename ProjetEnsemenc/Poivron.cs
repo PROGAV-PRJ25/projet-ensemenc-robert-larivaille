@@ -41,4 +41,13 @@ public abstract class Poivron : PlanteAnnuelle
         // Il restera à initialiser les coordonnées
 
     }
+
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Poivron : Taille :{Taille}, Santé {Sante}";
+
+        return message;
+    }
 }

@@ -93,7 +93,7 @@ public abstract class Plante
         int scoreLum;
 
         // Gestion du respect des conditions d'humidité
-        if (NiveauHumidite = SeuilHumidite)
+        if (NiveauHumidite == SeuilHumidite)
         {
             scoreEau = 100;
         }
@@ -104,7 +104,7 @@ public abstract class Plante
         }
 
         // Gestion du respect des conditions de luminosité
-        if (NiveauLuminosite = SeuilLuminosite)
+        if (NiveauLuminosite == SeuilLuminosite)
         {
             scoreLum = 100;
         }
@@ -115,8 +115,8 @@ public abstract class Plante
         }
 
         // Gestion du respect des conditions de température
-        int tempCible = (TemperatureCible(1) + TemperatureCible(0)) / 2; //On prend le milieu de la zone de température comme référentiel
-        if (NiveauTemperature = tempCible)
+        int tempCible = (TemperatureCible[1] + TemperatureCible[0]) / 2; //On prend le milieu de la zone de température comme référentiel
+        if (NiveauTemperature == tempCible)
         {
             scoreTemp = 100;
         }
@@ -146,12 +146,12 @@ public abstract class Plante
     public override string ToString()
     {
         string message;
-        message = $"Statuts {Plante} : Taille :{Taille}, Santé {Sante}";
+        message = $"Statuts Plante : Taille :{Taille}, Santé {Sante}";
         if (CalculerScoreCondition() < 250)
         {
             message += "-- Mauvaises conditions - Perte de production --";
         }
-        if ((CoorX = -1) && (CoorY = -1))
+        if ((CoorX == -1) && (CoorY == -1))
         {
             message = "-- Plante Morte --";
         }

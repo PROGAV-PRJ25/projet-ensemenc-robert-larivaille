@@ -42,4 +42,13 @@ public abstract class Thym : PlanteVivace
         // Il restera à initialiser les coordonnées
 
     }
+
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Thym : Taille :{Taille}, Santé {Sante}";
+
+        return message;
+    }
 }

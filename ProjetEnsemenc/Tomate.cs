@@ -41,4 +41,13 @@ public abstract class Tomate : PlanteAnnuelle
         // Il restera à initialiser les coordonnées
 
     }
+
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Tomate : Taille :{Taille}, Santé {Sante}";
+
+        return message;
+    }
 }
