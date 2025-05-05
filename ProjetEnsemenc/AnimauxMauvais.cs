@@ -8,4 +8,5 @@ public abstract class AnimauxMauvais : Animaux
     {
         Urgence=urgence;
     }
+
 }

@@ -5,4 +5,8 @@ public class Chien : AnimauxBons
         this.Nom="Chien";
     }
 
+    public override void Effet(Plante plante)
+    {
+        // Le chien ne fait rien sur la plante
+    }
 }

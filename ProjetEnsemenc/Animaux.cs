@@ -24,9 +24,9 @@ public abstract class Animaux
         Predateurs = new List<string>();
     }
 
-    public void EstMort()
+    public void Disparait()
     {
-        X = -1; // Si l'animal est mort on passe ses coordonnées à -1
+        X = -1; // Si l'animal est mort ou disparait on passe ses coordonnées à -1
         Y = -1;
     }
 
@@ -42,7 +42,7 @@ public abstract class Animaux
                     {
                         if (animal.Nom == predateur)
                         {
-                            EstMort();
+                            Disparait();
                         }
                     }
                 }
@@ -81,5 +81,6 @@ public abstract class Animaux
         }
     }
 
-
+    public abstract void Effet(Plante plante)
+    {}
 }

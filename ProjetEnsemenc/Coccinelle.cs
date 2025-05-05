@@ -4,4 +4,9 @@ public class Coccinelle : AnimauxBons
     {
         this.Nom="Coccinelle" ;
     }
+
+    public override void Effet(Plante plante)
+    {
+        // Les coccinelles ne font rien sur la plante, elles chassent les pucerons
+    }
 }

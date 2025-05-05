@@ -6,4 +6,9 @@ public abstract class AnimauxMangeurs : AnimauxMauvais
     {
         PlantesManges = new List<Plante>();
     }
+
+    public override void Effet(Plante plante)
+    {
+        plante.estMange();
+    }
 }

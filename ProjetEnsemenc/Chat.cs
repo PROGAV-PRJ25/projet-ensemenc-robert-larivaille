@@ -4,4 +4,14 @@ public class Chat : AnimauxDestructeurs
     {
         this.Nom="Chat";
     }
+
+    public override void Effet(Plante plante)
+    {
+        if (plante.Taille==1)
+        {
+            plante.estMorte(); //Le chat écrase les petites plantes
+        }
+    }
+
+   
 }
