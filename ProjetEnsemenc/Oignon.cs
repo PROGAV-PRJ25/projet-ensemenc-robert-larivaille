@@ -17,7 +17,7 @@ public abstract class Oignon : PlanteBisannuelle
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 5, 38 };
         this.NiveauTemperature = //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou }
+        this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 20 };
         this.Sante = 100;
         this.QteProduite = 1;

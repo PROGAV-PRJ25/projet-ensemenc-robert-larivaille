@@ -25,7 +25,7 @@ public abstract class Plante
     public int QteProduite { get; set; }
     public int FrequenceRecolte { get; set; }
     public int ScoreCondition { get; set; }
-    public int[] ScoreTerrain { get; set; }
+    public int ScoreTerrain { get; set; }
     public List<Animaux> AnimauxPresents { get; set; }
     public List<Achats> ObjetsPresents { get; set; }
 

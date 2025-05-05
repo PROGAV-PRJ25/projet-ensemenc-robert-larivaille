@@ -20,7 +20,7 @@ public abstract class Aubergine : PlanteVivace
         this.NiveauLuminosite = 80;
         this.TemperatureCible = new List<int> { 20, 28 };
         this.NiveauTemperature = //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou }
+        this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 30 };
         this.Sante = 100;
         this.QteProduite = 2;
