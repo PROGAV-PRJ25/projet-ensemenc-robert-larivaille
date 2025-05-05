@@ -18,7 +18,7 @@ public abstract class Roquette : PlanteAnnuelle
         this.NiveauLuminosite = 70;
         this.TemperatureCible = new List<int> { 10, 20 };
         this.NiveauTemperature; //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Altises, Mildiou };
+        this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 30, 15 };
         this.Sante = 100;
         this.QteProduite = 10;

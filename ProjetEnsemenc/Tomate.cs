@@ -18,7 +18,7 @@ public abstract class Tomate : PlanteAnnuelle
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 15, 30 };
         this.NiveauTemperature; //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou, Oidiou };
+        this.MaladiesPotentielles = new List<Maladie> { Mildiou, Oidium };
         this.ProbaMaladies = new int[] { 50, 20 };
         this.Sante = 100;
         this.QteProduite = 30;

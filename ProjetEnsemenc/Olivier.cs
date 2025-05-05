@@ -19,7 +19,7 @@ public abstract class Olivier : PlanteVivace
         this.NiveauLuminosite = 85;
         this.TemperatureCible = new List<int> { 20, 30 };
         this.NiveauTemperature; //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { };
+        this.MaladiesPotentielles = new List<Maladie> { Champignon };
         this.ProbaMaladies = new int[] { 40 };
         this.Sante = 100;
         this.QteProduite = 5000; //5000 olives par an
