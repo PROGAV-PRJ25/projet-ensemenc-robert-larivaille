@@ -73,12 +73,12 @@ public abstract class Plante
 
     public void AmelioreSante()
     {
-        ScoreTerrain += 5;
+        Sante += 5;
     }
 
     public void AmelioreTerrain()
     {
-        Sante += 5;
+        ScoreTerrain += 5;
     }
     public int CalculerScoreCondition()
     {
