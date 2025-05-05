@@ -1,8 +1,10 @@
 public abstract class PlanteAnnuelle : Plante
 {
-    public Saison SaisondeRecolte { get; set; }
-    public PlanteAnnuelle() : base()
+    public PlanteAnnuelle(Potager pot) : base(pot)
     {
+        this.CoorX = CoorX;
+        this.CoorY = CoorY;
         this.EsperanceDeVie = 12;
+
     }
 }

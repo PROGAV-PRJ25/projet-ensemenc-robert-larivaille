@@ -1,14 +1,14 @@
 public abstract class Thym : PlanteVivace
 {
-    public Thym() : base()
+    public Thym(Potager pot) : base(pot)
     {
         this.SaisondeSemis = Printemps;
-        this.TerrainPref = Calcaire;
+        this.SaisondeRecolte = Ete;
         this.Espacement = 1;
         this.Comestible = true;
         this.QuotaCroissance = 30;
         this.EsperanceDeVie = 44;
-        this.FrequenceRecolte = 5;
+        this.NbRecolte = 2;
         this.Taille = 1;
         this.TailleMax = 2;
         this.TempsCroissance = 3;
@@ -18,21 +18,21 @@ public abstract class Thym : PlanteVivace
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 15, 25 };
-        this.NiveauTemperature = //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Oidium }
+        this.NiveauTemperature; //Insérer Température Potager
+        this.MaladiesPotentielles = new List<Maladie> { Oidium };
         this.ProbaMaladies = new int[] { 15 };
         this.Sante = 100;
         this.QteProduite = 20;
 
-        if (TerrainPlant == TerrainPref)
+        if (TerrainPlant == "Calcaire")
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == Sable)
+        else if (TerrainPlant == "Sable")
         {
             this.ScoreTerrain = 90;
         }
-        else if (TerrainPlant == Terre)
+        else if (TerrainPlant == "Terre")
         {
             this.ScoreTerrain = 80;
         }

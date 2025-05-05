@@ -1,6 +1,6 @@
 public abstract class PlanteVivace : Plante
 {
-    public PlanteVivace() : base()
+    public PlanteVivace(Potager pot) : base(pot)
     {
 
     }
