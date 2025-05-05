@@ -78,14 +78,6 @@ public abstract class Plante
         CoorX = -1;
         CoorY = -1;
     }
-
-    public void EstMalade(Maladie maladie)
-    {
-        if (maladie is Maladie)
-        {
-            Sante -= 5; //Ajouter criticité ?
-        }
-    }
     public int CalculerScoreCondition()
     {
         int scoreEau;
@@ -93,7 +85,7 @@ public abstract class Plante
         int scoreLum;
 
         // Gestion du respect des conditions d'humidité
-        if (NiveauHumidite = SeuilHumidite)
+        if (NiveauHumidite == SeuilHumidite)
         {
             scoreEau = 100;
         }
@@ -104,7 +96,7 @@ public abstract class Plante
         }
 
         // Gestion du respect des conditions de luminosité
-        if (NiveauLuminosite = SeuilLuminosite)
+        if (NiveauLuminosite == SeuilLuminosite)
         {
             scoreLum = 100;
         }
@@ -116,7 +108,7 @@ public abstract class Plante
 
         // Gestion du respect des conditions de température
         int tempCible = (TemperatureCible(1) + TemperatureCible(0)) / 2; //On prend le milieu de la zone de température comme référentiel
-        if (NiveauTemperature = tempCible)
+        if (NiveauTemperature == tempCible)
         {
             scoreTemp = 100;
         }
@@ -151,7 +143,7 @@ public abstract class Plante
         {
             message += "-- Mauvaises conditions - Perte de production --";
         }
-        if ((CoorX = -1) && (CoorY = -1))
+        if ((CoorX == -1) && (CoorY == -1))
         {
             message = "-- Plante Morte --";
         }
