@@ -2,6 +2,14 @@ public abstract class Plante
 {
     public string Espece { get; set; }
     public Potager Pot;
+    public enum Terrain
+    {
+        Argile,
+        Sable,
+        Terre,
+        Calcaire,
+    }
+    public Terrain TerrainPlant { get; set; }
     public Saisons SaisondeSemis { get; set; }
     public Saisons SaisondeRecolte { get; set; }
     public int Espacement { get; set; }
@@ -51,12 +59,13 @@ public abstract class Plante
         }
     }
 
-    public Plante(int x, int y, Potager pot)
+    public Plante(int x, int y, Potager pot, Terrain terrain)
     {
         Pot = pot;
         CoorX = x;
         CoorY = y;
         NiveauTemperature = Pot.Temperature;
+        TerrainPlant = terrain;
     }
 
     public void EstMange()

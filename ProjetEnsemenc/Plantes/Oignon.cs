@@ -23,11 +23,11 @@ public abstract class Oignon : PlanteAnnuelle
         this.Sante = 100;
         this.QteProduite = 1;
 
-        if (TerrainPlant == "Terre")
+        if (TerrainPlant == Terrain.Terre)
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == "Argile")
+        else if (TerrainPlant == Terrain.Argile)
         {
             this.ScoreTerrain = 75;
         }

@@ -4,7 +4,6 @@ public abstract class Artichaut : PlanteVivace
     {
         this.Espece = "Artichaut";
         this.SaisondeSemis = Printemps;
-        this.TerrainPref = Terre;
         this.Espacement = 3;
         this.Comestible = true;
         this.QuotaCroissance = 10;
@@ -24,15 +23,15 @@ public abstract class Artichaut : PlanteVivace
         this.QteProduite = 5;
         this.NbRecolte = 2;
 
-        if (TerrainPlant == TerrainPref)
+        if (TerrainPlant == Terrain.Terre)
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == Argile)
+        else if (TerrainPlant == Terrain.Argile)
         {
             this.ScoreTerrain = 90;
         }
-        else if (TerrainPlant == Sable)
+        else if (TerrainPlant == Terrain.Sable)
         {
             this.ScoreTerrain = 80;
         }

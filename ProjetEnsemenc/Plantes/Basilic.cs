@@ -27,15 +27,15 @@ public abstract class Basilic : PlanteAnnuelle
         this.Sante = 100;
         this.QteProduite = 20;
 
-        if (TerrainPlant == "Terre")
+        if (TerrainPlant == Terrain.Terre)
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == "Sable")
+        else if (TerrainPlant == Terrain.Sable)
         {
             this.ScoreTerrain = 85;
         }
-        else if (TerrainPlant == "Calcaire")
+        else if (TerrainPlant == Terrain.Calcaire)
         {
             this.ScoreTerrain = 75;
         }

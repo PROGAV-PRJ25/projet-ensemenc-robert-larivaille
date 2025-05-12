@@ -24,15 +24,15 @@ public abstract class Thym : PlanteVivace
         this.Sante = 100;
         this.QteProduite = 20;
 
-        if (TerrainPlant == "Calcaire")
+        if (TerrainPlant == Terrain.Calcaire)
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == "Sable")
+        else if (TerrainPlant == Terrain.Sable)
         {
             this.ScoreTerrain = 90;
         }
-        else if (TerrainPlant == "Terre")
+        else if (TerrainPlant == Terrain.Terre)
         {
             this.ScoreTerrain = 80;
         }

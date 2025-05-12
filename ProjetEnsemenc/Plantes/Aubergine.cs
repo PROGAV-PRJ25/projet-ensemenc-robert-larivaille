@@ -24,15 +24,15 @@ public abstract class Aubergine : PlanteVivace
         this.Sante = 100;
         this.QteProduite = 2;
 
-        if (TerrainPlant == "Terre")
+        if (TerrainPlant == Terrain.Terre)
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == "Sable")
+        else if (TerrainPlant == Terrain.Sable)
         {
             this.ScoreTerrain = 70;
         }
-        else if (TerrainPlant == "Calcaire")
+        else if (TerrainPlant == Terrain.Calcaire)
         {
             this.ScoreTerrain = 60;
         }
