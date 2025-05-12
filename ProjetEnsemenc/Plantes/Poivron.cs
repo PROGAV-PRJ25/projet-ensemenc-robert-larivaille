@@ -23,7 +23,7 @@ public abstract class Poivron : PlanteAnnuelle
             new Mildiou("Mildiou"),
             new Oidium("Oidium")
         };
-        this.ProbaMaladies = new int[] { 35, 25 };
+        this.ProbaMaladies = new List<int> { 35, 25 };
         this.Sante = 100;
         this.QteProduite = 6;
 

@@ -20,7 +20,7 @@ public abstract class Thym : PlanteVivace
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 15, 25 };
         this.MaladiesPotentielles = new List<Maladie> { new Oidium("Oidium") };
-        this.ProbaMaladies = new int[] { 15 };
+        this.ProbaMaladies = new List<int> { 15 };
         this.Sante = 100;
         this.QteProduite = 20;
 

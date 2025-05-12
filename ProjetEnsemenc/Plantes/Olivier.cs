@@ -21,7 +21,7 @@ public abstract class Olivier : PlanteVivace
         this.NiveauLuminosite = 85;
         this.TemperatureCible = new List<int> { 20, 30 };
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
-        this.ProbaMaladies = new int[] { 40 };
+        this.ProbaMaladies = new List<int> { 40 };
         this.Sante = 100;
         this.QteProduite = 5000; //5000 olives par an
 

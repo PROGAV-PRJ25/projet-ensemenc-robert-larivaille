@@ -17,11 +17,11 @@ public abstract class Plante
     public int SeuilLuminosite { get; set; }
     public List<int> TemperatureCible { get; set; }
     public int NiveauTemperature { get; set; }  // Celle du potager par défaut 
-    public Maladie[] MaladiesPotentielles { get; set; }
-    public int[] ProbaMaladies { get; set; }
+    public List<Maladie> MaladiesPotentielles { get; set; }
+    public List<int> ProbaMaladies { get; set; }
     public int Sante { get; set; }  // à 100 par défaut
     public int EsperanceDeVie { get; set; } //En mois
-    public List<Maladie> estMaladeDe { get; set; } = new List<Maladie>();
+    public List<Maladie> EstMaladeDe { get; set; } = new List<Maladie>();
 
     public int QteProduite { get; set; } //Qté récupérée par récolte
     public int NbRecolte { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
