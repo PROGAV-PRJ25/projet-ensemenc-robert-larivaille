@@ -1,7 +1,9 @@
 public abstract class Olivier : PlanteVivace
 {
-    public Olivier(Potager pot) : base(pot)
+
+    public Olivier(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Olivier";
         this.SaisondeSemis = Automne;
         this.SaisondeRecolte = Automne;
         this.Espacement = 14; //7m entre chaque olivier
@@ -18,7 +20,6 @@ public abstract class Olivier : PlanteVivace
         this.SeuilLuminosite = 85;
         this.NiveauLuminosite = 85;
         this.TemperatureCible = new List<int> { 20, 30 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 40 };
         this.Sante = 100;
@@ -41,5 +42,13 @@ public abstract class Olivier : PlanteVivace
 
         // Il restera à initialiser les coordonnées
 
+    }
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Olivier : Taille :{Taille}, Santé {Sante}";
+
+        return message;
     }
 }

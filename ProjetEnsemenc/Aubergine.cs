@@ -1,15 +1,15 @@
 public abstract class Aubergine : PlanteVivace
 {
-    public Aubergine() : base()
+    public Aubergine(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Aubergine";
         this.SaisondeSemis = Printemps;
         this.SaisondeRecolte = Ete;
-        this.TerrainPref = Terre;
         this.Espacement = 1;
         this.Comestible = true;
         this.QuotaCroissance = 20;
         this.EsperanceDeVie = 40;
-        this.FrequenceRecolte = 1;
+        this.NbRecolte = 3;
         this.Taille = 1;
         this.TailleMax = 4;
         this.TempsCroissance = 3;
@@ -19,21 +19,20 @@ public abstract class Aubergine : PlanteVivace
         this.SeuilLuminosite = 80;
         this.NiveauLuminosite = 80;
         this.TemperatureCible = new List<int> { 20, 28 };
-        this.NiveauTemperature = //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 30 };
         this.Sante = 100;
         this.QteProduite = 2;
 
-        if (TerrainPlant == TerrainPref)
+        if (TerrainPlant == "Terre")
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == Sable)
+        else if (TerrainPlant == "Sable")
         {
             this.ScoreTerrain = 70;
         }
-        else if (TerrainPlant == Calcaire)
+        else if (TerrainPlant == "Calcaire")
         {
             this.ScoreTerrain = 60;
         }
@@ -42,5 +41,13 @@ public abstract class Aubergine : PlanteVivace
 
         // Il restera à initialiser les coordonnées
 
+    }
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Aubergine : Taille :{Taille}, Santé {Sante}";
+
+        return message;
     }
 }
