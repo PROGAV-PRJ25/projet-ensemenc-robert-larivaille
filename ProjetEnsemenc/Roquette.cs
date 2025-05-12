@@ -1,7 +1,8 @@
 public abstract class Roquette : PlanteAnnuelle
 {
-    public Roquette(Potager pot) : base(pot)
+    public Roquette(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Roquette";
         this.SaisondeSemis = Ete;
         this.SaisondeRecolte = Automne;
         this.Espacement = 0;
@@ -17,7 +18,6 @@ public abstract class Roquette : PlanteAnnuelle
         this.SeuilLuminosite = 70;
         this.NiveauLuminosite = 70;
         this.TemperatureCible = new List<int> { 10, 20 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 30, 15 };
         this.Sante = 100;
@@ -38,7 +38,7 @@ public abstract class Roquette : PlanteAnnuelle
         else
             this.ScoreTerrain = 50;
 
-        // Il restera à initialiser les coordonnées
+
 
     }
     public override string ToString()

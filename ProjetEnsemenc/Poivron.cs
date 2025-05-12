@@ -1,7 +1,8 @@
 public abstract class Poivron : PlanteAnnuelle
 {
-    public Poivron(Potager pot) : base(pot) // Selon caractéristiques du poivron rouge
+    public Poivron(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot) // Selon caractéristiques du poivron rouge
     {
+        this.Espece = "Poivron";
         this.SaisondeSemis = Hiver;
         this.SaisondeRecolte = Ete;
         this.Espacement = 1;
@@ -17,7 +18,6 @@ public abstract class Poivron : PlanteAnnuelle
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 20, 28 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Mildiou, Oidium };
         this.ProbaMaladies = new int[] { 35, 25 };
         this.Sante = 100;
