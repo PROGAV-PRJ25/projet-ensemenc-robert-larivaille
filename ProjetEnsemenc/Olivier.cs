@@ -1,14 +1,15 @@
 public abstract class Olivier : PlanteVivace
 {
-    public Olivier() : base()
+    public Olivier(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Olivier";
         this.SaisondeSemis = Automne;
-        this.TerrainPref = Terre;
+        this.SaisondeRecolte = Automne;
         this.Espacement = 14; //7m entre chaque olivier
         this.Comestible = true;
         this.QuotaCroissance = 8;
         this.EsperanceDeVie = 200; //50 ans d'espérance de vie
-        this.FrequenceRecolte = 12; // 1x par an
+        this.NbRecolte = 1; // 1x par an
         this.Taille = 1;
         this.TailleMax = 5;
         this.TempsCroissance = 12; //1 an pour passer à la taille supérieure
@@ -18,21 +19,20 @@ public abstract class Olivier : PlanteVivace
         this.SeuilLuminosite = 85;
         this.NiveauLuminosite = 85;
         this.TemperatureCible = new List<int> { 20, 30 };
-        this.NiveauTemperature = //Insérer Température Potager
-        this.MaladiesPotentielles = new List<Maladie> { Mouches }
+        this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 40 };
         this.Sante = 100;
         this.QteProduite = 5000; //5000 olives par an
 
-        if (TerrainPlant == TerrainPref)
+        if (TerrainPlant == "Terre")
         {
             this.ScoreTerrain = 100;
         }
-        else if (TerrainPlant == Calcaire)
+        else if (TerrainPlant == "Calcaire")
         {
             this.ScoreTerrain = 90;
         }
-        else if (TerrainPlant == Sable)
+        else if (TerrainPlant == "Sable")
         {
             this.ScoreTerrain = 80;
         }
@@ -41,5 +41,13 @@ public abstract class Olivier : PlanteVivace
 
         // Il restera à initialiser les coordonnées
 
+    }
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Olivier : Taille :{Taille}, Santé {Sante}";
+
+        return message;
     }
 }
