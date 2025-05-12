@@ -19,7 +19,7 @@ public abstract class Roquette : PlanteAnnuelle
         this.NiveauLuminosite = 70;
         this.TemperatureCible = new List<int> { 10, 20 };
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
-        this.ProbaMaladies = new int[] { 30, 15 };
+        this.ProbaMaladies = new List<int> { 30, 15 };
         this.Sante = 100;
         this.QteProduite = 10;
 

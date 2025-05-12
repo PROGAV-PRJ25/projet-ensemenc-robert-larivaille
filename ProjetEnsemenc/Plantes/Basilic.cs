@@ -23,7 +23,7 @@ public abstract class Basilic : PlanteAnnuelle
             new Fusariose("Fusariose"),
             new Mildiou("Mildiou"),
             new Oidium("Oidium") };
-        this.ProbaMaladies = new int[] { 35, 10, 20 };
+        this.ProbaMaladies = new List<int> { 35, 10, 20 };
         this.Sante = 100;
         this.QteProduite = 20;
 

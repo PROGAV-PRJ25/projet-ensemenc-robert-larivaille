@@ -20,7 +20,7 @@ public abstract class Aubergine : PlanteVivace
         this.NiveauLuminosite = 80;
         this.TemperatureCible = new List<int> { 20, 28 };
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
-        this.ProbaMaladies = new int[] { 30 };
+        this.ProbaMaladies = new List<int> { 30 };
         this.Sante = 100;
         this.QteProduite = 2;
 
