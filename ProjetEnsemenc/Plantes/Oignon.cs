@@ -37,13 +37,4 @@ public abstract class Oignon : PlanteAnnuelle
         // Il restera à initialiser les coordonnées
 
     }
-
-    public override string ToString()
-    {
-        string message = base.ToString();
-
-        message = $"Statuts Oignon : Taille :{Taille}, Santé {Sante}";
-
-        return message;
-    }
 }

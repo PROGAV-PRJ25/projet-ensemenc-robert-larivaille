@@ -147,7 +147,7 @@ public abstract class Plante
     public override string ToString()
     {
         string message;
-        message = $"Statuts Plante : Taille :{Taille}, Santé {Sante}";
+        message = $"Statuts {Espece} : Taille :{Taille}, Santé {Sante}";
         if (CalculerScoreCondition() < 250)
         {
             message += "-- Mauvaises conditions - Perte de production --";

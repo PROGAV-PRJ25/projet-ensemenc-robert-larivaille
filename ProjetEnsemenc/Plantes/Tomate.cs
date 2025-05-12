@@ -42,13 +42,4 @@ public abstract class Tomate : PlanteAnnuelle
         else
             this.ScoreTerrain = 50;
     }
-
-    public override string ToString()
-    {
-        string message = base.ToString();
-
-        message = $"Statuts Tomate : Taille :{Taille}, Santé {Sante}";
-
-        return message;
-    }
 }

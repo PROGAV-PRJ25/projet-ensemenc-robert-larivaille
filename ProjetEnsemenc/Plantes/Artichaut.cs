@@ -41,13 +41,5 @@ public abstract class Artichaut : PlanteVivace
 
         // Il restera à initialiser les coordonnées
     }
-    public override string ToString()
-    {
-        string message = base.ToString();
-
-        message = $"Statuts Artichaut : Taille :{Taille}, Santé {Sante}";
-
-        return message;
-    }
 
 }

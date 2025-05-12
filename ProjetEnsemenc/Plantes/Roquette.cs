@@ -41,12 +41,4 @@ public abstract class Roquette : PlanteAnnuelle
 
 
     }
-    public override string ToString()
-    {
-        string message = base.ToString();
-
-        message = $"Statuts Roquette : Taille :{Taille}, Santé {Sante}";
-
-        return message;
-    }
 }
