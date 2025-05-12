@@ -21,7 +21,7 @@ public abstract class Plante
     public int[] ProbaMaladies { get; set; }
     public int Sante { get; set; }  // à 100 par défaut
     public int EsperanceDeVie { get; set; } //En mois
-    public List<Maladie> estMaladeDe { get; set; }
+    public List<Maladie> estMaladeDe { get; set; } = new List<Maladie>();
 
     public int QteProduite { get; set; } //Qté récupérée par récolte
     public int NbRecolte { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
@@ -136,7 +136,14 @@ public abstract class Plante
         else if (CalculerScoreCondition() >= 350)
             QteProduite *= 2;
     }
-
+    public void AttraperMaladie(Maladie maladie)
+    {
+        if (MaladiesPotentielles.Contains(maladie) && !EstMaladeDe.Contains(maladie))
+        {
+            EstMaladeDe.Add(maladie);
+            Console.WriteLine($"{Espece} a attrapé {maladie.Nom} !");
+        }
+    }
     public override string ToString()
     {
         string message;

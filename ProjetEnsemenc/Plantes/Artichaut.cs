@@ -18,7 +18,7 @@ public abstract class Artichaut : PlanteVivace
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 15, 25 };
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou };
+        this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new int[] { 15, 10 };
         this.Sante = 100;
         this.QteProduite = 5;

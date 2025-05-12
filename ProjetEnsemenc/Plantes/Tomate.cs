@@ -18,7 +18,11 @@ public abstract class Tomate : PlanteAnnuelle
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 15, 30 };
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou, Oidium };
+        this.MaladiesPotentielles = new List<Maladie>
+        {
+            new Mildiou("Mildiou"),
+            new Oidium("Oidium")
+        };
         this.ProbaMaladies = new int[] { 50, 20 };
         this.Sante = 100;
         this.QteProduite = 30;

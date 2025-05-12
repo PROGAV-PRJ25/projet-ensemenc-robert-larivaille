@@ -18,7 +18,11 @@ public abstract class Basilic : PlanteAnnuelle
         this.SeuilLuminosite = 85;
         this.NiveauLuminosite = 85;
         this.TemperatureCible = new List<int> { 20, 25 };
-        this.MaladiesPotentielles = new List<Maladie> { Fusariose, Mildiou, Oidium };
+        this.MaladiesPotentielles = new List<Maladie>
+        {
+            new Fusariose("Fusariose"),
+            new Mildiou("Mildiou"),
+            new Oidium("Oidium") };
         this.ProbaMaladies = new int[] { 35, 10, 20 };
         this.Sante = 100;
         this.QteProduite = 20;

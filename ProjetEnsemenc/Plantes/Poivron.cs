@@ -18,7 +18,11 @@ public abstract class Poivron : PlanteAnnuelle
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 20, 28 };
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou, Oidium };
+        this.MaladiesPotentielles = new List<Maladie>
+        {
+            new Mildiou("Mildiou"),
+            new Oidium("Oidium")
+        };
         this.ProbaMaladies = new int[] { 35, 25 };
         this.Sante = 100;
         this.QteProduite = 6;

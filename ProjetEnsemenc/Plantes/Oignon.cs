@@ -18,7 +18,7 @@ public abstract class Oignon : PlanteAnnuelle
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 5, 38 };
-        this.MaladiesPotentielles = new List<Maladie> { Mildiou };
+        this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new int[] { 20 };
         this.Sante = 100;
         this.QteProduite = 1;
