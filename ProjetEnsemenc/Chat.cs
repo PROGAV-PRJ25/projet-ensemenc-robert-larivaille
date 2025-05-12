@@ -1,17 +1,17 @@
 public class Chat : AnimauxDestructeurs
 {
-    public Chat ( Potager pot) : base(  40, pot, -1, true )
+    public Chat(Potager pot) : base(40, pot, -1, true)
     {
-        this.Nom="Chat";
+        this.Nom = "Chat";
     }
 
     public override void Effet(Plante plante)
     {
-        if (plante.Taille==1)
+        if (plante.Taille == 1)
         {
-            plante.estMorte(); //Le chat écrase les petites plantes
+            plante.EstMorte(); //Le chat écrase les petites plantes
         }
     }
 
-   
+
 }

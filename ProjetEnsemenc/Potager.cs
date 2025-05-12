@@ -9,7 +9,7 @@ public class Potager
     public List<Graine> SacDeGraines { get; set; }
     public List<Recolte> Inventaire { get; set; }
 
-    public void Potager(int hauteur, int longueur, Saisons saison, int temperature)
+    public Potager(int hauteur, int longueur, Saisons saison, int temperature)
     {
         ListePlantes = new List<Plante>();
         ListeAnimaux = new List<Animaux>();

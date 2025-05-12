@@ -1,4 +1,4 @@
-public class Remede
+public abstract class Remede
 {
     public string Nom { get; set; }
     public List<string> AgitSur { get; set; }
@@ -7,8 +7,5 @@ public class Remede
         Nom = nom;
         AgitSur = new List<string>();
     }
-    public void Agir(Maladie maladie, Plante plante)
-    {
-
-    }
+    public abstract void Agir(Maladie maladie, Plante plante);
 }

@@ -15,7 +15,7 @@ public class Secheresse : Intemperie
                 animal.Disparait();
             }
         }
-        foreach (Plante plante in Pot.listePlantes)
+        foreach (Plante plante in Pot.ListePlantes)
         {
             plante.NiveauHumidite -= 10;
         }

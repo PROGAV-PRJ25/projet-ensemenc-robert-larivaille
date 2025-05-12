@@ -59,7 +59,7 @@ public abstract class Plante
         NiveauTemperature = Pot.Temperature;
     }
 
-    public void EstMange(Animaux animal)
+    public void EstMange()
     {
         Sante -= 5;
     }

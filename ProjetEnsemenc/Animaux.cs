@@ -34,7 +34,7 @@ public abstract class Animaux
     {
         if (Predateurs.Count != 0)
         {
-            foreach (Animaux animal in Pot.listeAnimaux)
+            foreach (Animaux animal in Pot.ListeAnimaux)
             {
                 if ((animal.X == X) && (animal.Y == Y))
                 {
@@ -81,6 +81,5 @@ public abstract class Animaux
         }
     }
 
-    public abstract void Effet(Plante plante)
-    {}
+    public abstract void Effet(Plante plante);
 }

@@ -4,7 +4,7 @@ public class RemedeOidium : Remede
     {
     }
 
-    public override void Agir(Plante plante, Maladie maladie)
+    public override void Agir(Maladie maladie, Plante plante)
     {
         if (maladie.Nom == "Oidium")
         {

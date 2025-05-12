@@ -1,5 +1,6 @@
 public abstract class Saisons
 {
+    public Potager Pot { get; set; }
     public string Nom { get; set; }
     public List<int> Luminosite { get; set; }
     public List<int> Temperature { get; set; }
@@ -11,18 +12,18 @@ public abstract class Saisons
         Temperature = new List<int>();
     }
 
-    public override void ChangerBesoinEau()
+    public void ChangerBesoinEau()
     {
         if ((Nom == "Hiver") || (Nom == "Automne"))
         {
-            foreach (Plante plante in Pot.listePlantes)
+            foreach (Plante plante in Pot.ListePlantes)
             {
                 plante.BesoinEau += 2;
             }
         }
         else
         {
-            foreach (Plante plante in Pot.listePlantes)
+            foreach (Plante plante in Pot.ListePlantes)
             {
                 plante.BesoinEau -= 2;
             }
