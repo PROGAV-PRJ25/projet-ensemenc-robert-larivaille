@@ -1,7 +1,8 @@
 public abstract class Oignon : PlanteAnnuelle
 {
-    public Oignon(Potager pot) : base(pot)
+    public Oignon(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Oignon";
         this.SaisondeSemis = Automne;
         this.SaisondeRecolte = Ete;
         this.Espacement = 0;
@@ -17,7 +18,6 @@ public abstract class Oignon : PlanteAnnuelle
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 5, 38 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 20 };
         this.Sante = 100;

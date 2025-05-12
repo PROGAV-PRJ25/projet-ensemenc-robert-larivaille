@@ -1,5 +1,6 @@
 public abstract class Plante
 {
+    public string Espece { get; set; }
     public Potager Pot;
     public Saison SaisondeSemis { get; set; }
     public Saison SaisondeRecolte { get; set; }
@@ -10,9 +11,9 @@ public abstract class Plante
     public int TailleMax { get; set; }
     public int TempsCroissance { get; set; }
     public int BesoinEau { get; set; }
-    public int NiveauHumidite { get; set; } //=seuil Humidité à la planta°
+    public int NiveauHumidite { get; set; } // Optimal à la plantation
     public int SeuilHumidite { get; set; }
-    public int NiveauLuminosite { get; set; } //=seuil Luminosité à la planta°
+    public int NiveauLuminosite { get; set; } //Optimal à la planta°
     public int SeuilLuminosite { get; set; }
     public List<int> TemperatureCible { get; set; }
     public int NiveauTemperature { get; set; }  // Celle du potager par défaut 
@@ -50,9 +51,12 @@ public abstract class Plante
         }
     }
 
-    public Plante(Potager pot)
+    public Plante(int x, int y, Potager pot)
     {
-        this.Pot = pot;
+        Pot = pot;
+        CoorX = x;
+        CoorY = y;
+        NiveauTemperature = Potager.Temperature;
     }
 
     public void EstMange(Animaux animal)
