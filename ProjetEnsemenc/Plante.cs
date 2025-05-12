@@ -108,7 +108,8 @@ public abstract class Plante
         }
 
         // Gestion du respect des conditions de température
-        int tempCible = (TemperatureCible[1] + TemperatureCible[0]) / 2; //On prend le milieu de la zone de température comme référentiel
+      
+        int tempCible = (TemperatureCible(1) + TemperatureCible(0)) / 2; //On prend le milieu de la zone de température comme référentiel
         if (NiveauTemperature == tempCible)
         {
             scoreTemp = 100;
