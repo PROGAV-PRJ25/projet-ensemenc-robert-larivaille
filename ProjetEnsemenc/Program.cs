@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿Aubergine a1 = new Aubergine();
+Console.WriteLine(a1);
+a1.EstMorte();
+Console.WriteLine(a1);
