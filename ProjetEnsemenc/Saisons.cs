@@ -3,14 +3,12 @@ public abstract class Saisons
     public string Nom { get; set; }
     public List<int> Luminosite { get; set; }
     public List<int> Temperature { get; set; }
-    public List<int> Humidite { get; set; }
 
     public Saisons(string nom)
     {
         Nom = nom;
         Luminosite = new List<int>();
         Temperature = new List<int>();
-        Humidite = new List<int>();
     }
 
     public override void ChangerBesoinEau()

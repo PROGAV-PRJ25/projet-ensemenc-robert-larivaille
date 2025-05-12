@@ -6,8 +6,6 @@ public class Ete : Saisons
         this.Temperature.Add(35);
         this.Luminosite.Add(90);
         this.Luminosite.Add(100);
-        this.Humidite.Add(40);
-        this.Humidite.Add(60);
     }
 
 }

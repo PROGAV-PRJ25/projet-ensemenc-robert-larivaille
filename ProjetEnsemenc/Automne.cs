@@ -6,8 +6,6 @@ public class Automne : Saisons
         this.Temperature.Add(20);
         this.Luminosite.Add(50);
         this.Luminosite.Add(75);
-        this.Humidite.Add(60);
-        this.Humidite.Add(80);
     }
 
 }

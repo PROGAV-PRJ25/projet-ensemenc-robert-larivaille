@@ -6,8 +6,6 @@ public class Hiver : Saisons
         this.Temperature.Add(10);
         this.Luminosite.Add(20);
         this.Luminosite.Add(40);
-        this.Humidite.Add(80);
-        this.Humidite.Add(100);
     }
 
 
