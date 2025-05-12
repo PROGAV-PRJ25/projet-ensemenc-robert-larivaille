@@ -1,5 +1,6 @@
 public abstract class Olivier : PlanteVivace
 {
+
     public Olivier(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
         this.Espece = "Olivier";
