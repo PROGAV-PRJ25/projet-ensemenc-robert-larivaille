@@ -1,0 +1,5 @@
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.AssemblyInfoInputs.cache
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.AssemblyInfo.cs
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.csproj.CoreCompileInputs.cache
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.sourcelink.json
