@@ -1,7 +1,8 @@
 public abstract class Basilic : PlanteAnnuelle
 {
-    public Basilic(Potager pot) : base(pot)
+    public Basilic(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Basilic";
         this.SaisondeSemis = Printemps;
         this.SaisondeRecolte = Ete;
         this.Espacement = 0;
@@ -17,7 +18,6 @@ public abstract class Basilic : PlanteAnnuelle
         this.SeuilLuminosite = 85;
         this.NiveauLuminosite = 85;
         this.TemperatureCible = new List<int> { 20, 25 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Fusariose, Mildiou, Oidium };
         this.ProbaMaladies = new int[] { 35, 10, 20 };
         this.Sante = 100;

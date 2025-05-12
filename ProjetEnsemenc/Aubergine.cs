@@ -1,7 +1,8 @@
 public abstract class Aubergine : PlanteVivace
 {
-    public Aubergine(Potager pot) : base(pot)
+    public Aubergine(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Aubergine";
         this.SaisondeSemis = Printemps;
         this.SaisondeRecolte = Ete;
         this.Espacement = 1;
@@ -18,7 +19,6 @@ public abstract class Aubergine : PlanteVivace
         this.SeuilLuminosite = 80;
         this.NiveauLuminosite = 80;
         this.TemperatureCible = new List<int> { 20, 28 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Mildiou };
         this.ProbaMaladies = new int[] { 30 };
         this.Sante = 100;
