@@ -2,8 +2,8 @@ public abstract class Plante
 {
     public string Espece { get; set; }
     public Potager Pot;
-    public Saison SaisondeSemis { get; set; }
-    public Saison SaisondeRecolte { get; set; }
+    public Saisons SaisondeSemis { get; set; }
+    public Saisons SaisondeRecolte { get; set; }
     public int Espacement { get; set; }
     public bool Comestible { get; set; }
     public int QuotaCroissance { get; set; }
@@ -56,7 +56,7 @@ public abstract class Plante
         Pot = pot;
         CoorX = x;
         CoorY = y;
-        NiveauTemperature = Potager.Temperature;
+        NiveauTemperature = Pot.Temperature;
     }
 
     public void EstMange(Animaux animal)
@@ -108,8 +108,8 @@ public abstract class Plante
         }
 
         // Gestion du respect des conditions de température
-      
-        int tempCible = (TemperatureCible(1) + TemperatureCible(0)) / 2; //On prend le milieu de la zone de température comme référentiel
+
+        int tempCible = (TemperatureCible[1] + TemperatureCible[0]) / 2; //On prend le milieu de la zone de température comme référentiel
         if (NiveauTemperature == tempCible)
         {
             scoreTemp = 100;
