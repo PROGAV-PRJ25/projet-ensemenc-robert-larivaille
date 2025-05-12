@@ -1,5 +1,6 @@
 public abstract class Plante
 {
+    public string Espece { get; set; }
     public Potager Pot;
     public Saison SaisondeSemis { get; set; }
     public Saison SaisondeRecolte { get; set; }
@@ -10,9 +11,9 @@ public abstract class Plante
     public int TailleMax { get; set; }
     public int TempsCroissance { get; set; }
     public int BesoinEau { get; set; }
-    public int NiveauHumidite { get; set; } //=seuil Humidité à la planta°
+    public int NiveauHumidite { get; set; } // Optimal à la plantation
     public int SeuilHumidite { get; set; }
-    public int NiveauLuminosite { get; set; } //=seuil Luminosité à la planta°
+    public int NiveauLuminosite { get; set; } //Optimal à la planta°
     public int SeuilLuminosite { get; set; }
     public List<int> TemperatureCible { get; set; }
     public int NiveauTemperature { get; set; }  // Celle du potager par défaut 
@@ -50,33 +51,33 @@ public abstract class Plante
         }
     }
 
-    public Plante(Potager pot)
+    public Plante(int x, int y, Potager pot)
     {
-        this.Pot = pot;
-    }
-
-    // Pour la méthode est Mangé -> utiliser if (instance is Classe)
-    public void EstDetruit(Animaux animal)
-    {
-        if (animal is AnimauxDestructeurs)
-        {
-            CoorX = -1;
-            CoorY = -1;
-        }
+        Pot = pot;
+        CoorX = x;
+        CoorY = y;
+        NiveauTemperature = Potager.Temperature;
     }
 
     public void EstMange(Animaux animal)
     {
-        if (animal is AnimauxMangeurs)
-        {
-            Sante -= 5;
-        }
+        Sante -= 5;
     }
 
     public void EstMorte()
     {
         CoorX = -1;
         CoorY = -1;
+    }
+
+    public void AmelioreSante()
+    {
+        Sante += 5;
+    }
+
+    public void AmelioreTerrain()
+    {
+        ScoreTerrain += 5;
     }
     public int CalculerScoreCondition()
     {
@@ -107,6 +108,7 @@ public abstract class Plante
         }
 
         // Gestion du respect des conditions de température
+      
         int tempCible = (TemperatureCible(1) + TemperatureCible(0)) / 2; //On prend le milieu de la zone de température comme référentiel
         if (NiveauTemperature == tempCible)
         {
@@ -138,7 +140,7 @@ public abstract class Plante
     public override string ToString()
     {
         string message;
-        message = $"Statuts {Plante} : Taille :{Taille}, Santé {Sante}";
+        message = $"Statuts Plante : Taille :{Taille}, Santé {Sante}";
         if (CalculerScoreCondition() < 250)
         {
             message += "-- Mauvaises conditions - Perte de production --";

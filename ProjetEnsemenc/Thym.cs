@@ -1,7 +1,8 @@
 public abstract class Thym : PlanteVivace
 {
-    public Thym(Potager pot) : base(pot)
+    public Thym(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Thym";
         this.SaisondeSemis = Printemps;
         this.SaisondeRecolte = Ete;
         this.Espacement = 1;
@@ -18,7 +19,6 @@ public abstract class Thym : PlanteVivace
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 15, 25 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Oidium };
         this.ProbaMaladies = new int[] { 15 };
         this.Sante = 100;
@@ -39,7 +39,14 @@ public abstract class Thym : PlanteVivace
         else
             this.ScoreTerrain = 50;
 
-        // Il restera à initialiser les coordonnées
+    }
 
+    public override string ToString()
+    {
+        string message = base.ToString();
+
+        message = $"Statuts Thym : Taille :{Taille}, Santé {Sante}";
+
+        return message;
     }
 }

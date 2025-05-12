@@ -1,7 +1,8 @@
 public abstract class Tomate : PlanteAnnuelle
 {
-    public Tomate(Potager pot) : base(pot)
+    public Tomate(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
     {
+        this.Espece = "Tomate";
         this.SaisondeSemis = Printemps;
         this.SaisondeRecolte = Ete;
         this.Espacement = 1;
@@ -17,7 +18,6 @@ public abstract class Tomate : PlanteAnnuelle
         this.SeuilLuminosite = 90;
         this.NiveauLuminosite = 90;
         this.TemperatureCible = new List<int> { 15, 30 };
-        this.NiveauTemperature; //Insérer Température Potager
         this.MaladiesPotentielles = new List<Maladie> { Mildiou, Oidium };
         this.ProbaMaladies = new int[] { 50, 20 };
         this.Sante = 100;
@@ -37,8 +37,14 @@ public abstract class Tomate : PlanteAnnuelle
         }
         else
             this.ScoreTerrain = 50;
+    }
 
-        // Il restera à initialiser les coordonnées
+    public override string ToString()
+    {
+        string message = base.ToString();
 
+        message = $"Statuts Tomate : Taille :{Taille}, Santé {Sante}";
+
+        return message;
     }
 }
