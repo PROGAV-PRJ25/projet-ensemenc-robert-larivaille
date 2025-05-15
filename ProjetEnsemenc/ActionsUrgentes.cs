@@ -1,21 +1,17 @@
-using System.Globalization;
-using System.Reflection.PortableExecutable;
 
 public abstract class ActionUrgente
 {
-    public string Sujet { get; set; }
-    public ActionUrgente(string sujet)
+    public object Sujet { get; set; }
+    public ActionUrgente() { }
+
+    public void ProposerAction(object Sujet, Potager Pot)
     {
-        Sujet = sujet;
-    }
-    public void ProposerAction(string Sujet, Potager Pot)
-    {
-        if (Sujet == "animal")
+        if (Sujet is Animaux)
         {
             Console.WriteLine("Vous pouvez : ");
             Console.WriteLine("-Faire du bruit (1) \n- Poser un épouvantail (2) \n- Faire fuir le chat (3) \n- Reboucher un trou (4) \n- Adopter un chien (5)");
         }
-        else if (Sujet == "intempérie")
+        else if (Sujet is Intemperie)
         {
             Console.WriteLine("Vous pouvez : ");
             Console.WriteLine("-Mettre une bâche (6) \n- Installer une pompe (7) \n- Utiliser le tuyau d'arrosage (8) \n- installer l'arrosage automatique (9)");
@@ -52,19 +48,19 @@ public abstract class ActionUrgente
         }
         else if (choix == 8)
         {
-            Arroser(Sujet, Pot);
+            Arroser(Sujet, Pot.ListePlantes);
         }
         else if (choix == 9)
         {
-            InstallerArosageAutomatique(Sujet, Pot);
+            InstallerArosageAuto(Sujet, Pot.ListePlantes);
         }
     }
 
-    public void FaireBruit(string Sujet)
+    public void FaireBruit(object Sujet)
     {
-        if (Sujet is Oiseau)
+        if (Sujet is Oiseau oiseau)
         {
-            Sujet.Disparait();
+            oiseau.Disparait();
         }
         else
         {
@@ -72,11 +68,11 @@ public abstract class ActionUrgente
         }
     }
 
-    public void PoserEpouvantail(string Sujet)
+    public void PoserEpouvantail(object Sujet)
     {
-        if (Sujet is Oiseau)
+        if (Sujet is Oiseau oiseau)
         {
-            Sujet.Disparait;
+            oiseau.Disparait();
             bool epouvantail = true; //Mettre dans simulation
         }
         else
@@ -84,22 +80,22 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void FaireFuirChat(string Sujet)
+    public void FaireFuirChat(object Sujet)
     {
-        if (Sujet is Chat)
+        if (Sujet is Chat chat)
         {
-            Sujet.Disparait();
+            chat.Disparait();
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void ReboucherTrou(string Sujet)
+    public void ReboucherTrou(object Sujet)
     {
-        if (Sujet is Taupe)
+        if (Sujet is Taupe taupe)
         {
-            Sujet.Disparait();
+            taupe.Disparait();
             //Enlever les trous
         }
         else
@@ -107,23 +103,23 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void AdopterChien(string Sujet)
+    public void AdopterChien(object Sujet)
     {
-        if (Sujet is Rongeur)
+        if (Sujet is Rongeur rongeur)
         {
-            Sujet.Disparait();
-            bool chien = true; //A mettree dans Simulation
+            rongeur.Disparait();
+            bool PresenceChien = true; //A mettree dans Simulation
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void PoserBache(string Sujet)
+    public void PoserBache(object Sujet)
     {
-        if ((Sujet is Grele) && (/*Vérifier qu'on a une bache */))
+        if ((Sujet is Grele)) /* Et Vérifier qu'on a une bache */
         {
-            Sujet.Disparait();
+            bool grele = false;
             bool bache = true; //A mettree dans Simulation
         }
         else
@@ -131,11 +127,11 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerPompe(string Sujet)
+    public void InstallerPompe(object Sujet)
     {
-        if ((Sujet is Inondation) && (/*Vérifier qu'on a une pompe */))
+        if ((Sujet is Inondation) /*&& (Vérifier qu'on a une pompe )*/)
         {
-            Sujet.Disparait();
+            bool inondation = false;
             bool pompe = true; //A mettree dans Simulation
         }
         else
@@ -143,12 +139,11 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void Arroser(string Sujet, Potager Pot)
+    public void Arroser(object Sujet, List<Plante> ListePlantes)
     {
-        if ((Sujet is Secheresse) && (/*Vérifier qu'on a un tuyau d'arrosage */))
+        if ((Sujet is Secheresse)/* && (Vérifier qu'on a un tuyau d'arrosage )*/)
         {
-            Sujet.Disparait();
-            foreach (Plante plante in Pot)
+            foreach (Plante plante in ListePlantes)
             {
                 plante.NiveauHumidite += 5;
             }
@@ -158,12 +153,12 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerArosageAutomatique(string Sujet, Potager Pot)
+    public void InstallerArosageAuto(object Sujet, List<Plante> ListePlantes)
     {
-        if ((Sujet is Secheresse) && (/*Vérifier qu'on a un arrosage auto */))
+        if ((Sujet is Secheresse) /*&& (Vérifier qu'on a un arrosage auto )*/)
         {
-            Sujet.Disparait();
-            foreach (Plante plante in Pot)
+            bool Secheresse = false;
+            foreach (Plante plante in ListePlantes)
             {
                 plante.NiveauHumidite = plante.SeuilHumidite;
             }
