@@ -1,13 +1,7 @@
 public class Saisons
 {
     public Potager Pot { get; set; }
-    public enum Saison
-    {
-        Printemps,
-        Ete,
-        Automne,
-        Hiver,
-    }
+
     public Saison Nom { get; set; }
     public List<int> Luminosite { get; set; }
     public List<int> Temperature { get; set; }
