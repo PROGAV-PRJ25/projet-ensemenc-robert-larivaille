@@ -11,7 +11,7 @@ public class Olivier : PlanteVivace
         this.Comestible = true;
         this.QuotaCroissance = 8;
         this.EsperanceDeVie = 200; //50 ans d'espérance de vie
-        this.NbRecolte = 1; // 1x par an
+        this.NbRecoltePossible = 1;
         this.Taille = 1;
         this.TailleMax = 5;
         this.TempsCroissance = 12; //1 an pour passer à la taille supérieure

@@ -23,7 +23,7 @@ public class Artichaut : PlanteVivace
         this.ProbaMaladies = new List<int> { 15, 10 };
         this.Sante = 100;
         this.QteProduite = 5;
-        this.NbRecolte = 2;
+        this.NbRecoltePossible = 2;
 
         if (TerrainPlant == Terrain.Terre)
         {

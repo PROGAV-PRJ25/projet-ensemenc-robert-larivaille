@@ -25,8 +25,10 @@ public abstract class Plante
     public int EsperanceDeVie { get; set; } //En mois
     public List<Maladie> EstMaladeDe { get; set; } = new List<Maladie>();
 
-    public int QteProduite { get; set; } //Qté récupérée par récolte
-    public int NbRecolte { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
+    public int QteMaxProduite { get; set; }
+    public int QteProduite { get; set; }//Qté récupérée par récolte
+    public int NbRecoltePossible { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
+    public int NbRecolte { get; set; }
     public int ScoreCondition { get; set; }
     public int ScoreTerrain { get; set; }
 
@@ -62,6 +64,7 @@ public abstract class Plante
         CoorY = y;
         NiveauTemperature = Pot.Temperature;
         TerrainPlant = terrain;
+        NbRecolte = 0;
     }
 
     public void MettreAJourPlantesAutour()
@@ -78,6 +81,42 @@ public abstract class Plante
                     PlantesAutour.Add(plante);
                 }
             }
+        }
+    }
+
+    public void CalculerQteProduite()
+    {
+        int pas;
+        pas = QteMaxProduite / TailleMax;
+        if (Taille == 1) QteProduite = 0;
+        if (Taille == 2) QteProduite = pas;
+        if (Taille == 3) QteProduite = 2 * pas;
+        if (Taille == 4) QteProduite = 3 * pas;
+        if (Taille == TailleMax) QteProduite = QteMaxProduite;
+    }
+
+    public void DonnerRecolte(Potager pot, Recolte recolte)
+    {
+        if (pot.Saison.Nom == SaisondeRecolte)
+        {
+            Console.WriteLine($"Voulez-vous récolter {Espece} ? (Oui ou Non)");
+            string reponse = Console.ReadLine()!;
+            if (reponse.Equals("Oui", StringComparison.OrdinalIgnoreCase))
+            {
+                if (NbRecolte < NbRecoltePossible)
+                {
+                    CalculerQteProduite();
+                    recolte.Quantite += QteProduite;
+                }
+                if (QteProduite == 0)
+                {
+                    Console.WriteLine("La plante n'a rien produit pour l'instant");
+                }
+                else
+                    Console.WriteLine($"Vous avez déjà récolté {NbRecoltePossible} fois {Espece}");
+
+            }
+
         }
     }
 

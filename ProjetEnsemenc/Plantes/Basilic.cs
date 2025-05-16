@@ -9,7 +9,7 @@ public class Basilic : PlanteAnnuelle
         this.Espacement = 0;
         this.Comestible = true;
         this.QuotaCroissance = 18;
-        this.NbRecolte = 3;
+        this.NbRecoltePossible = 3;
         this.Taille = 1;
         this.TailleMax = 2;
         this.TempsCroissance = 3;

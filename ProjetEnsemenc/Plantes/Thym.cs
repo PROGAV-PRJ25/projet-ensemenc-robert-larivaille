@@ -10,7 +10,7 @@ public class Thym : PlanteVivace
         this.Comestible = true;
         this.QuotaCroissance = 30;
         this.EsperanceDeVie = 44;
-        this.NbRecolte = 2;
+        this.NbRecoltePossible = 2;
         this.Taille = 1;
         this.TailleMax = 2;
         this.TempsCroissance = 3;
