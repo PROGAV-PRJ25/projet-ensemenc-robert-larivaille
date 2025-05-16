@@ -144,8 +144,10 @@ public class Simulation
     {
         foreach (Plante plante in pot.ListePlantes)
         {
+            plante.MettreAJourPlantesAutour();
             VerifierEsperanceDeVie(plante);
             plante.ImpactConditions();
+            plante.Contamination();
             if (NumeroTour % plante.TempsCroissance == 0) { plante.Grandir(); }
             Console.WriteLine(plante);
 
