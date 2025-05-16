@@ -9,12 +9,12 @@ public abstract class ActionUrgente
         if (Sujet is Animaux)
         {
             Console.WriteLine("Vous pouvez : ");
-            Console.WriteLine("-Faire du bruit (1) \n- Poser un épouvantail (2) \n- Faire fuir le chat (3) \n- Reboucher un trou (4) \n- Adopter un chien (5)");
+            Console.WriteLine("1 - Faire du bruit (contre : Oiseaux) \n2 - Poser un épouvantail (Plus aucun oiseau) \n3 - Faire fuir le chat (contre : Chat) \n4 - Reboucher un trou (contre : Taupe) \n5- Adopter un chien (plus aucun rongeur)");
         }
         else if (Sujet is Intemperie)
         {
             Console.WriteLine("Vous pouvez : ");
-            Console.WriteLine("-Mettre une bâche (6) \n- Installer une pompe (7) \n- Utiliser le tuyau d'arrosage (8) \n- installer l'arrosage automatique (9)");
+            Console.WriteLine("6 - Mettre une bâche (contre : Grêle) \n7 - Installer une pompe (contre : Inondation) \n8 - Utiliser le tuyau d'arrosage (contre : Sécheresse) \n9 - installer l'arrosage automatique (contre : Sécheresse)");
         }
 
         int choix = Convert.ToInt32(Console.ReadLine());
@@ -48,11 +48,11 @@ public abstract class ActionUrgente
         }
         else if (choix == 8)
         {
-            Arroser(Sujet, Pot.ListePlantes);
+            Arroser(Sujet, Pot);
         }
         else if (choix == 9)
         {
-            InstallerArosageAuto(Sujet, Pot.ListePlantes);
+            InstallerArosageAuto(Sujet, Pot);
         }
     }
 
@@ -139,11 +139,11 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void Arroser(object Sujet, List<Plante> ListePlantes)
+    public void Arroser(object Sujet, Potager pot)
     {
         if ((Sujet is Secheresse)/* && (Vérifier qu'on a un tuyau d'arrosage )*/)
         {
-            foreach (Plante plante in ListePlantes)
+            foreach (Plante plante in pot.ListePlantes)
             {
                 plante.NiveauHumidite += 5;
             }
@@ -153,12 +153,12 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerArosageAuto(object Sujet, List<Plante> ListePlantes)
+    public void InstallerArosageAuto(object Sujet, Potager pot)
     {
         if ((Sujet is Secheresse) /*&& (Vérifier qu'on a un arrosage auto )*/)
         {
             bool Secheresse = false;
-            foreach (Plante plante in ListePlantes)
+            foreach (Plante plante in pot.ListePlantes)
             {
                 plante.NiveauHumidite = plante.SeuilHumidite;
             }
