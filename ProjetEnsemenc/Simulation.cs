@@ -61,6 +61,19 @@ public class Simulation
         if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(x, y, Pot, ter));
     }
 
+    public Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
+    {
+        if (plante.Espece == "Artichaut") return RecAr;
+        if (plante.Espece == "Aubergine") return RecAu;
+        if (plante.Espece == "Basilic") return RecB;
+        if (plante.Espece == "Oignon") return RecO;
+        if (plante.Espece == "Olivier") return RecOl;
+        if (plante.Espece == "Poivron") return RecP;
+        if (plante.Espece == "Roquette") return RecR;
+        if (plante.Espece == "Thym") return RecTh;
+        else return RecTo;
+    }
+
     public void Planter()
     {
         if (Pot.SacDeGraines.Count == 0)
@@ -142,6 +155,17 @@ public class Simulation
 
     public void Simuler(Potager pot)
     {
+        // Création des récoltes
+        Recolte RecArtichaut = new Recolte("Artichaut", 0);
+        Recolte RecAubergine = new Recolte("Aubergine", 0);
+        Recolte RecBasilic = new Recolte("Basilic", 0);
+        Recolte RecOignon = new Recolte("Oignon", 0);
+        Recolte RecOlivier = new Recolte("Olive", 0);
+        Recolte RecPoivron = new Recolte("Poivron", 0);
+        Recolte RecRoquette = new Recolte("Roquette", 0);
+        Recolte RecThym = new Recolte("Thym", 0);
+        Recolte RecTomate = new Recolte("Tomate", 0);
+
         foreach (Plante plante in pot.ListePlantes)
         {
             plante.MettreAJourPlantesAutour();
@@ -149,6 +173,7 @@ public class Simulation
             plante.ImpactConditions();
             plante.Contamination();
             if (NumeroTour % plante.TempsCroissance == 0) { plante.Grandir(); }
+            plante.DonnerRecolte(pot, AssocierRecoltePlante(plante, RecArtichaut, RecAubergine, RecBasilic, RecOignon, RecOlivier, RecPoivron, RecRoquette, RecThym, RecTomate));
             Console.WriteLine(plante);
 
         }

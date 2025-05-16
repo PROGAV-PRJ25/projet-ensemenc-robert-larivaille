@@ -9,7 +9,7 @@ public class Poivron : PlanteAnnuelle
         this.Espacement = 1;
         this.Comestible = true;
         this.QuotaCroissance = 15;
-        this.NbRecolte = 3;
+        this.NbRecoltePossible = 3;
         this.Taille = 1;
         this.TailleMax = 3;
         this.TempsCroissance = 2;

@@ -10,7 +10,7 @@ public class Aubergine : PlanteVivace
         this.Comestible = true;
         this.QuotaCroissance = 20;
         this.EsperanceDeVie = 40;
-        this.NbRecolte = 3;
+        this.NbRecoltePossible = 3;
         this.Taille = 1;
         this.TailleMax = 4;
         this.TempsCroissance = 3;

@@ -9,7 +9,7 @@ public class Tomate : PlanteAnnuelle
         this.Espacement = 1;
         this.Comestible = true;
         this.QuotaCroissance = 30;
-        this.NbRecolte = 3;
+        this.NbRecoltePossible = 3;
         this.Taille = 1;
         this.TailleMax = 3;
         this.TempsCroissance = 4;

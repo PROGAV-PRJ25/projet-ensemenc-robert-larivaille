@@ -9,7 +9,7 @@ public class Oignon : PlanteAnnuelle
         this.Espacement = 0;
         this.Comestible = true;
         this.QuotaCroissance = 20;
-        this.NbRecolte = 1;
+        this.NbRecoltePossible = 1;
         this.Taille = 1;
         this.TailleMax = 2;
         this.TempsCroissance = 3;
