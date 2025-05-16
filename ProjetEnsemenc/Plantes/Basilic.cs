@@ -1,10 +1,11 @@
-public abstract class Basilic : PlanteAnnuelle
+public class Basilic : PlanteAnnuelle
 {
-    public Basilic(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
+    public Basilic(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
     {
         this.Espece = "Basilic";
-        this.SaisondeSemis = Printemps;
-        this.SaisondeRecolte = Ete;
+        this.SaisondeSemis = Saison.Printemps;
+        this.SaisondeRecolte = Saison.Ete;
+        this.TerrainPlant = ter;
         this.Espacement = 0;
         this.Comestible = true;
         this.QuotaCroissance = 18;

@@ -1,10 +1,11 @@
-public abstract class Aubergine : PlanteVivace
+public class Aubergine : PlanteVivace
 {
-    public Aubergine(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
+    public Aubergine(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
     {
         this.Espece = "Aubergine";
-        this.SaisondeSemis = Printemps;
-        this.SaisondeRecolte = Ete;
+        this.SaisondeSemis = Saison.Printemps;
+        this.SaisondeRecolte = Saison.Ete;
+        this.TerrainPlant = ter;
         this.Espacement = 1;
         this.Comestible = true;
         this.QuotaCroissance = 20;

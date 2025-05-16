@@ -1,4 +1,16 @@
-﻿Aubergine a1 = new Aubergine();
-Console.WriteLine(a1);
-a1.EstMorte();
-Console.WriteLine(a1);
+﻿Console.WriteLine("Déterminez la hauteur du potager");
+int hauteur;
+while (!int.TryParse(Console.ReadLine(), out hauteur))
+{
+    Console.WriteLine("Veuillez entrer un nombre entier valide.");
+}
+
+Console.WriteLine("Déterminez la largeur du potager");
+int largeur;
+while (!int.TryParse(Console.ReadLine(), out largeur))
+{
+    Console.WriteLine("Veuillez entrer un nombre entier valide.");
+}
+
+
+Simulation simu = new Simulation(hauteur, largeur);

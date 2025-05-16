@@ -1,10 +1,11 @@
-public abstract class Roquette : PlanteAnnuelle
+public class Roquette : PlanteAnnuelle
 {
-    public Roquette(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
+    public Roquette(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
     {
         this.Espece = "Roquette";
-        this.SaisondeSemis = Ete;
-        this.SaisondeRecolte = Automne;
+        this.SaisondeSemis = Saison.Ete;
+        this.SaisondeRecolte = Saison.Automne;
+        this.TerrainPlant = ter;
         this.Espacement = 0;
         this.Comestible = true;
         this.QuotaCroissance = 25;

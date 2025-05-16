@@ -1,11 +1,12 @@
-public abstract class Olivier : PlanteVivace
+public class Olivier : PlanteVivace
 {
 
-    public Olivier(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot)
+    public Olivier(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
     {
         this.Espece = "Olivier";
-        this.SaisondeSemis = Automne;
-        this.SaisondeRecolte = Automne;
+        this.SaisondeSemis = Saison.Automne;
+        this.SaisondeRecolte = Saison.Automne;
+        this.TerrainPlant = ter;
         this.Espacement = 14; //7m entre chaque olivier
         this.Comestible = true;
         this.QuotaCroissance = 8;

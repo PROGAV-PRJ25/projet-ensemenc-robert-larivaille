@@ -8,7 +8,7 @@ public class RemedeMildiou : Remede
     {
         if (maladie.Nom == "Mildiou")
         {
-            plante.estMaladeDe.Remove(maladie);
+            plante.EstMaladeDe.Remove(maladie);
             plante.Sante = 100;
         }
         else

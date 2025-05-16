@@ -1,17 +1,11 @@
+
 public abstract class Plante
 {
     public string Espece { get; set; }
     public Potager Pot;
-    public enum Terrain
-    {
-        Argile,
-        Sable,
-        Terre,
-        Calcaire,
-    }
     public Terrain TerrainPlant { get; set; }
-    public Saisons SaisondeSemis { get; set; }
-    public Saisons SaisondeRecolte { get; set; }
+    public Saison SaisondeSemis { get; set; }
+    public Saison SaisondeRecolte { get; set; }
     public int Espacement { get; set; }
     public bool Comestible { get; set; }
     public int QuotaCroissance { get; set; }
@@ -35,6 +29,8 @@ public abstract class Plante
     public int NbRecolte { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
     public int ScoreCondition { get; set; }
     public int ScoreTerrain { get; set; }
+
+    public List<Plante> PlantesAutour = new List<Plante>();
 
     // Faire en sorte que les objets et animaux sachent sur quelle plante ils sont plutôt
     // public List<Animaux> AnimauxPresents { get; set; }
@@ -66,6 +62,73 @@ public abstract class Plante
         CoorY = y;
         NiveauTemperature = Pot.Temperature;
         TerrainPlant = terrain;
+    }
+
+    public void MettreAJourPlantesAutour()
+    {
+        PlantesAutour.Clear();
+        foreach (Plante plante in Pot.ListePlantes)
+        {
+            if (plante != this) // pour ne pas ajouter la plante elle-même
+            {
+                int distancex = Math.Abs(plante.CoorX - this.CoorX);
+                int distancey = Math.Abs(plante.CoorY - this.CoorY);
+                if (distancex <= 1 && distancey <= 1)
+                {
+                    PlantesAutour.Add(plante);
+                }
+            }
+        }
+    }
+
+    public int CalculerQuotaCroissance()
+    {
+        int quota = 0;
+        foreach (Plante plante in PlantesAutour)
+        {
+            quota += plante.Taille;
+        }
+        return quota;
+    }
+
+    public void Contamination()
+    {
+        Random rng = new Random();
+        int proba = 0;
+        if (EstMaladeDe.Count() != 0) // SI la liste n'est pas vide
+        {
+            foreach (Plante plante in PlantesAutour)
+            {
+                for (int i = 0; i <= EstMaladeDe.Count(); i++) // On parcours la liste de maladies que la plante a
+                {
+                    for (int j = 0; j <= plante.MaladiesPotentielles.Count(); j++) // Et la liste de maladie que chaque plante autour peut attraper
+                    {
+                        if (EstMaladeDe[i] == plante.MaladiesPotentielles[j]) //on les compare et si c'est les même
+                        {
+                            proba = rng.Next(0, 101); // on tire au hasard un chiffre ente 1 et 100
+                            if (proba < plante.ProbaMaladies[j]) // Si celui-ci est entre 0 et la proba d'attraper la maladie
+                            {
+                                plante.AttraperMaladie(EstMaladeDe[i]); //La plante devient malade
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    public void Grandir()
+    {
+        if (QuotaCroissance >= CalculerQuotaCroissance())
+        {
+            if (Taille < TailleMax)
+            {
+                Taille += 1;
+            }
+        }
+        else
+            Console.WriteLine($"Il y a trop de plantes autour pour que {Espece} grandisse");
     }
 
     public void EstMange()
@@ -153,10 +216,12 @@ public abstract class Plante
             Console.WriteLine($"{Espece} a attrapé {maladie.Nom} !");
         }
     }
+
     public override string ToString()
     {
         string message;
         message = $"Statuts {Espece} : Taille :{Taille}, Santé {Sante}";
+        message += $"- Maladies : {EstMaladeDe}";
         if (CalculerScoreCondition() < 250)
         {
             message += "-- Mauvaises conditions - Perte de production --";
