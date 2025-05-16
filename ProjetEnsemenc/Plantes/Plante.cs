@@ -1,17 +1,11 @@
+
 public abstract class Plante
 {
     public string Espece { get; set; }
     public Potager Pot;
-    public enum Terrain
-    {
-        Argile,
-        Sable,
-        Terre,
-        Calcaire,
-    }
     public Terrain TerrainPlant { get; set; }
-    public Saisons SaisondeSemis { get; set; }
-    public Saisons SaisondeRecolte { get; set; }
+    public Saison SaisondeSemis { get; set; }
+    public Saison SaisondeRecolte { get; set; }
     public int Espacement { get; set; }
     public bool Comestible { get; set; }
     public int QuotaCroissance { get; set; }
@@ -66,6 +60,14 @@ public abstract class Plante
         CoorY = y;
         NiveauTemperature = Pot.Temperature;
         TerrainPlant = terrain;
+    }
+
+    public void Grandir()
+    {
+        if (Taille < TailleMax)
+        {
+            Taille += 1;
+        }
     }
 
     public void EstMange()
@@ -153,10 +155,12 @@ public abstract class Plante
             Console.WriteLine($"{Espece} a attrapé {maladie.Nom} !");
         }
     }
+
     public override string ToString()
     {
         string message;
         message = $"Statuts {Espece} : Taille :{Taille}, Santé {Sante}";
+        message += $"- Maladies : {EstMaladeDe}";
         if (CalculerScoreCondition() < 250)
         {
             message += "-- Mauvaises conditions - Perte de production --";

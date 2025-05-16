@@ -1,10 +1,11 @@
-public abstract class Poivron : PlanteAnnuelle
+public class Poivron : PlanteAnnuelle
 {
-    public Poivron(int coorX, int coorY, Potager pot) : base(coorX, coorY, pot) // Selon caractéristiques du poivron rouge
+    public Poivron(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter) // Selon caractéristiques du poivron rouge
     {
         this.Espece = "Poivron";
-        this.SaisondeSemis = Hiver;
-        this.SaisondeRecolte = Ete;
+        this.SaisondeSemis = Saison.Hiver;
+        this.SaisondeRecolte = Saison.Ete;
+        this.TerrainPlant = ter;
         this.Espacement = 1;
         this.Comestible = true;
         this.QuotaCroissance = 15;
