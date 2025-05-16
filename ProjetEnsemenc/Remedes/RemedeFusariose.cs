@@ -8,7 +8,7 @@ public class RemedeFusariose : Remede
     {
         if (maladie.Nom == "Fusariose")
         {
-            plante.estMaladeDe.Remove(maladie);
+            plante.EstMaladeDe.Remove(maladie);
             plante.Sante = 100;
         }
         else
