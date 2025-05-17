@@ -152,7 +152,6 @@ public class Simulation
         if (plante.EsperanceDeVie > NumeroTour)
             plante.EstMorte();
     }
-
     public void Simuler(Potager pot)
     {
         // Création des récoltes
