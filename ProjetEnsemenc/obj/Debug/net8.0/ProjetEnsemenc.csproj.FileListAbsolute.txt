@@ -3,3 +3,13 @@ C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\Pro
 C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.AssemblyInfo.cs
 C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.csproj.CoreCompileInputs.cache
 C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.sourcelink.json
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\bin\Debug\net8.0\ProjetEnsemenc.exe
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\bin\Debug\net8.0\ProjetEnsemenc.deps.json
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\bin\Debug\net8.0\ProjetEnsemenc.runtimeconfig.json
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\bin\Debug\net8.0\ProjetEnsemenc.dll
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\bin\Debug\net8.0\ProjetEnsemenc.pdb
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.dll
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\refint\ProjetEnsemenc.dll
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.pdb
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ProjetEnsemenc.genruntimeconfig.cache
+C:\Users\jadel\OneDrive\Bureau\ENSC\S6\POO\projet-ensemenc-robert-larivaille\ProjetEnsemenc\obj\Debug\net8.0\ref\ProjetEnsemenc.dll

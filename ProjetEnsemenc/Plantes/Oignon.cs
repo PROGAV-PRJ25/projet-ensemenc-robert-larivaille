@@ -1,6 +1,6 @@
 public class Oignon : PlanteAnnuelle
 {
-    public Oignon(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public Oignon(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Espece = "Oignon";
         this.SaisondeSemis = Saison.Automne;
@@ -22,7 +22,7 @@ public class Oignon : PlanteAnnuelle
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new List<int> { 20 };
         this.Sante = 100;
-        this.QteProduite = 1;
+        this.QteMaxProduite = 1;
 
         if (TerrainPlant == Terrain.Terre)
         {

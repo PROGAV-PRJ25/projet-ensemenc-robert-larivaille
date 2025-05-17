@@ -17,18 +17,21 @@ public class Saisons
 
     public void ChangerBesoinEau()
     {
-        if ((Nom == Saison.Hiver) || (Nom == Saison.Automne))
+        if (Pot != null && Pot.ListePlantes.Count() != 0)
         {
-            foreach (Plante plante in Pot.ListePlantes)
+            if ((Nom == Saison.Hiver) || (Nom == Saison.Automne))
             {
-                plante.BesoinEau += 2;
+                foreach (Plante plante in Pot.ListePlantes)
+                {
+                    plante.BesoinEau += 2;
+                }
             }
-        }
-        else
-        {
-            foreach (Plante plante in Pot.ListePlantes)
+            else
             {
-                plante.BesoinEau -= 2;
+                foreach (Plante plante in Pot.ListePlantes)
+                {
+                    plante.BesoinEau -= 2;
+                }
             }
         }
     }

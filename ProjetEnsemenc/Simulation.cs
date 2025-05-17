@@ -18,6 +18,11 @@ public enum Saison
     Automne,
     Hiver,
 }
+public enum ChoixOuiNon
+{
+    Oui,
+    Non,
+}
 public class Simulation
 {
     public Potager Pot { get; set; }
@@ -41,24 +46,25 @@ public class Simulation
         PresenceEpouvantail = false;
     }
 
-    public void CreerPlante(string espece, int x, int y)
+    public void CreerPlante(string espece, int x, int y, Simulation simu)
     {
         Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
         string terrain = Console.ReadLine()!;
-        Terrain ter = Terrain.Terre; // Par défaut de la terre
-        if (terrain.Equals("Argile", StringComparison.OrdinalIgnoreCase)) ter = Terrain.Argile;
-        if (terrain.Equals("Sable", StringComparison.OrdinalIgnoreCase)) ter = Terrain.Sable;
-        if (terrain.Equals("Terre", StringComparison.OrdinalIgnoreCase)) ter = Terrain.Terre;
-        if (terrain.Equals("Calcaire", StringComparison.OrdinalIgnoreCase)) ter = Terrain.Calcaire;
-        if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(x, y, Pot, ter));
-        if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(x, y, Pot, ter));
-        if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(x, y, Pot, ter));
-        if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(x, y, Pot, ter));
-        if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(x, y, Pot, ter));
-        if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(x, y, Pot, ter));
-        if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(x, y, Pot, ter));
-        if (espece == "Thym") Pot.ListePlantes.Add(new Thym(x, y, Pot, ter));
-        if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(x, y, Pot, ter));
+        Terrain ter;
+        while (!Enum.TryParse<Terrain>(terrain, true, out ter))
+        {
+            Console.WriteLine("Entrée invalide. Veuillez saisir un terrain valide (Argile, Sable, Terre ou Calcaire) :");
+            terrain = Console.ReadLine()!;
+        }
+        if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(x, y, Pot, ter, simu));
+        if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(x, y, Pot, ter, simu));
+        if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(x, y, Pot, ter, simu));
+        if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(x, y, Pot, ter, simu));
+        if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(x, y, Pot, ter, simu));
+        if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(x, y, Pot, ter, simu));
+        if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(x, y, Pot, ter, simu));
+        if (espece == "Thym") Pot.ListePlantes.Add(new Thym(x, y, Pot, ter, simu));
+        if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(x, y, Pot, ter, simu));
     }
 
     public Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
@@ -74,7 +80,7 @@ public class Simulation
         else return RecTo;
     }
 
-    public void Planter()
+    public void Planter(Simulation simu)
     {
         if (Pot.SacDeGraines.Count == 0)
         {
@@ -95,28 +101,39 @@ public class Simulation
             Console.WriteLine("Quel est le numéro de la graine que vous voulez planter ? ");
             string reponse = Console.ReadLine()!;
             int numeroAPlanter;
-            while (!Int32.TryParse(reponse, out numeroAPlanter) || (numeroAPlanter < 0) || (numeroAPlanter >= Pot.SacDeGraines.Count))
+            while (!int.TryParse(reponse, out numeroAPlanter) || (numeroAPlanter < 0) || (numeroAPlanter >= Pot.SacDeGraines.Count))
             {
                 Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de la graine que vous voulez planter ? ");
+                reponse = Console.ReadLine()!;
             }
             Console.WriteLine("A quel numéro de ligne voulez-vous la planter ? ");
             string reponseX = Console.ReadLine()!;
             int x;
-            while ((!Int32.TryParse(reponseX, out x)) || (x < 0) || (x >= Pot.Hauteur))
+            while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Hauteur))
             {
                 Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la ligne où vous voulez planter ? ");
+                reponseX = Console.ReadLine()!;
             }
             Console.WriteLine("A quel numéro de colonne voulez-vous la planter ? ");
             string reponseY = Console.ReadLine()!;
             int y;
-            while ((!Int32.TryParse(reponseY, out y)) || (y < 0) || (x >= Pot.Longueur))
+            while (!int.TryParse(reponseY, out y) || (y < 0) || (y >= Pot.Longueur))
             {
                 Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez planter ? ");
+                reponseY = Console.ReadLine()!;
             }
             Pot.SacDeGraines[numeroAPlanter].Quantite--;
-            CreerPlante(Pot.SacDeGraines[numeroAPlanter].Espece, x, y);
+            CreerPlante(Pot.SacDeGraines[numeroAPlanter].Espece, x, y, simu);
         }
 
+    }
+
+    public void AfficherStatutsPlantes()
+    {
+        foreach (Plante plante in Pot.ListePlantes)
+        {
+            Console.WriteLine(plante);
+        }
     }
 
     public void Arroser()
@@ -125,31 +142,48 @@ public class Simulation
         int numero = 0;
         foreach (Plante plante in Pot.ListePlantes)
         {
-            Console.WriteLine($"- {numero}. {plante} : niveau actuel : {plante.NiveauHumidite} | niveau optimal : {plante.SeuilHumidite} | diminution de l'humidité par tour : {plante.BesoinEau} ");
+            Console.WriteLine($"- {numero}. {plante.Espece} : niveau actuel : {plante.NiveauHumidite} | niveau optimal : {plante.SeuilHumidite} | diminution de l'humidité par tour : {plante.BesoinEau} ");
             numero++;
         }
         Console.WriteLine("Arroser une plante augmente son niveau d'humidité actuel de 10. ");
-        Console.WriteLine("Entrez les numéros des plantes à arroser un par un. Entrez 1000 pour arreter l'arrosage. ");
-        string reponse = Console.ReadLine()!;
+        Console.WriteLine("Entrez les numéros des plantes à arroser un par un. Entrez 1000 pour arrêter l'arrosage. ");
+
         int numeroAArroser = -1;
-        while (numeroAArroser != 1000)
+        bool continuer = true;
+        while (continuer)
         {
-            while ((!Int32.TryParse(reponse, out numeroAArroser)) || (numeroAArroser < 0) || ((numeroAArroser >= Pot.ListePlantes.Count) && (numeroAArroser != 1000)))
+            string reponse = Console.ReadLine()!;
+            if (Int32.TryParse(reponse, out numeroAArroser))
             {
-                Console.WriteLine("Réponse invalide ");
-                Console.WriteLine("Entrez les numéros des plantes à arroser un par un. Entrez 1000 pour arreter l'arrosage. ");
+                if (numeroAArroser == 1000)
+                    continuer = false;
+                else if (numeroAArroser >= 0 && numeroAArroser < Pot.ListePlantes.Count)
+                {
+                    Pot.ListePlantes[numeroAArroser].NiveauHumidite += 10;
+                }
+                else
+                {
+                    Console.WriteLine("Numéro invalide. Essayez encore.");
+                }
             }
-            if (numeroAArroser != 1000)
+            else
             {
-                Pot.ListePlantes[numeroAArroser].NiveauHumidite += 10;
+                Console.WriteLine("Réponse invalide. Entrez un numéro valide ou 1000 pour arrêter.");
             }
         }
+    }
 
+    public void MajBesoinEau()
+    {
+        foreach (Plante plante in Pot.ListePlantes)
+        {
+            plante.NiveauHumidite -= plante.BesoinEau;
+        }
     }
 
     public void VerifierEsperanceDeVie(Plante plante)
     {
-        if (plante.EsperanceDeVie > NumeroTour)
+        if (plante.EsperanceDeVie < NumeroTour - plante.TourPlantation)
             plante.EstMorte();
     }
 
@@ -159,7 +193,39 @@ public class Simulation
         {
             for (int j = 0; j < Pot.Longueur; j++)
             {
-                grille[i, j] = "🔳";
+                grille[i, j] = " 🔳 ";
+            }
+        }
+    }
+
+    public void AfficherPotager(string[,] grille)
+    {
+        for (int i = 0; i < Pot.Hauteur; i++)
+        {
+            for (int j = 0; j < Pot.Longueur; j++)
+            {
+                Console.Write(grille[i, j]);
+            }
+            Console.WriteLine("");
+            Console.WriteLine("");
+        }
+    }
+
+    public void MajConditionsPotager()
+    {
+        Console.WriteLine("-- Statuts du potager --");
+        Console.WriteLine($"Saison : {Pot.Saison.Nom}, Température : {Pot.Temperature}");
+        AfficherRecoltes();
+    }
+
+    public void AfficherRecoltes()
+    {
+        Console.WriteLine("-- Recoltes : --");
+        foreach (Recolte recolte in Pot.Inventaire)
+        {
+            if (recolte.Quantite != 0)
+            {
+                Console.WriteLine($"    - {recolte.Espece} -- {recolte.Quantite}");
             }
         }
     }
@@ -169,47 +235,70 @@ public class Simulation
         InitialisationPotager(Pot, grille);
         foreach (Plante plante in Pot.ListePlantes)
         {
-            if ((plante.Espece == "Artichaut") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "atc";
+            if ((plante.Espece == "Artichaut") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " atc";
             if ((plante.Espece == "Artichaut") && (plante.Taille == 2)) grille[plante.CoorY, plante.CoorX] = "ATC";
             if ((plante.Espece == "Artichaut") && (plante.Taille == 3)) grille[plante.CoorY, plante.CoorX] = "🌲";
             if ((plante.Espece == "Artichaut") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🥦";
 
-            if ((plante.Espece == "Aubergine") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "aub";
+            if ((plante.Espece == "Aubergine") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " aub";
             if ((plante.Espece == "Aubergine") && (plante.Taille == 2)) grille[plante.CoorY, plante.CoorX] = "AUB";
             if ((plante.Espece == "Aubergine") && (plante.Taille == 3)) grille[plante.CoorY, plante.CoorX] = "🌾";
             if ((plante.Espece == "Aubergine") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🍆";
 
-            if ((plante.Espece == "Basilic") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "bsl";
+            if ((plante.Espece == "Basilic") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " bsl";
             if ((plante.Espece == "Basilic") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🪴";
 
-            if ((plante.Espece == "Oignon") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "ogn";
+            if ((plante.Espece == "Oignon") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " ogn";
             if ((plante.Espece == "Oignon") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🧅";
 
-            if ((plante.Espece == "Olivier") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "olv";
+            if ((plante.Espece == "Olivier") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " olv";
             if ((plante.Espece == "Olivier") && (plante.Taille == 2)) grille[plante.CoorY, plante.CoorX] = "OLV";
             if ((plante.Espece == "Olivier") && (plante.Taille == 3)) grille[plante.CoorY, plante.CoorX] = "🌿";
             if ((plante.Espece == "Olivier") && (plante.Taille == 4)) grille[plante.CoorY, plante.CoorX] = "🌳";
             if ((plante.Espece == "Olivier") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🫒";
 
-            if ((plante.Espece == "Poivron") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "pvr";
+            if ((plante.Espece == "Poivron") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " pvr";
             if ((plante.Espece == "Poivron") && (plante.Taille == 2)) grille[plante.CoorY, plante.CoorX] = "PVR";
             if ((plante.Espece == "Poivron") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🫑";
 
-            if ((plante.Espece == "Roquette") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "rqt";
+            if ((plante.Espece == "Roquette") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " rqt";
             if ((plante.Espece == "Roquette") && (plante.Taille == 2)) grille[plante.CoorY, plante.CoorX] = "RQT";
             if ((plante.Espece == "Roquette") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🥬";
 
-            if ((plante.Espece == "Thym") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "thy";
+            if ((plante.Espece == "Thym") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " thy";
             if ((plante.Espece == "Thym") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🌱";
 
-            if ((plante.Espece == "Tomate") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = "tmt";
+            if ((plante.Espece == "Tomate") && (plante.Taille == 1)) grille[plante.CoorY, plante.CoorX] = " tmt";
             if ((plante.Espece == "Tomate") && (plante.Taille == 2)) grille[plante.CoorY, plante.CoorX] = "TMT";
             if ((plante.Espece == "Tomate") && (plante.Taille == plante.TailleMax)) grille[plante.CoorY, plante.CoorX] = "🍅";
         }
     }
 
-    public void Simuler(Potager pot)
+    public void ChoisirActionsTour(ref bool jeuEnCours, ref string[,] grille, Simulation simu)
     {
+        int reponse;
+        do
+        {
+            MajAffichagePlantes(grille);
+            AfficherPotager(grille);
+            MajConditionsPotager();
+            AfficherStatutsPlantes();
+            Console.WriteLine("Que voulez-vous faire ?");
+            Console.WriteLine("(1) Planter une graine \n(2) Faire un Achat \n(3) Arroser \n(4) Poser un item de votre inventaire \n(5) Avancer dans le temps\n(6)Quitter le jeu");
+            reponse = Convert.ToInt16(Console.ReadLine()!);
+            if (reponse == 1) Planter(simu);
+            if (reponse == 2) Console.WriteLine("ça arrive bientôt tkt");
+            if (reponse == 3) Arroser();
+            if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
+        }
+        while (reponse != 5 && reponse != 6);
+        if (reponse == 5) NumeroTour += 1;
+        if (reponse == 6) jeuEnCours = false;
+    }
+
+    public void Simuler(Potager pot, Simulation simu)
+    {
+        bool jeuEnCours = true;
         // Création des récoltes
         Recolte RecArtichaut = new Recolte("Artichaut", 0);
         Recolte RecAubergine = new Recolte("Aubergine", 0);
@@ -221,41 +310,59 @@ public class Simulation
         Recolte RecThym = new Recolte("Thym", 0);
         Recolte RecTomate = new Recolte("Tomate", 0);
 
+        //Ajout à l'inventaire
+        Pot.Inventaire.Add(RecArtichaut);
+        Pot.Inventaire.Add(RecAubergine);
+        Pot.Inventaire.Add(RecBasilic);
+        Pot.Inventaire.Add(RecOignon);
+        Pot.Inventaire.Add(RecOlivier);
+        Pot.Inventaire.Add(RecPoivron);
+        Pot.Inventaire.Add(RecRoquette);
+        Pot.Inventaire.Add(RecThym);
+        Pot.Inventaire.Add(RecTomate);
+
+        // Création des graines
+        Graine GraineAtc = new Graine("Artichaut", 0);
+        Graine GraineAub = new Graine("Aubergine", 3);
+        Graine GraineBsl = new Graine("Basilic", 0);
+        Graine GraineOgn = new Graine("Oignon", 0);
+        Graine GraineOlv = new Graine("Olivier", 1);
+        Graine GrainePvr = new Graine("Poivron", 0);
+        Graine GraineRqt = new Graine("Roquette", 0);
+        Graine GraineThy = new Graine("Thym", 0);
+        Graine GraineTmt = new Graine("Tomate", 2);
+
         string[,] GrillePotager = new string[pot.Hauteur, pot.Longueur];
         InitialisationPotager(pot, GrillePotager);
-        MajAffichagePlantes(GrillePotager);
 
-        foreach (Plante plante in pot.ListePlantes)
+        while (jeuEnCours)
         {
-            plante.MettreAJourPlantesAutour();
-            VerifierEsperanceDeVie(plante);
-            plante.ImpactConditions();
-            plante.Contamination();
-            if (NumeroTour % plante.TempsCroissance == 0) { plante.Grandir(); }
-            plante.DonnerRecolte(pot, AssocierRecoltePlante(plante, RecArtichaut, RecAubergine, RecBasilic, RecOignon, RecOlivier, RecPoivron, RecRoquette, RecThym, RecTomate));
-            Console.WriteLine(plante);
+            Pot.SacDeGraines.Add(GraineAub);
+            Pot.SacDeGraines.Add(GraineOlv);
+            Pot.SacDeGraines.Add(GraineTmt);
+            MajAffichagePlantes(GrillePotager);
+
+            foreach (Plante plante in pot.ListePlantes)
+            {
+                MajBesoinEau();
+                plante.MettreAJourPlantesAutour();
+                VerifierEsperanceDeVie(plante);
+                plante.ImpactConditions();
+                plante.Contamination();
+                if (NumeroTour % plante.TempsCroissance == 0) { plante.Grandir(); }
+                plante.DonnerRecolte(pot, AssocierRecoltePlante(plante, RecArtichaut, RecAubergine, RecBasilic, RecOignon, RecOlivier, RecPoivron, RecRoquette, RecThym, RecTomate));
+                Console.WriteLine(plante);
+
+            }
+            if (NumeroTour == 1) { pot.Saison.Nom = Saison.Printemps; }
+            if (NumeroTour == 4) { pot.Saison.Nom = Saison.Ete; }
+            if (NumeroTour == 7) { pot.Saison.Nom = Saison.Automne; }
+            if (NumeroTour == 10) { pot.Saison.Nom = Saison.Hiver; }
+            Pot.Saison.ChangerBesoinEau();
+            Pot.Saison.ChangerTemperature();
+
 
         }
-        if (NumeroTour == 1) { pot.Saison.Nom = Saison.Printemps; }
-        if (NumeroTour == 4) { pot.Saison.Nom = Saison.Ete; }
-        if (NumeroTour == 7) { pot.Saison.Nom = Saison.Automne; }
-        if (NumeroTour == 10) { pot.Saison.Nom = Saison.Hiver; }
-        Pot.Saison.ChangerBesoinEau();
-        Pot.Saison.ChangerTemperature();
-
-        int reponse;
-        do
-        {
-            Console.WriteLine("Que voulez-vous faire ?");
-            Console.WriteLine("(1) Planter une graine \n(2) Faire un Achat \n(3) Arroser \n(4) Poser un item de votre inventaire \n(5) Avancer dans le temps");
-            reponse = Convert.ToInt16(Console.ReadLine()!);
-            if (reponse == 1) Planter();
-            if (reponse == 2) Console.WriteLine("ça arrive bientôt tkt");
-            if (reponse == 3) Arroser();
-            if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
-        }
-        while (reponse != 5);
-        NumeroTour += 1;
     }
 
 }

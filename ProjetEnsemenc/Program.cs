@@ -14,3 +14,4 @@ while (!int.TryParse(Console.ReadLine(), out largeur))
 
 
 Simulation simu = new Simulation(hauteur, largeur);
+simu.Simuler(simu.Pot, simu);
