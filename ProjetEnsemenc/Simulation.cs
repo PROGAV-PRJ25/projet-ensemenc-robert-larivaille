@@ -243,7 +243,19 @@ public class Simulation
         Pot.Saison.ChangerBesoinEau();
         Pot.Saison.ChangerTemperature();
 
-
+        int reponse;
+        do
+        {
+            Console.WriteLine("Que voulez-vous faire ?");
+            Console.WriteLine("(1) Planter une graine \n(2) Faire un Achat \n(3) Arroser \n(4) Poser un item de votre inventaire \n(5) Avancer dans le temps");
+            reponse = Convert.ToInt16(Console.ReadLine()!);
+            if (reponse == 1) Planter();
+            if (reponse == 2) Console.WriteLine("ça arrive bientôt tkt");
+            if (reponse == 3) Arroser();
+            if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
+        }
+        while (reponse != 5);
+        NumeroTour += 1;
     }
 
 }

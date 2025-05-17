@@ -73,7 +73,7 @@ public abstract class ActionUrgente
         if (Sujet is Oiseau oiseau)
         {
             oiseau.Disparait();
-            bool epouvantail = true; //Mettre dans simulation
+            bool PresenceEpouvantail = true; //Mettre dans simulation
         }
         else
         {
