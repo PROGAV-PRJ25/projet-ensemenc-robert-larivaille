@@ -190,6 +190,13 @@ public abstract class Plante
     {
         ScoreTerrain += 5;
     }
+
+    public void EffetFertilisant()
+    {
+        double augmentation= 1.10 * Convert.ToDouble(QteMaxProduite);
+        QteMaxProduite= Convert.ToInt32(augmentation);
+    }
+
     public int CalculerScoreCondition()
     {
         int scoreEau;
