@@ -30,4 +30,19 @@ public class Potager
         SacDeGraines.Add(new Graine("Tomate", 0));
     }
 
+    public void EffetArrosageAutomatique()
+    {
+        foreach (Plante plante in ListePlantes)
+        {
+            plante.NiveauHumidite = plante.SeuilHumidite;
+        }
+    }
+
+    public void EffetFertilisant()
+    {
+        foreach (Plante plante in ListePlantes)
+        {
+            plante.Fertilise();
+        }
+    }
 }

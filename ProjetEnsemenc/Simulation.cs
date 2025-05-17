@@ -28,7 +28,11 @@ public class Simulation
     public List<int> ListeAchats { get; set; } //Nombre de chaque achat qui n'a pas encore été utilisé pour dans l'odre : Arrosage automatique, Bache, Coccinelle, Chien, Epouvantail, Fertilisant, Graine, LampeUV, Pompe, Serre, tuyau d'arrosage, RemedeFusariose, Remede Mildiou, Remede Oidium
 
     public bool PresenceChien { get; set; }
-    public bool PresenceEpouvantail { get; set; } // Indique si un epouvantail est présent sur le jeu (acheter et posé)
+    public bool PresenceEpouvantail { get; set; } // Indique si un epouvantail est présent sur le jeu (acheté et posé)
+    public bool PresenceArrosageAutomatique { get; set; }
+    public bool PresenceLampeUV { get; set; }
+    public bool PresenceSerre { get; set; }
+    
 
 
     public Simulation(int hauteur, int largeur)
@@ -41,6 +45,9 @@ public class Simulation
         ListeAchats = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         PresenceChien = false;
         PresenceEpouvantail = false;
+        PresenceArrosageAutomatique=false;
+        PresenceLampeUV=false;
+        PresenceSerre=false;
         achatsPossibles.Add(new ArrosageAutomatique());
         achatsPossibles.Add(new Bache());
         achatsPossibles.Add(new AchatCoccinelle());
@@ -334,7 +341,7 @@ public class Simulation
         Console.WriteLine("Vous possédez les achats suivants :");
         foreach (int nombreAchat in ListeAchats)
         {
-            if ( (nombreAchat != 0) && (numero != 3) && (numero != 6)  && (numero != 1) && (numero != 8) && (numero != 10) ) //On ne peut pas poser : chien (3), graine (6), bache (1), pompe (8), tuyau d'arrosage (10)
+            if ((nombreAchat != 0) && (numero != 3) && (numero != 6) && (numero != 1) && (numero != 8) && (numero != 10)) //On ne peut pas poser : chien (3), graine (6), bache (1), pompe (8), tuyau d'arrosage (10)
             {
                 Console.WriteLine($"- {numero}. {achatsPossibles[numero].Nom} : {nombreAchat} unités");
             }
@@ -350,11 +357,13 @@ public class Simulation
         }
         if (numeroAAcheter == 5)
         {
-            foreach (Plante plante in Pot.ListePlantes)
-            {
-                plante.EffetFertilisant();
-            }
+            Pot.EffetFertilisant();
             Console.WriteLine("Vous avez choisi le fertilisant, il a amélioré la production maximum de toutes les plantes du potager.");
+        }
+        if (numeroAAcheter == 0)
+        {
+            Pot.EffetArrosageAutomatique();
+            Console.WriteLine("Vous avez installé un arrosage automatique.");
         }
         //pas fini
 

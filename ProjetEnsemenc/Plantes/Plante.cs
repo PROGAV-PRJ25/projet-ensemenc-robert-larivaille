@@ -191,7 +191,7 @@ public abstract class Plante
         ScoreTerrain += 5;
     }
 
-    public void EffetFertilisant()
+    public void Fertilise()
     {
         double augmentation= 1.10 * Convert.ToDouble(QteMaxProduite);
         QteMaxProduite= Convert.ToInt32(augmentation);
