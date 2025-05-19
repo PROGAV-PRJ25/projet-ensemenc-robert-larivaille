@@ -37,7 +37,7 @@ public class Simulation
     public bool PresenceArrosageAutomatique { get; set; }
     public bool PresenceLampeUV { get; set; }
     public bool PresenceSerre { get; set; }
-    
+
 
 
     public Simulation(int hauteur, int largeur)
@@ -50,9 +50,9 @@ public class Simulation
         ListeAchats = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         PresenceChien = false;
         PresenceEpouvantail = false;
-        PresenceArrosageAutomatique=false;
-        PresenceLampeUV=false;
-        PresenceSerre=false;
+        PresenceArrosageAutomatique = false;
+        PresenceLampeUV = false;
+        PresenceSerre = false;
         achatsPossibles.Add(new ArrosageAutomatique());
         achatsPossibles.Add(new Bache());
         achatsPossibles.Add(new AchatCoccinelle());
@@ -252,15 +252,15 @@ public class Simulation
         }
         else
         {
-            Console.WriteLine("Confirmez l'achat : 1.OUI 2.NON. Entrez 1 ou 2");
-            int rep = -1;
-            string reponse3 = Console.ReadLine()!;
-            while ((!Int32.TryParse(reponse3, out rep)) || ((rep != 1) && (rep != 2)))
+            Console.WriteLine("Confirmez l'achat : Entrez Oui ou Non");
+            string reponse = Console.ReadLine()!;
+            ChoixOuiNon choix;
+            while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix))
             {
-                Console.WriteLine("Réponse invalide ");
-                Console.WriteLine("Confirmez l'achat : 1.OUI 2.NON. Entrez 1 ou 2.");
+                Console.WriteLine("Entrée invalide. Veuillez saisir un choix valide : Oui, Non");
+                reponse = Console.ReadLine()!;
             }
-            if (rep == 1)
+            if (choix == ChoixOuiNon.Oui)
             {
                 Argent -= prixTotal;
                 Console.WriteLine($"Vous avez maintenant un solde de {Argent}");
@@ -276,18 +276,29 @@ public class Simulation
     public void AcheterGraine()
     {
         int numero = 0;
-        Console.WriteLine("Vous possédez les graines suivantes :");
+        Console.WriteLine("Vous pouvez acheter les graines suivantes :");
         foreach (Graine graine in Pot.SacDeGraines)
         {
             Console.WriteLine($"- {numero}. {graine.Espece} : {graine.Quantite} unités");
             numero++;
         }
+        Console.WriteLine($"- {numero}. Retour à la liste des achats");
         Console.WriteLine("Quel est le numéro de la graine que vous voulez acheter ? ");
         string reponse = Console.ReadLine()!;
         int numeroAAcheter;
-        while (!Int32.TryParse(reponse, out numeroAAcheter) || (numeroAAcheter < 0) || (numeroAAcheter >= Pot.SacDeGraines.Count))
+        while (!Int32.TryParse(reponse, out numeroAAcheter) || (numeroAAcheter < 0) || (numeroAAcheter > Pot.SacDeGraines.Count))
         {
             Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de la graine que vous voulez acheter ? ");
+            reponse = Console.ReadLine()!;
+        }
+        if (numeroAAcheter == Pot.SacDeGraines.Count)
+        {
+            Acheter();
+            return;
+        }
+        if (numeroAAcheter == 1000)
+        {
+            return;
         }
         int nombreUnites = DemanderNombreAchats();
         double prixTotal = 0.20 * nombreUnites;
@@ -314,7 +325,7 @@ public class Simulation
         else
         {
             prixUnitaire = achatSouhaite.Prix;
-            Console.WriteLine($"Le prix par utilisation est {prixUnitaire}");
+            Console.WriteLine($"Le prix par item est {prixUnitaire}");
         }
         int nombreUnites = 1;
         if (achatSouhaite.Nature != Natures.Graine)
@@ -360,6 +371,7 @@ public class Simulation
             {
                 Console.WriteLine("Réponse invalide ");
                 Console.WriteLine("Entrez les numéros des achats que vous souhaitez faire un par un. Entrez 1000 pour arreter les achats. ");
+                reponse = Console.ReadLine()!;
             }
             if (numeroAAcheter != 1000)
             {
@@ -409,6 +421,7 @@ public class Simulation
         //pas fini
 
     }
+
 
     public void InitialisationPotager(Potager Pot, string[,] grille)
     {
@@ -522,7 +535,7 @@ public class Simulation
                 rep = Console.ReadLine()!;
             }
             if (reponse == 1) Planter(simu);
-            if (reponse == 2) Console.WriteLine("ça arrive bientôt tkt");
+            if (reponse == 2) Acheter();
             if (reponse == 3) Arroser();
             if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
         }
@@ -556,35 +569,11 @@ public class Simulation
         Pot.Inventaire.Add(RecThym);
         Pot.Inventaire.Add(RecTomate);
 
-        // Création des graines
-        Graine GraineAtc = new Graine("Artichaut", 0);
-        Graine GraineAub = new Graine("Aubergine", 3);
-        Graine GraineBsl = new Graine("Basilic", 0);
-        Graine GraineOgn = new Graine("Oignon", 0);
-        Graine GraineOlv = new Graine("Olivier", 1);
-        Graine GrainePvr = new Graine("Poivron", 0);
-        Graine GraineRqt = new Graine("Roquette", 0);
-        Graine GraineThy = new Graine("Thym", 0);
-        Graine GraineTmt = new Graine("Tomate", 2);
-
         string[,] GrillePotager = new string[pot.Hauteur, pot.Longueur];
         InitialisationPotager(pot, GrillePotager);
 
-        Pot.SacDeGraines.Add(GraineAub);
-        Pot.SacDeGraines.Add(GraineOlv);
-        Pot.SacDeGraines.Add(GraineTmt);
-
         while (jeuEnCours)
         {
-
-            Console.WriteLine("Que voulez-vous faire ?");
-            Console.WriteLine("(1) Planter une graine \n(2) Faire un Achat \n(3) Arroser \n(4) Poser un item de votre inventaire \n(5) Avancer dans le temps");
-            reponse = Convert.ToInt16(Console.ReadLine()!);
-            if (reponse == 1) Planter();
-            if (reponse == 2) Acheter();
-            if (reponse == 3) Arroser();
-            if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
-
             MajAffichagePlantes(GrillePotager);
 
             foreach (Plante plante in pot.ListePlantes)
