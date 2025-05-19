@@ -37,7 +37,7 @@ public class Simulation
     public bool PresenceArrosageAutomatique { get; set; }
     public bool PresenceLampeUV { get; set; }
     public bool PresenceSerre { get; set; }
-    
+
 
 
     public Simulation(int hauteur, int largeur)
@@ -50,9 +50,9 @@ public class Simulation
         ListeAchats = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         PresenceChien = false;
         PresenceEpouvantail = false;
-        PresenceArrosageAutomatique=false;
-        PresenceLampeUV=false;
-        PresenceSerre=false;
+        PresenceArrosageAutomatique = false;
+        PresenceLampeUV = false;
+        PresenceSerre = false;
         achatsPossibles.Add(new ArrosageAutomatique());
         achatsPossibles.Add(new Bache());
         achatsPossibles.Add(new AchatCoccinelle());
@@ -522,7 +522,7 @@ public class Simulation
                 rep = Console.ReadLine()!;
             }
             if (reponse == 1) Planter(simu);
-            if (reponse == 2) Console.WriteLine("ça arrive bientôt tkt");
+            if (reponse == 2) Acheter();
             if (reponse == 3) Arroser();
             if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
         }
@@ -576,15 +576,6 @@ public class Simulation
 
         while (jeuEnCours)
         {
-
-            Console.WriteLine("Que voulez-vous faire ?");
-            Console.WriteLine("(1) Planter une graine \n(2) Faire un Achat \n(3) Arroser \n(4) Poser un item de votre inventaire \n(5) Avancer dans le temps");
-            reponse = Convert.ToInt16(Console.ReadLine()!);
-            if (reponse == 1) Planter();
-            if (reponse == 2) Acheter();
-            if (reponse == 3) Arroser();
-            if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
-
             MajAffichagePlantes(GrillePotager);
 
             foreach (Plante plante in pot.ListePlantes)
