@@ -116,12 +116,13 @@ public abstract class Plante
                 {
                     CalculerQteProduite();
                     recolte.Quantite += QteProduite;
+                    NbRecolte++;
                 }
-                if (QteProduite == 0)
+                else if (QteProduite == 0)
                 {
                     Console.WriteLine("La plante n'a rien produit pour l'instant");
                 }
-                else
+                else if (NbRecolte >= NbRecoltePossible)
                     Console.WriteLine($"Vous avez déjà récolté {NbRecoltePossible} fois {Espece}");
 
             }
@@ -202,8 +203,8 @@ public abstract class Plante
 
     public void Fertilise()
     {
-        double augmentation= 1.10 * Convert.ToDouble(QteMaxProduite);
-        QteMaxProduite= Convert.ToInt32(augmentation);
+        double augmentation = 1.10 * Convert.ToDouble(QteMaxProduite);
+        QteMaxProduite = Convert.ToInt32(augmentation);
     }
 
     public int CalculerScoreCondition()
