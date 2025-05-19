@@ -2,6 +2,7 @@ public class RemedeFusariose : Remede
 {
     public RemedeFusariose() : base("Traitement Fusariose")
     {
+
     }
 
     public override void Agir(Maladie maladie, Plante plante)

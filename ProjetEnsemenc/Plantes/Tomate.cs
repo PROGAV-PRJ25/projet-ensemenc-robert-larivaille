@@ -1,6 +1,6 @@
 public class Tomate : PlanteAnnuelle
 {
-    public Tomate(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public Tomate(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Espece = "Tomate";
         this.SaisondeSemis = Saison.Printemps;
@@ -26,7 +26,7 @@ public class Tomate : PlanteAnnuelle
         };
         this.ProbaMaladies = new List<int> { 50, 20 };
         this.Sante = 100;
-        this.QteProduite = 30;
+        this.QteMaxProduite = 30;
 
         if (TerrainPlant == Terrain.Terre)
         {

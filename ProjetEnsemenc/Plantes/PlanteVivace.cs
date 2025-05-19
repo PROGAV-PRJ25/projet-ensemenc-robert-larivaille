@@ -1,6 +1,6 @@
 public abstract class PlanteVivace : Plante
 {
-    public PlanteVivace(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public PlanteVivace(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Pot = pot;
         this.CoorX = CoorX;

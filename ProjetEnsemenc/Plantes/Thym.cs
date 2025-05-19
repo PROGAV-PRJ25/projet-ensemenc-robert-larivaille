@@ -1,6 +1,6 @@
 public class Thym : PlanteVivace
 {
-    public Thym(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public Thym(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Espece = "Thym";
         this.SaisondeSemis = Saison.Printemps;
@@ -23,7 +23,7 @@ public class Thym : PlanteVivace
         this.MaladiesPotentielles = new List<Maladie> { new Oidium("Oidium") };
         this.ProbaMaladies = new List<int> { 15 };
         this.Sante = 100;
-        this.QteProduite = 20;
+        this.QteMaxProduite = 20;
 
         if (TerrainPlant == Terrain.Calcaire)
         {

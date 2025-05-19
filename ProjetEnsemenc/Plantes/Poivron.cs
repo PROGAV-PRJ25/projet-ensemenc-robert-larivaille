@@ -1,6 +1,6 @@
 public class Poivron : PlanteAnnuelle
 {
-    public Poivron(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter) // Selon caractéristiques du poivron rouge
+    public Poivron(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu) // Selon caractéristiques du poivron rouge
     {
         this.Espece = "Poivron";
         this.SaisondeSemis = Saison.Hiver;
@@ -26,7 +26,7 @@ public class Poivron : PlanteAnnuelle
         };
         this.ProbaMaladies = new List<int> { 35, 25 };
         this.Sante = 100;
-        this.QteProduite = 6;
+        this.QteMaxProduite = 6;
 
         if (TerrainPlant == Terrain.Terre)
         {

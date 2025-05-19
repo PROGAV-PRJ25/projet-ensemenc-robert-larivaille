@@ -1,6 +1,6 @@
 public class Aubergine : PlanteVivace
 {
-    public Aubergine(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public Aubergine(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Espece = "Aubergine";
         this.SaisondeSemis = Saison.Printemps;
@@ -23,7 +23,7 @@ public class Aubergine : PlanteVivace
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new List<int> { 30 };
         this.Sante = 100;
-        this.QteProduite = 2;
+        this.QteMaxProduite = 2;
 
         if (TerrainPlant == Terrain.Terre)
         {

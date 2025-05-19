@@ -1,6 +1,6 @@
 public class Roquette : PlanteAnnuelle
 {
-    public Roquette(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public Roquette(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Espece = "Roquette";
         this.SaisondeSemis = Saison.Ete;
@@ -22,7 +22,7 @@ public class Roquette : PlanteAnnuelle
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new List<int> { 30, 15 };
         this.Sante = 100;
-        this.QteProduite = 10;
+        this.QteMaxProduite = 10;
 
         if (TerrainPlant == Terrain.Terre)
         {

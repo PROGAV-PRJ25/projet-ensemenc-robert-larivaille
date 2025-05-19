@@ -1,6 +1,6 @@
 public class Artichaut : PlanteVivace
 {
-    public Artichaut(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public Artichaut(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Espece = "Artichaut";
         this.SaisondeSemis = Saison.Printemps;
@@ -22,7 +22,7 @@ public class Artichaut : PlanteVivace
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new List<int> { 15, 10 };
         this.Sante = 100;
-        this.QteProduite = 5;
+        this.QteMaxProduite = 5;
         this.NbRecoltePossible = 2;
 
         if (TerrainPlant == Terrain.Terre)

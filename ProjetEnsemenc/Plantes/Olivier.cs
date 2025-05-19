@@ -1,7 +1,7 @@
 public class Olivier : PlanteVivace
 {
 
-    public Olivier(int coorX, int coorY, Potager pot, Terrain ter) : base(coorX, coorY, pot, ter)
+    public Olivier(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
     {
         this.Espece = "Olivier";
         this.SaisondeSemis = Saison.Automne;
@@ -24,7 +24,7 @@ public class Olivier : PlanteVivace
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new List<int> { 40 };
         this.Sante = 100;
-        this.QteProduite = 5000; //5000 olives par an
+        this.QteMaxProduite = 5000; //5000 olives par an
 
         if (TerrainPlant == Terrain.Terre)
         {

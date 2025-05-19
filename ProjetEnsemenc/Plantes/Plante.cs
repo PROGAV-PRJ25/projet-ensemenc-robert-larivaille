@@ -6,6 +6,7 @@ public abstract class Plante
     public Terrain TerrainPlant { get; set; }
     public Saison SaisondeSemis { get; set; }
     public Saison SaisondeRecolte { get; set; }
+    public int TourPlantation { get; set; }
     public int Espacement { get; set; }
     public bool Comestible { get; set; }
     public int QuotaCroissance { get; set; }
@@ -26,7 +27,7 @@ public abstract class Plante
     public List<Maladie> EstMaladeDe { get; set; } = new List<Maladie>();
 
     public int QteMaxProduite { get; set; }
-    public int QteProduite { get; set; }//Qté récupérée par récolte
+    public int QteProduite { get; set; }
     public int NbRecoltePossible { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
     public int NbRecolte { get; set; }
     public int ScoreCondition { get; set; }
@@ -57,7 +58,7 @@ public abstract class Plante
         }
     }
 
-    public Plante(int x, int y, Potager pot, Terrain terrain)
+    public Plante(int x, int y, Potager pot, Terrain terrain, Simulation simu)
     {
         Pot = pot;
         CoorX = x;
@@ -65,6 +66,8 @@ public abstract class Plante
         NiveauTemperature = Pot.Temperature;
         TerrainPlant = terrain;
         NbRecolte = 0;
+        TourPlantation = simu.NumeroTour;
+        QteProduite = 0;
     }
 
     public void MettreAJourPlantesAutour()
@@ -101,7 +104,13 @@ public abstract class Plante
         {
             Console.WriteLine($"Voulez-vous récolter {Espece} ? (Oui ou Non)");
             string reponse = Console.ReadLine()!;
-            if (reponse.Equals("Oui", StringComparison.OrdinalIgnoreCase))
+            ChoixOuiNon choix;
+            while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix))
+            {
+                Console.WriteLine("Entrée invalide. Veuillez saisir un choix valide : Oui, Non");
+                reponse = Console.ReadLine()!;
+            }
+            if (choix == ChoixOuiNon.Oui)
             {
                 if (NbRecolte < NbRecoltePossible)
                 {
@@ -211,7 +220,7 @@ public abstract class Plante
         else
         {
             int differenceEau = Math.Abs(NiveauHumidite - SeuilHumidite);
-            scoreEau = Math.Max(0, 100 - (differenceEau * 2)); // Réduit le score de 2 points par unité d'écart
+            scoreEau = Math.Max(0, 100 - (differenceEau * 5)); // Réduit le score de 5 points par unité d'écart
         }
 
         // Gestion du respect des conditions de luminosité
@@ -222,7 +231,7 @@ public abstract class Plante
         else
         {
             int differenceLum = Math.Abs(NiveauLuminosite - SeuilLuminosite);
-            scoreLum = Math.Max(0, 100 - (differenceLum * 2)); // Réduit le score de 2 points par unité d'écart
+            scoreLum = Math.Max(0, 100 - (differenceLum * 5)); // Réduit le score de 5 points par unité d'écart
         }
 
         // Gestion du respect des conditions de température
@@ -235,23 +244,29 @@ public abstract class Plante
         else
         {
             int differenceTemp = Math.Abs(NiveauTemperature - tempCible);
-            scoreTemp = Math.Max(0, 100 - (differenceTemp * 2)); // Réduit le score de 2 points par unité d'écart
+            scoreTemp = Math.Max(0, 100 - (differenceTemp * 5)); // Réduit le score de 5 points par unité d'écart
         }
         ScoreCondition = ScoreTerrain + scoreEau + scoreTemp + scoreLum;
+        // Console.WriteLine($"Score Luminosité: {scoreLum}");
+        // Console.WriteLine($"Score Eau : {scoreEau}");
+        // Console.WriteLine($"Score Terrain : {ScoreTerrain}");
+        // Console.WriteLine($"Score Eau : {scoreEau}");
+        // Console.WriteLine($"--  Score Conditions : {ScoreCondition} -- ");
         return ScoreCondition;
     }
 
     public void ImpactConditions()
     {
-        if (CalculerScoreCondition() < 200)
+        int score = CalculerScoreCondition();
+        if (score < 200)
         {
             EstMorte();
         }
-        else if ((CalculerScoreCondition() >= 200) && (CalculerScoreCondition() < 250))
+        else if ((score >= 200) && (score < 250))
         {
             QteProduite /= 2;
         }
-        else if (CalculerScoreCondition() >= 350)
+        else if (score >= 350)
             QteProduite *= 2;
     }
     public void AttraperMaladie(Maladie maladie)
@@ -266,15 +281,18 @@ public abstract class Plante
     public override string ToString()
     {
         string message;
-        message = $"Statuts {Espece} : Taille :{Taille}, Santé {Sante}";
-        message += $"- Maladies : {EstMaladeDe}";
+        message = $"Statuts {Espece} : Taille :{Taille}, Santé {Sante}\n Conditions : Humidité {NiveauHumidite}, Luminosité {NiveauLuminosite}, Température : {NiveauTemperature}";
+        if (EstMaladeDe.Count() != 0)
+        {
+            message += $"- Maladies : {EstMaladeDe}";
+        }
         if (CalculerScoreCondition() < 250)
         {
             message += "-- Mauvaises conditions - Perte de production --";
         }
         if ((CoorX == -1) && (CoorY == -1))
         {
-            message = "-- Plante Morte --";
+            message = $"-- {Espece} Morte --";
         }
         return message;
     }
