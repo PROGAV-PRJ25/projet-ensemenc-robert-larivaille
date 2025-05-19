@@ -19,7 +19,7 @@ public class Potager
         Longueur = longueur;
         Temperature = temperature;
         Saison = saison;
-        SacDeGraines.Add(new Graine("Artichaud", 0));
+        SacDeGraines.Add(new Graine("Artichaut", 0));
         SacDeGraines.Add(new Graine("Aubergine", 0));
         SacDeGraines.Add(new Graine("Basilic", 0));
         SacDeGraines.Add(new Graine("Oignon", 0));
