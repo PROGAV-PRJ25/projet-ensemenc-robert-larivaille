@@ -213,7 +213,7 @@ public abstract class Plante
         else
         {
             int differenceEau = Math.Abs(NiveauHumidite - SeuilHumidite);
-            scoreEau = Math.Max(0, 100 - (differenceEau * 2)); // Réduit le score de 2 points par unité d'écart
+            scoreEau = Math.Max(0, 100 - (differenceEau * 5)); // Réduit le score de 5 points par unité d'écart
         }
 
         // Gestion du respect des conditions de luminosité
@@ -224,7 +224,7 @@ public abstract class Plante
         else
         {
             int differenceLum = Math.Abs(NiveauLuminosite - SeuilLuminosite);
-            scoreLum = Math.Max(0, 100 - (differenceLum * 2)); // Réduit le score de 2 points par unité d'écart
+            scoreLum = Math.Max(0, 100 - (differenceLum * 5)); // Réduit le score de 5 points par unité d'écart
         }
 
         // Gestion du respect des conditions de température
@@ -237,14 +237,14 @@ public abstract class Plante
         else
         {
             int differenceTemp = Math.Abs(NiveauTemperature - tempCible);
-            scoreTemp = Math.Max(0, 100 - (differenceTemp * 2)); // Réduit le score de 2 points par unité d'écart
+            scoreTemp = Math.Max(0, 100 - (differenceTemp * 5)); // Réduit le score de 5 points par unité d'écart
         }
         ScoreCondition = ScoreTerrain + scoreEau + scoreTemp + scoreLum;
-        Console.WriteLine($"Score Luminosité: {scoreLum}");
-        Console.WriteLine($"Score Eau : {scoreEau}");
-        Console.WriteLine($"Score Terrain : {ScoreTerrain}");
-        Console.WriteLine($"Score Eau : {scoreEau}");
-        Console.WriteLine($"--  Score Conditions : {ScoreCondition} -- ");
+        // Console.WriteLine($"Score Luminosité: {scoreLum}");
+        // Console.WriteLine($"Score Eau : {scoreEau}");
+        // Console.WriteLine($"Score Terrain : {ScoreTerrain}");
+        // Console.WriteLine($"Score Eau : {scoreEau}");
+        // Console.WriteLine($"--  Score Conditions : {ScoreCondition} -- ");
         return ScoreCondition;
     }
 
@@ -285,7 +285,7 @@ public abstract class Plante
         }
         if ((CoorX == -1) && (CoorY == -1))
         {
-            message = "-- Plante Morte --";
+            message = $"-- {Espece} Morte --";
         }
         return message;
     }
