@@ -26,13 +26,19 @@ public enum ChoixOuiNon
 public class Simulation
 {
     public Potager Pot { get; set; }
-    public int Argent { get; set; }
+    public double Argent { get; set; }
     public int NumeroTour { get; set; }
     public ModeDeJeu mode { get; set; }
-    public List<int> ListeAchats { get; set; } //Nombre de chaque achat qui n'a pas encore été utilisé pour dans l'odre : 
+    public List<Achats> achatsPossibles = new List<Achats>();
+    public List<int> ListeAchats { get; set; } //Nombre de chaque achat qui n'a pas encore été utilisé pour dans l'odre : Arrosage automatique, Bache, Coccinelle, Chien, Epouvantail, Fertilisant, Graine, LampeUV, Pompe, Serre, tuyau d'arrosage, RemedeFusariose, Remede Mildiou, Remede Oidium
 
     public bool PresenceChien { get; set; }
-    public bool PresenceEpouvantail { get; set; } // Indique si un epouvantail est présent sur le jeu (acheter et posé)
+    public bool PresenceEpouvantail { get; set; } // Indique si un epouvantail est présent sur le jeu (acheté et posé)
+    public bool PresenceArrosageAutomatique { get; set; }
+    public bool PresenceLampeUV { get; set; }
+    public bool PresenceSerre { get; set; }
+    
+
 
     public Simulation(int hauteur, int largeur)
     {
@@ -41,9 +47,26 @@ public class Simulation
         mode = ModeDeJeu.Classique;
         Argent = 1000;
         NumeroTour = 1;
-        ListeAchats = new List<int>();
+        ListeAchats = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         PresenceChien = false;
         PresenceEpouvantail = false;
+        PresenceArrosageAutomatique=false;
+        PresenceLampeUV=false;
+        PresenceSerre=false;
+        achatsPossibles.Add(new ArrosageAutomatique());
+        achatsPossibles.Add(new Bache());
+        achatsPossibles.Add(new AchatCoccinelle());
+        achatsPossibles.Add(new AchatChien());
+        achatsPossibles.Add(new Epouvantail());
+        achatsPossibles.Add(new Fertilisant());
+        achatsPossibles.Add(new AchatGraine());
+        achatsPossibles.Add(new LampeUV());
+        achatsPossibles.Add(new Pompe());
+        achatsPossibles.Add(new Serre());
+        achatsPossibles.Add(new TuyauArrosage());
+        achatsPossibles.Add(new AchatRemedeFusariose());
+        achatsPossibles.Add(new AchatRemedeMildiou());
+        achatsPossibles.Add(new AchatRemedeOidium());
     }
 
     public void CreerPlante(string espece, int x, int y, Simulation simu)
@@ -194,6 +217,199 @@ public class Simulation
             plante.EstMorte();
     }
 
+    public void AjouterAchat(int numero, int quantite)
+    {
+        ListeAchats[numero] += quantite;
+    }
+
+    public void RetirerAchat(int numero, int quantite)
+    {
+        ListeAchats[numero] -= quantite;
+    }
+
+    public int DemanderNombreAchats()
+    {
+        Console.WriteLine("Combien d'unités voulez-vous acheter ?");
+        int nombreUnites = -1;
+        string reponse = Console.ReadLine()!;
+        while ((!Int32.TryParse(reponse, out nombreUnites)) || (nombreUnites < 0))
+        {
+            Console.WriteLine("Réponse invalide ");
+            Console.WriteLine("Entrez le nombre d'unités.");
+        }
+        return nombreUnites;
+    }
+
+
+    public bool PayerAchat(double prixTotal)
+    {
+        Console.WriteLine($"Le prix pour cet achat est {prixTotal}");
+        Console.WriteLine($"Vous avez un solde de {Argent}");
+        if (Argent - prixTotal < 0)
+        {
+            Console.WriteLine("Vous n'avez pas assez d'argent pour effectuer l'achat.");
+            return false;
+        }
+        else
+        {
+            Console.WriteLine("Confirmez l'achat : 1.OUI 2.NON. Entrez 1 ou 2");
+            int rep = -1;
+            string reponse3 = Console.ReadLine()!;
+            while ((!Int32.TryParse(reponse3, out rep)) || ((rep != 1) && (rep != 2)))
+            {
+                Console.WriteLine("Réponse invalide ");
+                Console.WriteLine("Confirmez l'achat : 1.OUI 2.NON. Entrez 1 ou 2.");
+            }
+            if (rep == 1)
+            {
+                Argent -= prixTotal;
+                Console.WriteLine($"Vous avez maintenant un solde de {Argent}");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public void AcheterGraine()
+    {
+        int numero = 0;
+        Console.WriteLine("Vous possédez les graines suivantes :");
+        foreach (Graine graine in Pot.SacDeGraines)
+        {
+            Console.WriteLine($"- {numero}. {graine.Espece} : {graine.Quantite} unités");
+            numero++;
+        }
+        Console.WriteLine("Quel est le numéro de la graine que vous voulez acheter ? ");
+        string reponse = Console.ReadLine()!;
+        int numeroAAcheter;
+        while (!Int32.TryParse(reponse, out numeroAAcheter) || (numeroAAcheter < 0) || (numeroAAcheter >= Pot.SacDeGraines.Count))
+        {
+            Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de la graine que vous voulez acheter ? ");
+        }
+        int nombreUnites = DemanderNombreAchats();
+        double prixTotal = 0.20 * nombreUnites;
+        bool acheter = PayerAchat(prixTotal);
+        if (acheter)
+        {
+            Pot.SacDeGraines[numeroAAcheter].Quantite += nombreUnites;
+        }
+    }
+
+    public void EffectuerAchat(int numero)
+    {
+        Achats achatSouhaite = achatsPossibles[numero];
+        if (achatSouhaite.Nature == Natures.Remede)
+        {
+            Console.WriteLine("Pour information, le remède traite tout le potager lorsqu'on l'utilise");
+        }
+        double prixUnitaire = 0;
+        if (achatSouhaite.PrixVariant)
+        {
+            prixUnitaire = achatSouhaite.Prix * Pot.Hauteur * Pot.Longueur;
+            Console.WriteLine($"Le prix de cet achat dépend de la taille du potager. Pour ce potager, le prix par utilisation est {prixUnitaire}");
+        }
+        else
+        {
+            prixUnitaire = achatSouhaite.Prix;
+            Console.WriteLine($"Le prix par utilisation est {prixUnitaire}");
+        }
+        int nombreUnites = 1;
+        if (achatSouhaite.Nature != Natures.Graine)
+        {
+            if (achatSouhaite.Nom != Achat.Chien)
+            {
+                nombreUnites = DemanderNombreAchats();
+            }
+            else
+            {
+                Console.WriteLine("Vous ne pouvez acheter qu'un chien. ");
+            }
+            double prixTotal = prixUnitaire * nombreUnites;
+            bool acheter = PayerAchat(prixTotal);
+            if (acheter)
+            {
+                AjouterAchat(numero, nombreUnites);
+                if (achatSouhaite.Nom == Achat.Chien)
+                {
+                    PresenceChien = true;
+                    Chien chienA = new Chien(Pot);
+                    Pot.ListeAnimaux.Add(chienA);
+                    Console.WriteLine(" Vous possédez maintenant un chien");
+                }
+            }
+        }
+        else
+        {
+            AcheterGraine();
+        }
+    }
+
+    public void Acheter()
+    {
+        Console.WriteLine($" Vous possédez {Argent} ");
+        Console.WriteLine(" Vous pouvez achetez : \n1. un arrosage automatique, \n2. une bache, \n3. des coccinelle, \n4. un chien, \n5. un epouvantail, \n6. du fertilisant, \n7. des graines, \n8. des lampes UV, \n9. une pompe, \n10. une serre,\n11. un tuyau d'arrosage, \n12. du remede anti fusariose, \n13. du remede anti mildiou, \n14. du remede anti Oidium ");
+        Console.WriteLine("Entrez les numéros des achats que vous souhaitez faire un par un. Entrez 1000 pour arreter les achats. ");
+        string reponse = Console.ReadLine()!;
+        int numeroAAcheter = -1;
+        while (numeroAAcheter != 1000)
+        {
+            while ((!Int32.TryParse(reponse, out numeroAAcheter)) || (numeroAAcheter < 0) || ((numeroAAcheter >= 15) && (numeroAAcheter != 1000)))
+            {
+                Console.WriteLine("Réponse invalide ");
+                Console.WriteLine("Entrez les numéros des achats que vous souhaitez faire un par un. Entrez 1000 pour arreter les achats. ");
+            }
+            if (numeroAAcheter != 1000)
+            {
+                if (PresenceChien && (numeroAAcheter - 1 == 3))
+                {
+                    Console.WriteLine("Vous ne pouvez acheter qu'un chien. Effectuez un autre achat.");
+                }
+                else
+                {
+                    EffectuerAchat(numeroAAcheter - 1);
+                }
+            }
+        }
+        if (ListeAchats[4] != 0) { PresenceEpouvantail = true; }
+    }
+
+    public void PoserAchat()
+    {
+        int numero = 0;
+        Console.WriteLine("Vous possédez les achats suivants :");
+        foreach (int nombreAchat in ListeAchats)
+        {
+            if ((nombreAchat != 0) && (numero != 3) && (numero != 6) && (numero != 1) && (numero != 8) && (numero != 10)) //On ne peut pas poser : chien (3), graine (6), bache (1), pompe (8), tuyau d'arrosage (10)
+            {
+                Console.WriteLine($"- {numero}. {achatsPossibles[numero].Nom} : {nombreAchat} unités");
+            }
+            numero++;
+        }
+        Console.WriteLine("Vous ne pouvez utiliser les baches, pompes et tuyau d'arrosage qu'en cas d'intempéries ; ils n'apparaissent pas dans la liste ci-dessus.");
+        Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
+        string reponse = Console.ReadLine()!;
+        int numeroAAcheter;
+        while (!Int32.TryParse(reponse, out numeroAAcheter) || (numeroAAcheter < 0) || (numeroAAcheter >= Pot.SacDeGraines.Count))
+        {
+            Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+        }
+        if (numeroAAcheter == 5)
+        {
+            Pot.EffetFertilisant();
+            Console.WriteLine("Vous avez choisi le fertilisant, il a amélioré la production maximum de toutes les plantes du potager.");
+        }
+        if (numeroAAcheter == 0)
+        {
+            Pot.EffetArrosageAutomatique();
+            Console.WriteLine("Vous avez installé un arrosage automatique.");
+        }
+        //pas fini
+
+    }
+
     public void InitialisationPotager(Potager Pot, string[,] grille)
     {
         for (int i = 0; i < Pot.Hauteur; i++)
@@ -241,6 +457,7 @@ public class Simulation
     }
 
     public void MajAffichagePlantes(string[,] grille)
+
     {
         InitialisationPotager(Pot, grille);
         foreach (Plante plante in Pot.ListePlantes)
@@ -360,6 +577,14 @@ public class Simulation
         while (jeuEnCours)
         {
 
+            Console.WriteLine("Que voulez-vous faire ?");
+            Console.WriteLine("(1) Planter une graine \n(2) Faire un Achat \n(3) Arroser \n(4) Poser un item de votre inventaire \n(5) Avancer dans le temps");
+            reponse = Convert.ToInt16(Console.ReadLine()!);
+            if (reponse == 1) Planter();
+            if (reponse == 2) Acheter();
+            if (reponse == 3) Arroser();
+            if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
+
             MajAffichagePlantes(GrillePotager);
 
             foreach (Plante plante in pot.ListePlantes)
@@ -382,7 +607,6 @@ public class Simulation
             Pot.Saison.ChangerTemperature();
 
             ChoisirActionsTour(ref jeuEnCours, ref GrillePotager, simu);
-
         }
         Console.WriteLine("FIN DE LA PARTIE.");
     }
