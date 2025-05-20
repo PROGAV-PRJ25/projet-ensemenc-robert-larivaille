@@ -258,8 +258,12 @@ public abstract class Plante
 
     public void ImpactConditions()
     {
+        foreach (Maladie maladie in EstMaladeDe)
+        {
+            maladie.EffetMaladie(this);
+        }
         int score = CalculerScoreCondition();
-        if (score < 200)
+        if ((score < 200) || (Sante < 40))
         {
             EstMorte();
         }

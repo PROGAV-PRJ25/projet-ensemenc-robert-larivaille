@@ -395,7 +395,7 @@ public class Simulation
         Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
         string reponse = Console.ReadLine()!;
         int numeroAPoser;
-        while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
+        while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count) || (numeroAPoser == 0) || (numeroAPoser == 3) || (numeroAPoser == 6) || (numeroAPoser == 1) || (numeroAPoser == 8) || (numeroAPoser == 10))
         {
             Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
         }
@@ -404,47 +404,47 @@ public class Simulation
             Pot.EffetArrosageAutomatique();
             Console.WriteLine("Vous avez installé un arrosage automatique.");
         }
-        if (numeroAPoser == 2)
+        else if (numeroAPoser == 2)
         {
             //ApparitionAnimal(Coccinelle);
             Console.WriteLine("Vous avez posé des coccinelles.");
         }
-        if (numeroAPoser == 4)
+        else if (numeroAPoser == 4)
         {
             PresenceEpouvantail = true;
             Console.WriteLine("Vous avez posé un épouvantail.");
         }
-        if (numeroAPoser == 4)
+        else if (numeroAPoser == 4)
         {
             PresenceEpouvantail = true;
             Console.WriteLine("Vous avez posé un épouvantail.");
         }
-        if (numeroAPoser == 5)
+        else if (numeroAPoser == 5)
         {
             Pot.EffetFertilisant();
             Console.WriteLine("Vous avez choisi le fertilisant, il a amélioré la production maximum de toutes les plantes du potager.");
         }
-        if (numeroAPoser == 7)
+        else if (numeroAPoser == 7)
         {
             PresenceLampeUV = true;
             Console.WriteLine("Vous avez posé des lampes UV.");
         }
-        if (numeroAPoser == 9)
+        else if (numeroAPoser == 9)
         {
             PresenceSerre = true;
             Console.WriteLine("Vous avez posé une serre.");
         }
-        if (numeroAPoser == 11)
+        else if (numeroAPoser == 11)
         {
             //
             Console.WriteLine("Vous avez posé un  remède.");
         }
-        if (numeroAPoser == 12)
+        else if (numeroAPoser == 12)
         {
             //
             Console.WriteLine("Vous avez posé un  remède.");
         }
-        if (numeroAPoser == 13)
+        else if (numeroAPoser == 13)
         {
             //
             Console.WriteLine("Vous avez posé un  remède.");
