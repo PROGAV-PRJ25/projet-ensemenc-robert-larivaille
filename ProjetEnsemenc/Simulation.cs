@@ -37,6 +37,13 @@ public class Simulation
     public bool PresenceArrosageAutomatique { get; set; }
     public bool PresenceLampeUV { get; set; }
     public bool PresenceSerre { get; set; }
+    public bool PresenceBache { get; set; }
+    public bool PresencePompe { get; set; }
+    public bool Grele { get; set; }
+    public bool Inondation { get; set; }
+    public bool Secheresse { get; set; }
+
+    public ActionUrgente ActionUrgente { get; set; }
 
 
 
@@ -53,6 +60,11 @@ public class Simulation
         PresenceArrosageAutomatique = false;
         PresenceLampeUV = false;
         PresenceSerre = false;
+        PresenceBache = false;
+        PresencePompe = false;
+        Grele = false;
+        Inondation = false;
+        Secheresse = false;
         achatsPossibles.Add(new ArrosageAutomatique());
         achatsPossibles.Add(new Bache());
         achatsPossibles.Add(new AchatCoccinelle());
@@ -67,9 +79,7 @@ public class Simulation
         achatsPossibles.Add(new AchatRemedeFusariose());
         achatsPossibles.Add(new AchatRemedeMildiou());
         achatsPossibles.Add(new AchatRemedeOidium());
-        Grele grele = new Grele(Pot);
-        Inondation inondation = new Inondation(Pot);
-        Secheresse secheresse = new Secheresse(Pot);
+
     }
 
     public void CreerPlante(string espece, int x, int y, Simulation simu)
@@ -626,7 +636,7 @@ public class Simulation
         }
     }
 
-    public void TirerAuSortIntemperie(Grele grele, Inondation inondation, Secheresse secheresse, Saison saison)
+    public void TirerAuSortIntemperie(Simulation simu, Grele grele, Inondation inondation, Secheresse secheresse, Saison saison, string[,] grille)
     {
         Random rng = new Random();
         int probaGrele = 20;
@@ -638,19 +648,108 @@ public class Simulation
             probaSecheresse = 50;
         if (saison == Saison.Automne || saison == Saison.Printemps)
             probaInondation = 30;
+        if (simu.PresenceArrosageAutomatique)
+            probaSecheresse = 0;  //les plantes ne sont plus affectées => plus d'urgence
         int tirageGrele = rng.Next(0, 101);
-        if (tirageGrele <= probaGrele) {/*Passer booléen grêle true et lancer mode urgence */}
+        if (tirageGrele < probaGrele) // Inférieur stricte pour si proba de 0
+        {
+            Grele = true;
+            AffichageUrgence(grille, grele, simu.ActionUrgente, simu.Pot, simu);
+        }
         int tirageInondation = rng.Next(0, 101);
-        if (tirageInondation <= probaInondation) {/*Passer booléen inondation true et lancer mode urgence */}
+        if (tirageInondation < probaInondation)
+        {
+            Inondation = true;
+            AffichageUrgence(grille, inondation, simu.ActionUrgente, simu.Pot, simu);
+        }
         int tirageSecheresse = rng.Next(0, 101);
-        if (tirageSecheresse <= probaSecheresse) {/*Passer booléen grêle true et lancer mode urgence */}
+        if (tirageSecheresse < probaSecheresse)
+        {
+            Secheresse = true;
+            AffichageUrgence(grille, secheresse, simu.ActionUrgente, simu.Pot, simu);
+        }
     }
 
-    public void AffichageUrgence(string[,] grille)
+    public void TirerAuSortAnimauxUrgents(Simulation simu, Oiseau oiseau, Chat chat, Taupe taupe, Rongeur rongeur, string[,] grille)
     {
-        System.Threading.Thread.Sleep(500);
+        Random rng = new Random();
+        int probaOiseau = 40;
+        int probaChat = 20;
+        int probaTaupe = 20;
+        int probaRongeur = 25;
+        if (simu.PresenceEpouvantail)
+            probaOiseau = 0;
+        if (simu.PresenceChien)
+            probaRongeur = 0;
+        int tirageOiseau = rng.Next(0, 101);
+        if (tirageOiseau < probaOiseau)
+        {
+            AffichageUrgence(grille, oiseau, simu.ActionUrgente, simu.Pot, simu);
+        }
+        int tirageChat = rng.Next(0, 101);
+        if (tirageChat < probaChat)
+        {
+            AffichageUrgence(grille, chat, simu.ActionUrgente, simu.Pot, simu);
+        }
+        int tirageTaupe = rng.Next(0, 101);
+        if (tirageTaupe <= probaTaupe)
+        {
+            AffichageUrgence(grille, taupe, simu.ActionUrgente, simu.Pot, simu);
+        }
+        int tirageRongeur = rng.Next(0, 101);
+        if (tirageRongeur <= probaRongeur)
+        {
+            AffichageUrgence(grille, rongeur, simu.ActionUrgente, simu.Pot, simu);
+        }
+    }
+
+    public void AffichageUrgence(string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
+    {
         Console.Clear();
-        AffichageComplet(grille);
+        Console.WriteLine("--- URGENCE ---");
+        Console.WriteLine($"Urgence : {pb}");
+        if (pb is Grele) Console.WriteLine("⛈️⛈️⛈️⛈️⛈️⛈️");
+        if (pb is Inondation) Console.WriteLine("🌊🌊🌊🌊🌊🌊");
+        if (pb is Secheresse) Console.WriteLine("☀️☀️☀️☀️☀️☀️");
+        Console.WriteLine();
+
+        List<string> lignesPotager = new List<string>();
+        for (int i = 0; i < Pot.Hauteur; i++)
+        {
+            string ligne = "";
+            for (int j = 0; j < Pot.Longueur; j++)
+            {
+                ligne += grille[i, j];
+            }
+            lignesPotager.Add(ligne);
+            lignesPotager.Add("");
+        }
+
+        while (simu.mode == ModeDeJeu.Urgence)
+        {
+            MajAffichagePlantes(grille);
+            for (int i = 0; i < lignesPotager.Count; i++)
+            {
+                Console.WriteLine(lignesPotager[i]);
+            }
+            if (pb is Intemperie intemp)
+            {
+                intemp.EffetIntemperie();
+            }
+            if (pb is AnimauxMauvais ani)
+            {
+                foreach (Plante plante in Pot.ListePlantes)
+                {
+                    ani.Effet(plante);
+                }
+                ani.SeDeplacer();
+            }
+            actionUrgente.ProposerAction(pb, pot, simu);
+            System.Threading.Thread.Sleep(500);
+            Console.Clear();
+
+        }
+        Console.WriteLine("-- Fin de l'urgence -- \n <Retour au mode de jeu classique>");
     }
 
     public void Simuler(Potager pot, Simulation simu)
@@ -677,6 +776,16 @@ public class Simulation
         Pot.Inventaire.Add(RecRoquette);
         Pot.Inventaire.Add(RecThym);
         Pot.Inventaire.Add(RecTomate);
+
+        // Création des intempéries et animaux pour le mode urgence
+        Grele grele = new Grele(Pot);
+        Inondation inondation = new Inondation(Pot);
+        Secheresse secheresse = new Secheresse(Pot);
+        ActionUrgente = new ActionUrgente();
+        Oiseau oiseau = new Oiseau(Pot);
+        Chat chat = new Chat(Pot);
+        Taupe taupe = new Taupe(Pot);
+        Rongeur rongeur = new Rongeur(Pot);
 
         string[,] GrillePotager = new string[pot.Hauteur, pot.Longueur];
         InitialisationPotager(pot, GrillePotager);
@@ -725,6 +834,8 @@ public class Simulation
                 }
 
                 ChoisirActionsTour(ref jeuEnCours, ref GrillePotager, simu);
+                TirerAuSortAnimauxUrgents(simu, oiseau, chat, taupe, rongeur, GrillePotager);
+                TirerAuSortIntemperie(simu, grele, inondation, secheresse, Pot.Saison.Nom, GrillePotager);
             }
 
         }

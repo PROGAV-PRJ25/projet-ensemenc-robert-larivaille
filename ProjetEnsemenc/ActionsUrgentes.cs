@@ -1,11 +1,11 @@
 
-public abstract class ActionUrgente
+public class ActionUrgente
 {
     public object Sujet { get; set; }
-    
+
     public ActionUrgente() { }
 
-    public void ProposerAction(object Sujet, Potager Pot)
+    public void ProposerAction(object Sujet, Potager Pot, Simulation simu)
     {
         if (Sujet is Animaux)
         {
@@ -21,47 +21,49 @@ public abstract class ActionUrgente
         int choix = Convert.ToInt32(Console.ReadLine());
         if (choix == 1)
         {
-            FaireBruit(Sujet);
+            FaireBruit(Sujet, simu);
         }
         else if (choix == 2)
         {
-            PoserEpouvantail(Sujet);
+            PoserEpouvantail(Sujet, simu);
         }
         else if (choix == 3)
         {
-            FaireFuirChat(Sujet);
+            FaireFuirChat(Sujet, simu);
         }
         else if (choix == 4)
         {
-            ReboucherTrou(Sujet);
+            ReboucherTrou(Sujet, simu);
         }
         else if (choix == 5)
         {
-            AdopterChien(Sujet);
+            AdopterChien(Sujet, simu);
         }
         else if (choix == 6)
         {
-            PoserBache(Sujet);
+            PoserBache(Sujet, simu);
         }
         else if (choix == 7)
         {
-            InstallerPompe(Sujet);
+            InstallerPompe(Sujet, simu);
         }
         else if (choix == 8)
         {
-            Arroser(Sujet, Pot);
+            Arroser(Sujet, Pot, simu);
         }
         else if (choix == 9)
         {
-            InstallerArosageAuto(Sujet, Pot);
+            InstallerArosageAuto(Sujet, Pot, simu);
         }
     }
 
-    public void FaireBruit(object Sujet)
+    public void FaireBruit(object Sujet, Simulation simu)
     {
         if (Sujet is Oiseau oiseau)
         {
             oiseau.Disparait();
+            Console.WriteLine("L'oiseau a fuit !");
+            simu.mode = ModeDeJeu.Classique;
         }
         else
         {
@@ -69,34 +71,40 @@ public abstract class ActionUrgente
         }
     }
 
-    public void PoserEpouvantail(object Sujet, ref bool PresenceEpouvantail)
+    public void PoserEpouvantail(object Sujet, Simulation simu)
     {
         if (Sujet is Oiseau oiseau)
         {
             oiseau.Disparait();
-            PresenceEpouvantail = true;
+            simu.PresenceEpouvantail = true;
+            Console.WriteLine("Vous avez posé un épouvantail, vous n'aurez plus jamais d'oiseau !");
+            simu.mode = ModeDeJeu.Classique;
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void FaireFuirChat(object Sujet)
+    public void FaireFuirChat(object Sujet, Simulation simu)
     {
         if (Sujet is Chat chat)
         {
             chat.Disparait();
+            Console.WriteLine("Le chat a fuit !");
+            simu.mode = ModeDeJeu.Classique;
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void ReboucherTrou(object Sujet)
+    public void ReboucherTrou(object Sujet, Simulation simu)
     {
         if (Sujet is Taupe taupe)
         {
             taupe.Disparait();
+            Console.WriteLine("La taupe a fuit !");
+            simu.mode = ModeDeJeu.Classique;
             //Enlever les trous
         }
         else
@@ -104,59 +112,66 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void AdopterChien(object Sujet, ref bool PresenceChien)
+    public void AdopterChien(object Sujet, Simulation simu)
     {
         if (Sujet is Rongeur rongeur)
         {
             rongeur.Disparait();
-            PresenceChien = true;
+            Console.WriteLine("Vous avez adopté un chien, vous n'aurez plus jamais de rongeur sur vos terres !");
+            simu.PresenceChien = true;
+            simu.mode = ModeDeJeu.Classique;
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void PoserBache(object Sujet, ref bool Grele, ref bool Bache)
+    public void PoserBache(object Sujet, Simulation simu)
     {
-        if ((Sujet is Grele)) /* Et Vérifier qu'on a une bache */
+        if ((Sujet is Grele) && simu.ListeAchats[1] > 0)
         {
-            Grele = false;
-            Bache = true; //A mettree dans Simulation
+            simu.PresenceBache = true;
+            Console.WriteLine("Vous avez posé une bâche, il n'y aura pas plus de dégâts lors de cette urgence");
+            simu.mode = ModeDeJeu.Classique;
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerPompe(object Sujet)
+    public void InstallerPompe(object Sujet, Simulation simu)
     {
-        if ((Sujet is Inondation) /*&& (Vérifier qu'on a une pompe )*/)
+        if ((Sujet is Inondation) && simu.ListeAchats[8] > 0)
         {
-            bool inondation = false;
-            bool pompe = true; //A mettree dans Simulation
+            simu.PresencePompe = true;
+            Console.WriteLine("Vous avez posé une pompe pour arrêter l'inondation, il n'y aura pas plus de dégâts lors de cette urgence");
+            simu.mode = ModeDeJeu.Classique;
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void Arroser(object Sujet, Potager pot)
+    public void Arroser(object Sujet, Potager pot, Simulation simu)
     {
-        if ((Sujet is Secheresse)/* && (Vérifier qu'on a un tuyau d'arrosage )*/)
+        if ((Sujet is Secheresse) && simu.ListeAchats[10] > 0)
         {
             pot.EffetArroserTuyau();
+            Console.WriteLine("Vous avez arrosé vos plantes, mais un arrosage automatique règlerait le problème");
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerArosageAuto(object Sujet, Potager pot)
+    public void InstallerArosageAuto(object Sujet, Potager pot, Simulation simu)
     {
-        if ((Sujet is Secheresse) /*&& (Vérifier qu'on a un arrosage auto )*/)
+        if ((Sujet is Secheresse) && simu.ListeAchats[0] > 0)
         {
-            bool Secheresse = false;
+            simu.PresenceArrosageAutomatique = true;
             pot.EffetArrosageAutomatique();
+            Console.WriteLine("Vous avez installé l'arrosage automatique, vos plantes ne souffriront plus de la sécheresse");
+            simu.mode = ModeDeJeu.Classique;
         }
         else
         {
