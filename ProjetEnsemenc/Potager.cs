@@ -45,4 +45,12 @@ public class Potager
             plante.Fertilise();
         }
     }
+
+    public void EffetArroserTuyau()
+    {
+        foreach (Plante plante in ListePlantes)
+        {
+            plante.NiveauHumidite += 5;
+        }
+    }
 }

@@ -2,6 +2,7 @@
 public abstract class ActionUrgente
 {
     public object Sujet { get; set; }
+    
     public ActionUrgente() { }
 
     public void ProposerAction(object Sujet, Potager Pot)
@@ -143,10 +144,7 @@ public abstract class ActionUrgente
     {
         if ((Sujet is Secheresse)/* && (Vérifier qu'on a un tuyau d'arrosage )*/)
         {
-            foreach (Plante plante in pot.ListePlantes)
-            {
-                plante.NiveauHumidite += 5;
-            }
+            pot.EffetArroserTuyau();
         }
         else
         {
@@ -158,10 +156,7 @@ public abstract class ActionUrgente
         if ((Sujet is Secheresse) /*&& (Vérifier qu'on a un arrosage auto )*/)
         {
             bool Secheresse = false;
-            foreach (Plante plante in pot.ListePlantes)
-            {
-                plante.NiveauHumidite = plante.SeuilHumidite;
-            }
+            pot.EffetArrosageAutomatique();
         }
         else
         {
