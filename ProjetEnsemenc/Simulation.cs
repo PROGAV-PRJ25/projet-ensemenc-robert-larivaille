@@ -67,6 +67,9 @@ public class Simulation
         achatsPossibles.Add(new AchatRemedeFusariose());
         achatsPossibles.Add(new AchatRemedeMildiou());
         achatsPossibles.Add(new AchatRemedeOidium());
+        Grele grele = new Grele(Pot);
+        Inondation inondation = new Inondation(Pot);
+        Secheresse secheresse = new Secheresse(Pot);
     }
 
     public void CreerPlante(string espece, int x, int y, Simulation simu)
@@ -123,11 +126,26 @@ public class Simulation
             }
             Console.WriteLine("Quel est le numéro de la graine que vous voulez planter ? ");
             string reponse = Console.ReadLine()!;
-            int numeroAPlanter;
-            while (!int.TryParse(reponse, out numeroAPlanter) || (numeroAPlanter < 0) || (numeroAPlanter >= Pot.SacDeGraines.Count))
+            int numeroAPlanter = -1;
+            bool saisieInt = false;
+            bool grainePossible = false;
+            while (!saisieInt || !grainePossible)
             {
-                Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de la graine que vous voulez planter ? ");
-                reponse = Console.ReadLine()!;
+                if (!int.TryParse(reponse, out numeroAPlanter) || numeroAPlanter < 0 || numeroAPlanter >= Pot.SacDeGraines.Count)
+                {
+                    Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de la graine que vous voulez planter ? ");
+                    reponse = Console.ReadLine()!;
+                    saisieInt = false;
+                }
+                else saisieInt = true;
+                if (Pot.SacDeGraines[numeroAPlanter].Quantite == 0)
+                {
+                    Console.WriteLine("Vous ne possédez pas cette graine, choisissez une graine de la liste :");
+                    reponse = Console.ReadLine()!;
+                    grainePossible = false;
+                }
+                else grainePossible = true;
+
             }
             Console.WriteLine("A quel numéro de ligne voulez-vous la planter ? ");
             string reponseX = Console.ReadLine()!;
@@ -569,6 +587,33 @@ public class Simulation
         }
     }
 
+    public void TirerAuSortIntemperie(Grele grele, Inondation inondation, Secheresse secheresse, Saison saison)
+    {
+        Random rng = new Random();
+        int probaGrele = 20;
+        int probaInondation = 10;
+        int probaSecheresse = 0;
+        if (saison == Saison.Hiver)
+            probaGrele = 40;
+        if (saison == Saison.Ete)
+            probaSecheresse = 50;
+        if (saison == Saison.Automne || saison == Saison.Printemps)
+            probaInondation = 30;
+        int tirageGrele = rng.Next(0, 101);
+        if (tirageGrele <= probaGrele) {/*Passer booléen grêle true et lancer mode urgence */}
+        int tirageInondation = rng.Next(0, 101);
+        if (tirageInondation <= probaInondation) {/*Passer booléen inondation true et lancer mode urgence */}
+        int tirageSecheresse = rng.Next(0, 101);
+        if (tirageSecheresse <= probaSecheresse) {/*Passer booléen grêle true et lancer mode urgence */}
+    }
+
+    public void AffichageUrgence(string[,] grille)
+    {
+        System.Threading.Thread.Sleep(500);
+        Console.Clear();
+        AffichageComplet(grille);
+    }
+
     public void Simuler(Potager pot, Simulation simu)
     {
         bool jeuEnCours = true;
@@ -599,46 +644,50 @@ public class Simulation
 
         while (jeuEnCours)
         {
-            MajAffichagePlantes(GrillePotager);
+            while (simu.mode == ModeDeJeu.Classique)
+            {
+                MajAffichagePlantes(GrillePotager);
 
-            foreach (Plante plante in pot.ListePlantes)
-            {
-                MajBesoinEau();
-                plante.MettreAJourPlantesAutour();
-                VerifierEsperanceDeVie(plante);
-                plante.ImpactConditions();
-                plante.Contamination();
-                if (NumeroTour % plante.TempsCroissance == 0) { plante.Grandir(); }
-                plante.DonnerRecolte(pot, AssocierRecoltePlante(plante, RecArtichaut, RecAubergine, RecBasilic, RecOignon, RecOlivier, RecPoivron, RecRoquette, RecThym, RecTomate));
-                Console.WriteLine(plante);
+                foreach (Plante plante in pot.ListePlantes)
+                {
+                    MajBesoinEau();
+                    plante.MettreAJourPlantesAutour();
+                    VerifierEsperanceDeVie(plante);
+                    plante.ImpactConditions();
+                    plante.Contamination();
+                    if (NumeroTour % plante.TempsCroissance == 0) { plante.Grandir(); }
+                    plante.DonnerRecolte(pot, AssocierRecoltePlante(plante, RecArtichaut, RecAubergine, RecBasilic, RecOignon, RecOlivier, RecPoivron, RecRoquette, RecThym, RecTomate));
+                    Console.WriteLine(plante);
 
-            }
-            if (NumeroTour == 1)
-            {
-                pot.Saison.Nom = Saison.Printemps;
-                Pot.Saison.ChangerBesoinEau();
-                Pot.Saison.ChangerTemperature();
-            }
-            if (NumeroTour == 4)
-            {
-                pot.Saison.Nom = Saison.Ete;
-                Pot.Saison.ChangerBesoinEau();
-                Pot.Saison.ChangerTemperature();
-            }
-            if (NumeroTour == 7)
-            {
-                pot.Saison.Nom = Saison.Automne;
-                Pot.Saison.ChangerBesoinEau();
-                Pot.Saison.ChangerTemperature();
-            }
-            if (NumeroTour == 10)
-            {
-                pot.Saison.Nom = Saison.Hiver;
-                Pot.Saison.ChangerBesoinEau();
-                Pot.Saison.ChangerTemperature();
+                }
+                if (NumeroTour == 1)
+                {
+                    pot.Saison.Nom = Saison.Printemps;
+                    Pot.Saison.ChangerBesoinEau();
+                    Pot.Saison.ChangerTemperature();
+                }
+                if (NumeroTour == 4)
+                {
+                    pot.Saison.Nom = Saison.Ete;
+                    Pot.Saison.ChangerBesoinEau();
+                    Pot.Saison.ChangerTemperature();
+                }
+                if (NumeroTour == 7)
+                {
+                    pot.Saison.Nom = Saison.Automne;
+                    Pot.Saison.ChangerBesoinEau();
+                    Pot.Saison.ChangerTemperature();
+                }
+                if (NumeroTour == 10)
+                {
+                    pot.Saison.Nom = Saison.Hiver;
+                    Pot.Saison.ChangerBesoinEau();
+                    Pot.Saison.ChangerTemperature();
+                }
+
+                ChoisirActionsTour(ref jeuEnCours, ref GrillePotager, simu);
             }
 
-            ChoisirActionsTour(ref jeuEnCours, ref GrillePotager, simu);
         }
         Console.WriteLine("FIN DE LA PARTIE.");
     }

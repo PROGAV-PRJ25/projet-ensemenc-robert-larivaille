@@ -68,12 +68,12 @@ public abstract class ActionUrgente
         }
     }
 
-    public void PoserEpouvantail(object Sujet)
+    public void PoserEpouvantail(object Sujet, ref bool PresenceEpouvantail)
     {
         if (Sujet is Oiseau oiseau)
         {
             oiseau.Disparait();
-            bool PresenceEpouvantail = true; //Mettre dans simulation
+            PresenceEpouvantail = true;
         }
         else
         {
@@ -103,24 +103,24 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void AdopterChien(object Sujet)
+    public void AdopterChien(object Sujet, ref bool PresenceChien)
     {
         if (Sujet is Rongeur rongeur)
         {
             rongeur.Disparait();
-            bool PresenceChien = true; //A mettree dans Simulation
+            PresenceChien = true;
         }
         else
         {
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void PoserBache(object Sujet)
+    public void PoserBache(object Sujet, ref bool Grele, ref bool Bache)
     {
         if ((Sujet is Grele)) /* Et Vérifier qu'on a une bache */
         {
-            bool grele = false;
-            bool bache = true; //A mettree dans Simulation
+            Grele = false;
+            Bache = true; //A mettree dans Simulation
         }
         else
         {
