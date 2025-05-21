@@ -225,7 +225,13 @@ public class Simulation
         if (nom == "VersDeTerre") Pot.ListeAnimaux.Add(new VersDeTerre(Pot));
     }
 
-    public void PoserCoccinelle()
+    public void ApparaitreHasardAnimal()
+    {
+        
+    }
+
+
+    public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être acheté et poser sur la case souhaitée.
     {
         Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
         string reponseX = Console.ReadLine()!;
