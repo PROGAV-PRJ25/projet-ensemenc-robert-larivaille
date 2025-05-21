@@ -82,28 +82,7 @@ public class Simulation
 
     }
 
-    //Plantes, Graines, Recoltes :
-    public void CreerPlante(string espece, int y, int x, Simulation simu)
-    {
-        Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
-        string terrain = Console.ReadLine()!;
-        Terrain ter;
-        while (!Enum.TryParse<Terrain>(terrain, true, out ter))
-        {
-            Console.WriteLine("Entrée invalide. Veuillez saisir un terrain valide (Argile, Sable, Terre ou Calcaire) :");
-            terrain = Console.ReadLine()!;
-        }
-        if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(y, x, Pot, ter, simu));
-        if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(y, x, Pot, ter, simu));
-        if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(y, x, Pot, ter, simu));
-        if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(y, x, Pot, ter, simu));
-        if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(y, x, Pot, ter, simu));
-        if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(y, x, Pot, ter, simu));
-        if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(y, x, Pot, ter, simu));
-        if (espece == "Thym") Pot.ListePlantes.Add(new Thym(y, x, Pot, ter, simu));
-        if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
-    }
-    //Animaux : 
+    //Animaux :  
     public void CreerAnimal(string nom)
     {
         if (nom == "Abeille") Pot.ListeAnimaux.Add(new Abeille(Pot));
@@ -117,7 +96,13 @@ public class Simulation
         if (nom == "VersDeTerre") Pot.ListeAnimaux.Add(new VersDeTerre(Pot));
     }
 
-    public void PoserCoccinelle()
+    public void ApparaitreHasardAnimal()
+    {
+
+    }
+
+
+    public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être acheté et poser sur la case souhaitée.
     {
         Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
         string reponseX = Console.ReadLine()!;
@@ -139,6 +124,29 @@ public class Simulation
         c.X = x;
         c.Y = y;
         Pot.ListeAnimaux.Add(c);
+    }
+
+
+    //Plantes, Graines, Recoltes :
+    public void CreerPlante(string espece, int y, int x, Simulation simu)
+    {
+        Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
+        string terrain = Console.ReadLine()!;
+        Terrain ter;
+        while (!Enum.TryParse<Terrain>(terrain, true, out ter))
+        {
+            Console.WriteLine("Entrée invalide. Veuillez saisir un terrain valide (Argile, Sable, Terre ou Calcaire) :");
+            terrain = Console.ReadLine()!;
+        }
+        if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(y, x, Pot, ter, simu));
+        if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(y, x, Pot, ter, simu));
+        if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(y, x, Pot, ter, simu));
+        if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(y, x, Pot, ter, simu));
+        if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(y, x, Pot, ter, simu));
+        if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(y, x, Pot, ter, simu));
+        if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(y, x, Pot, ter, simu));
+        if (espece == "Thym") Pot.ListePlantes.Add(new Thym(y, x, Pot, ter, simu));
+        if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
     }
 
     public Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
@@ -286,49 +294,6 @@ public class Simulation
             plante.EstMorte();
     }
 
-    //Animaux : 
-    public void CreerAnimal(string nom)
-    {
-        if (nom == "Abeille") Pot.ListeAnimaux.Add(new Abeille(Pot));
-        if (nom == "Chat") Pot.ListeAnimaux.Add(new Chat(Pot));
-        if (nom == "Chien") Pot.ListeAnimaux.Add(new Chien(Pot));
-        if (nom == "Coccinelle") Pot.ListeAnimaux.Add(new Coccinelle(Pot));
-        if (nom == "Escargot") Pot.ListeAnimaux.Add(new Escargot(Pot));
-        if (nom == "Oiseau") Pot.ListeAnimaux.Add(new Oiseau(Pot));
-        if (nom == "Pucerons") Pot.ListeAnimaux.Add(new Pucerons(Pot));
-        if (nom == "Rongeur") Pot.ListeAnimaux.Add(new Rongeur(Pot));
-        if (nom == "VersDeTerre") Pot.ListeAnimaux.Add(new VersDeTerre(Pot));
-    }
-
-    public void ApparaitreHasardAnimal()
-    {
-        
-    }
-
-
-    public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être acheté et poser sur la case souhaitée.
-    {
-        Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
-        string reponseX = Console.ReadLine()!;
-        int x;
-        while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Hauteur))
-        {
-            Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la ligne où vous voulez poser vos coccinelles ? ");
-            reponseX = Console.ReadLine()!;
-        }
-        Console.WriteLine("A quel numéro de colonne voulez-vous poser vos coccinelles ? ");
-        string reponseY = Console.ReadLine()!;
-        int y;
-        while (!int.TryParse(reponseY, out y) || (y < 0) || (y >= Pot.Longueur))
-        {
-            Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez poser vos coccinelles ? ");
-            reponseY = Console.ReadLine()!;
-        }
-        Coccinelle c = new Coccinelle(Pot);
-        c.X = x;
-        c.Y = y;
-        Pot.ListeAnimaux.Add(c);
-    }
 
     // Achats
     public void AjouterAchat(int numero, int quantite)
