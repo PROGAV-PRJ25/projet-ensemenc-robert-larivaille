@@ -118,7 +118,15 @@ public class Simulation
 
     public void Planter(Simulation simu)
     {
-        if (Pot.SacDeGraines.Count == 0)
+        bool presenceGraine = false;
+        foreach (Graine graine in Pot.SacDeGraines)
+        {
+            if (graine.Quantite != 0)
+            {
+                presenceGraine = true;
+            }
+        }
+        if (!presenceGraine)
         {
             Console.WriteLine("Vous ne possédez aucune graine donc vous ne pouvez rien planter. ");
         }
@@ -412,75 +420,89 @@ public class Simulation
 
     public void PoserAchat()
     {
-        int numero = 0;
-        Console.WriteLine("Vous possédez les achats suivants :");
-        foreach (int nombreAchat in ListeAchats)
+        bool presenceAchat = false;
+        for (int i = 0; i < ListeAchats.Count(); i++)
         {
-            if ((nombreAchat != 0) && (numero != 3) && (numero != 6) && (numero != 1) && (numero != 8) && (numero != 10)) //On ne peut pas poser : chien (3), graine (6), bache (1), pompe (8), tuyau d'arrosage (10)
+            if (ListeAchats[i] != 0)
             {
-                Console.WriteLine($"- {numero}. {achatsPossibles[numero].Nom} : {nombreAchat} unités");
+                presenceAchat = true;
             }
-            numero++;
         }
-        Console.WriteLine("Vous ne pouvez utiliser les baches, pompes et tuyau d'arrosage qu'en cas d'intempéries ; ils n'apparaissent pas dans la liste ci-dessus.");
-        Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
-        string reponse = Console.ReadLine()!;
-        int numeroAPoser;
-        while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
+        if (!presenceAchat)
         {
-            Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+            Console.WriteLine("Vous n'avez aucun item à poser.");
         }
-        if (numeroAPoser == 0)
+        else
         {
-            Pot.EffetArrosageAutomatique();
-            Console.WriteLine("Vous avez installé un arrosage automatique.");
+            int numero = 0;
+            Console.WriteLine("Vous possédez les items suivants :");
+            foreach (int nombreAchat in ListeAchats)
+            {
+                if ((nombreAchat != 0) && (numero != 3) && (numero != 6) && (numero != 1) && (numero != 8) && (numero != 10)) //On ne peut pas poser : chien (3), graine (6), bache (1), pompe (8), tuyau d'arrosage (10)
+                {
+                    Console.WriteLine($"- {numero}. {achatsPossibles[numero].Nom} : {nombreAchat} unités");
+                }
+                numero++;
+            }
+            Console.WriteLine("Vous ne pouvez utiliser les baches, pompes et tuyau d'arrosage qu'en cas d'intempéries ; ils n'apparaissent pas dans la liste ci-dessus.");
+            Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
+            string reponse = Console.ReadLine()!;
+            int numeroAPoser;
+            while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
+            {
+                Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+            }
+            if (numeroAPoser == 0)
+            {
+                Pot.EffetArrosageAutomatique();
+                Console.WriteLine("Vous avez installé un arrosage automatique.");
+            }
+            if (numeroAPoser == 2)
+            {
+                //ApparitionAnimal(Coccinelle);
+                Console.WriteLine("Vous avez posé des coccinelles.");
+            }
+            if (numeroAPoser == 4)
+            {
+                PresenceEpouvantail = true;
+                Console.WriteLine("Vous avez posé un épouvantail.");
+            }
+            if (numeroAPoser == 4)
+            {
+                PresenceEpouvantail = true;
+                Console.WriteLine("Vous avez posé un épouvantail.");
+            }
+            if (numeroAPoser == 5)
+            {
+                Pot.EffetFertilisant();
+                Console.WriteLine("Vous avez choisi le fertilisant, il a amélioré la production maximum de toutes les plantes du potager.");
+            }
+            if (numeroAPoser == 7)
+            {
+                PresenceLampeUV = true;
+                Console.WriteLine("Vous avez posé des lampes UV.");
+            }
+            if (numeroAPoser == 9)
+            {
+                PresenceSerre = true;
+                Console.WriteLine("Vous avez posé une serre.");
+            }
+            if (numeroAPoser == 11)
+            {
+                //
+                Console.WriteLine("Vous avez posé un remède.");
+            }
+            if (numeroAPoser == 12)
+            {
+                //
+                Console.WriteLine("Vous avez posé un remède.");
+            }
+            if (numeroAPoser == 13)
+            {
+                //
+                Console.WriteLine("Vous avez posé un remède.");
+            }
         }
-        if (numeroAPoser == 2)
-        {
-            //ApparitionAnimal(Coccinelle);
-            Console.WriteLine("Vous avez posé des coccinelles.");
-        }
-        if (numeroAPoser == 4)
-        {
-            PresenceEpouvantail = true;
-            Console.WriteLine("Vous avez posé un épouvantail.");
-        }
-        if (numeroAPoser == 4)
-        {
-            PresenceEpouvantail = true;
-            Console.WriteLine("Vous avez posé un épouvantail.");
-        }
-        if (numeroAPoser == 5)
-        {
-            Pot.EffetFertilisant();
-            Console.WriteLine("Vous avez choisi le fertilisant, il a amélioré la production maximum de toutes les plantes du potager.");
-        }
-        if (numeroAPoser == 7)
-        {
-            PresenceLampeUV = true;
-            Console.WriteLine("Vous avez posé des lampes UV.");
-        }
-        if (numeroAPoser == 9)
-        {
-            PresenceSerre = true;
-            Console.WriteLine("Vous avez posé une serre.");
-        }
-        if (numeroAPoser == 11)
-        {
-            //
-            Console.WriteLine("Vous avez posé un  remède.");
-        }
-        if (numeroAPoser == 12)
-        {
-            //
-            Console.WriteLine("Vous avez posé un  remède.");
-        }
-        if (numeroAPoser == 13)
-        {
-            //
-            Console.WriteLine("Vous avez posé un  remède.");
-        }
-        // En cours
     }
 
 
@@ -571,7 +593,7 @@ public class Simulation
             if (reponse == 1) Planter(simu);
             if (reponse == 2) Acheter();
             if (reponse == 3) Arroser();
-            if (reponse == 4) Console.WriteLine("ça arrive bientôt tkt");
+            if (reponse == 4) PoserAchat();
         }
         while (reponse != 5 && reponse != 6);
         if (reponse == 5) NumeroTour += 1;
@@ -580,7 +602,7 @@ public class Simulation
 
     public void AffichageComplet(string[,] grille)
     {
-        Console.Clear();
+        //Console.Clear();
         Console.WriteLine("--- Statuts du potager ---");
         Console.WriteLine($"Saison : {Pot.Saison.Nom}, Température : {Pot.Temperature}");
         Console.WriteLine();
