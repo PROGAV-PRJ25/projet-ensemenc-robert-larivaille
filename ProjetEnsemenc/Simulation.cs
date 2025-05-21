@@ -82,6 +82,7 @@ public class Simulation
 
     }
 
+    //Plantes, Graines, Recoltes :
     public void CreerPlante(string espece, int y, int x, Simulation simu)
     {
         Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
@@ -101,6 +102,43 @@ public class Simulation
         if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(y, x, Pot, ter, simu));
         if (espece == "Thym") Pot.ListePlantes.Add(new Thym(y, x, Pot, ter, simu));
         if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
+    }
+    //Animaux : 
+    public void CreerAnimal(string nom)
+    {
+        if (nom == "Abeille") Pot.ListeAnimaux.Add(new Abeille(Pot));
+        if (nom == "Chat") Pot.ListeAnimaux.Add(new Chat(Pot));
+        if (nom == "Chien") Pot.ListeAnimaux.Add(new Chien(Pot));
+        if (nom == "Coccinelle") Pot.ListeAnimaux.Add(new Coccinelle(Pot));
+        if (nom == "Escargot") Pot.ListeAnimaux.Add(new Escargot(Pot));
+        if (nom == "Oiseau") Pot.ListeAnimaux.Add(new Oiseau(Pot));
+        if (nom == "Pucerons") Pot.ListeAnimaux.Add(new Pucerons(Pot));
+        if (nom == "Rongeur") Pot.ListeAnimaux.Add(new Rongeur(Pot));
+        if (nom == "VersDeTerre") Pot.ListeAnimaux.Add(new VersDeTerre(Pot));
+    }
+
+    public void PoserCoccinelle()
+    {
+        Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
+        string reponseX = Console.ReadLine()!;
+        int x;
+        while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Hauteur))
+        {
+            Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la ligne où vous voulez poser vos coccinelles ? ");
+            reponseX = Console.ReadLine()!;
+        }
+        Console.WriteLine("A quel numéro de colonne voulez-vous poser vos coccinelles ? ");
+        string reponseY = Console.ReadLine()!;
+        int y;
+        while (!int.TryParse(reponseY, out y) || (y < 0) || (y >= Pot.Longueur))
+        {
+            Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez poser vos coccinelles ? ");
+            reponseY = Console.ReadLine()!;
+        }
+        Coccinelle c = new Coccinelle(Pot);
+        c.X = x;
+        c.Y = y;
+        Pot.ListeAnimaux.Add(c);
     }
 
     public Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
@@ -248,6 +286,7 @@ public class Simulation
             plante.EstMorte();
     }
 
+    // Achats
     public void AjouterAchat(int numero, int quantite)
     {
         ListeAchats[numero] += quantite;
@@ -374,8 +413,7 @@ public class Simulation
                 if (achatSouhaite.Nom == Achat.Chien)
                 {
                     PresenceChien = true;
-                    Chien chienA = new Chien(Pot);
-                    Pot.ListeAnimaux.Add(chienA);
+                    CreerAnimal("Chien");
                     Console.WriteLine(" Vous possédez maintenant un chien");
                 }
             }
@@ -457,55 +495,48 @@ public class Simulation
                 Pot.EffetArrosageAutomatique();
                 Console.WriteLine("Vous avez installé un arrosage automatique.");
             }
-            if (numeroAPoser == 2)
+            else if (numeroAPoser == 2)
             {
-                //ApparitionAnimal(Coccinelle);
+                PoserCoccinelle();
                 Console.WriteLine("Vous avez posé des coccinelles.");
             }
-            if (numeroAPoser == 4)
+            else if (numeroAPoser == 4)
             {
                 PresenceEpouvantail = true;
                 Console.WriteLine("Vous avez posé un épouvantail.");
             }
-            if (numeroAPoser == 4)
-            {
-                PresenceEpouvantail = true;
-                Console.WriteLine("Vous avez posé un épouvantail.");
-            }
-            if (numeroAPoser == 5)
+            else if (numeroAPoser == 5)
             {
                 Pot.EffetFertilisant();
                 Console.WriteLine("Vous avez choisi le fertilisant, il a amélioré la production maximum de toutes les plantes du potager.");
             }
-            if (numeroAPoser == 7)
+            else if (numeroAPoser == 7)
             {
                 PresenceLampeUV = true;
                 Console.WriteLine("Vous avez posé des lampes UV.");
             }
-            if (numeroAPoser == 9)
+            else if (numeroAPoser == 9)
             {
                 PresenceSerre = true;
                 Console.WriteLine("Vous avez posé une serre.");
             }
-            if (numeroAPoser == 11)
+            else if ((numeroAPoser == 11) || (numeroAPoser == 12) || (numeroAPoser == 13))
             {
                 //
-                Console.WriteLine("Vous avez posé un remède.");
-            }
-            if (numeroAPoser == 12)
-            {
-                //
-                Console.WriteLine("Vous avez posé un remède.");
-            }
-            if (numeroAPoser == 13)
-            {
-                //
-                Console.WriteLine("Vous avez posé un remède.");
+                Console.WriteLine("Vous avez posé un  remède.");
+                Pot.EffetPoserRemede(numeroAPoser); //Le Console.WriteLine pour dire qu'on a utilisé un remède est dans la méthode Pot.EffetPoserRemede.
             }
         }
     }
 
+    public void ImpactAchatPose() //Effectue l'impact pour les achats déjà posé
+    {
+        if (PresenceLampeUV) Pot.EffetLampeUV();
+        if (PresenceArrosageAutomatique) Pot.EffetArrosageAutomatique();
+        if (PresenceSerre) Pot.EffetSerre();
+    }
 
+    // Initialisation, actions et affichage : 
     public void InitialisationPotager(Potager Pot, string[,] grille)
     {
         for (int i = 0; i < Pot.Hauteur; i++)
@@ -831,6 +862,7 @@ public class Simulation
                 {
                     plante.MettreAJourPlantesAutour();
                     VerifierEsperanceDeVie(plante);
+                    ImpactAchatPose();
                     plante.ImpactConditions();
                     plante.Contamination();
                     if (NumeroTour % plante.TempsCroissance == 0)
