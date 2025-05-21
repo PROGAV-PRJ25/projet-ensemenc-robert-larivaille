@@ -69,6 +69,8 @@ public class Simulation
         achatsPossibles.Add(new AchatRemedeOidium());
     }
 
+
+    //Plantes, Graines, Recoltes :
     public void CreerPlante(string espece, int x, int y, Simulation simu)
     {
         Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
@@ -209,6 +211,45 @@ public class Simulation
             plante.EstMorte();
     }
 
+    //Animaux : 
+    public void CreerAnimal(string nom)
+    {
+        if (nom == "Abeille") Pot.ListeAnimaux.Add(new Abeille(Pot));
+        if (nom == "Chat") Pot.ListeAnimaux.Add(new Chat(Pot));
+        if (nom == "Chien") Pot.ListeAnimaux.Add(new Chien(Pot));
+        if (nom == "Coccinelle") Pot.ListeAnimaux.Add(new Coccinelle(Pot));
+        if (nom == "Escargot") Pot.ListeAnimaux.Add(new Escargot(Pot));
+        if (nom == "Oiseau") Pot.ListeAnimaux.Add(new Oiseau(Pot));
+        if (nom == "Pucerons") Pot.ListeAnimaux.Add(new Pucerons(Pot));
+        if (nom == "Rongeur") Pot.ListeAnimaux.Add(new Rongeur(Pot));
+        if (nom == "VersDeTerre") Pot.ListeAnimaux.Add(new VersDeTerre(Pot));
+    }
+
+    public void PoserCoccinelle()
+    {
+        Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
+        string reponseX = Console.ReadLine()!;
+        int x;
+        while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Hauteur))
+        {
+            Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la ligne où vous voulez poser vos coccinelles ? ");
+            reponseX = Console.ReadLine()!;
+        }
+        Console.WriteLine("A quel numéro de colonne voulez-vous poser vos coccinelles ? ");
+        string reponseY = Console.ReadLine()!;
+        int y;
+        while (!int.TryParse(reponseY, out y) || (y < 0) || (y >= Pot.Longueur))
+        {
+            Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez poser vos coccinelles ? ");
+            reponseY = Console.ReadLine()!;
+        }
+        Coccinelle c = new Coccinelle(Pot);
+        c.X = x;
+        c.Y = y;
+        Pot.ListeAnimaux.Add(c);
+    }
+
+    // Achats
     public void AjouterAchat(int numero, int quantite)
     {
         ListeAchats[numero] += quantite;
@@ -335,8 +376,7 @@ public class Simulation
                 if (achatSouhaite.Nom == Achat.Chien)
                 {
                     PresenceChien = true;
-                    Chien chienA = new Chien(Pot);
-                    Pot.ListeAnimaux.Add(chienA);
+                    CreerAnimal("Chien");
                     Console.WriteLine(" Vous possédez maintenant un chien");
                 }
             }
@@ -406,7 +446,7 @@ public class Simulation
         }
         else if (numeroAPoser == 2)
         {
-            //ApparitionAnimal(Coccinelle);
+            PoserCoccinelle();
             Console.WriteLine("Vous avez posé des coccinelles.");
         }
         else if (numeroAPoser == 4)
@@ -429,11 +469,10 @@ public class Simulation
             PresenceSerre = true;
             Console.WriteLine("Vous avez posé une serre.");
         }
-        else if ( (numeroAPoser == 11) || (numeroAPoser == 12) || (numeroAPoser == 13))
+        else if ((numeroAPoser == 11) || (numeroAPoser == 12) || (numeroAPoser == 13))
         {
             Pot.EffetPoserRemede(numeroAPoser); //Le Console.WriteLine pour dire qu'on a utilisé un remède est dans la méthode Pot.EffetPoserRemede.
         }
-        // En cours
     }
 
     public void ImpactAchatPose() //Effectue l'impact pour les achats déjà posé
@@ -443,7 +482,7 @@ public class Simulation
         if (PresenceSerre) Pot.EffetSerre();
     }
 
-
+    // Initialisation, actions et affichage : 
     public void InitialisationPotager(Potager Pot, string[,] grille)
     {
         for (int i = 0; i < Pot.Hauteur; i++)

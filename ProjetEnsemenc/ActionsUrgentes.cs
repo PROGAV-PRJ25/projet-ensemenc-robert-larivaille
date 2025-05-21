@@ -92,18 +92,6 @@ public abstract class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void ReboucherTrou(object Sujet)
-    {
-        if (Sujet is Taupe taupe)
-        {
-            taupe.Disparait();
-            //Enlever les trous
-        }
-        else
-        {
-            Console.WriteLine("Aucun Effet");
-        }
-    }
     public void AdopterChien(object Sujet)
     {
         if (Sujet is Rongeur rongeur)
