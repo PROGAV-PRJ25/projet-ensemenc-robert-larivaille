@@ -24,10 +24,10 @@ public class ActionUrgente
             Console.WriteLine("5 - Mettre une bâche (contre : Grêle) \n6 - Installer une pompe (contre : Inondation) \n7 - Utiliser le tuyau d'arrosage (contre : Sécheresse) \n8 - installer l'arrosage automatique (contre : Sécheresse)");
         }
 
-        string? saisie = ReadLineWithTimeout(3000);
+        string? saisie = ReadLineWithTimeout(4000);
         if (saisie == null)
         {
-            // L'utilisateur n'a rien entré, on quitte la méthode pour laisser la boucle d'urgence continuer
+            // Si aucune saisie on fait passer le temps
             return;
         }
         int choix;
