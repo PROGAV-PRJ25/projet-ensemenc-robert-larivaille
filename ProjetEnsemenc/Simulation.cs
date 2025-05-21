@@ -98,7 +98,20 @@ public class Simulation
 
     public void ApparaitreHasardAnimal()
     {
-
+        Random rng = new Random();
+        int[] tableauProbabilites = new int[] { 20, 50, 55, 60, 65, 80 }; // Tableau qui contient les valeurs des probabilités d'apparition des Animaux dans l'ordre du tableau ci-dessous.
+        string[] tableauAnimaux = new string[] { "Chien", "Escargot", "Coccinelle", "Abeille", "Pucerons", "VersDeTerre" };
+        for (int i = 0; i < 6; i++)
+        {
+            int tirage = rng.Next(0, 101);
+            if (tirage < tableauProbabilites[i])
+            {
+                string ani = tableauAnimaux[i];
+                CreerAnimal(ani);
+                if (ani == "VersDeTerre") ani = "Vers de terre";
+                Console.WriteLine($"Un nouvel animal est apparu : {ani}");
+            }
+        }
     }
 
 
