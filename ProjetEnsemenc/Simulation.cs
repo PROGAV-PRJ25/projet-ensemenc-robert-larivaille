@@ -414,11 +414,6 @@ public class Simulation
             PresenceEpouvantail = true;
             Console.WriteLine("Vous avez posé un épouvantail.");
         }
-        else if (numeroAPoser == 4)
-        {
-            PresenceEpouvantail = true;
-            Console.WriteLine("Vous avez posé un épouvantail.");
-        }
         else if (numeroAPoser == 5)
         {
             Pot.EffetFertilisant();
