@@ -53,4 +53,23 @@ public class Potager
             plante.NiveauHumidite += 5;
         }
     }
+
+    public void EffetLampeUV()
+    {
+        foreach (Plante plante in ListePlantes)
+        {
+            plante.NiveauLuminosite=plante.SeuilLuminosite;
+        }
+    }
+
+    public void EffetSerre()
+    {
+        foreach (Plante plante in ListePlantes)
+        {
+            int tempCible = (plante.TemperatureCible[1] + plante.TemperatureCible[0]) / 2;
+            plante.NiveauLuminosite=plante.SeuilLuminosite;
+            plante.NiveauTemperature = tempCible;
+            plante.NiveauHumidite = plante.SeuilHumidite;
+        }
+    }
 }

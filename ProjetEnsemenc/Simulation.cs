@@ -452,6 +452,13 @@ public class Simulation
         // En cours
     }
 
+    public void ImpactAchatPose() //Effectue l'impact pour les achats déjà posé
+    {
+        if (PresenceLampeUV) Pot.EffetLampeUV();
+        if (PresenceArrosageAutomatique) Pot.EffetArrosageAutomatique();
+        if (PresenceSerre) Pot.EffetSerre();
+    }
+
 
     public void InitialisationPotager(Potager Pot, string[,] grille)
     {
@@ -645,6 +652,7 @@ public class Simulation
                 MajBesoinEau();
                 plante.MettreAJourPlantesAutour();
                 VerifierEsperanceDeVie(plante);
+                ImpactAchatPose();
                 plante.ImpactConditions();
                 plante.Contamination();
                 if (NumeroTour % plante.TempsCroissance == 0) { plante.Grandir(); }
