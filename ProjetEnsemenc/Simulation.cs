@@ -429,20 +429,9 @@ public class Simulation
             PresenceSerre = true;
             Console.WriteLine("Vous avez posé une serre.");
         }
-        else if (numeroAPoser == 11)
+        else if ( (numeroAPoser == 11) || (numeroAPoser == 12) || (numeroAPoser == 13))
         {
-            //
-            Console.WriteLine("Vous avez posé un  remède.");
-        }
-        else if (numeroAPoser == 12)
-        {
-            //
-            Console.WriteLine("Vous avez posé un  remède.");
-        }
-        else if (numeroAPoser == 13)
-        {
-            //
-            Console.WriteLine("Vous avez posé un  remède.");
+            Pot.EffetPoserRemede(numeroAPoser); //Le Console.WriteLine pour dire qu'on a utilisé un remède est dans la méthode Pot.EffetPoserRemede.
         }
         // En cours
     }

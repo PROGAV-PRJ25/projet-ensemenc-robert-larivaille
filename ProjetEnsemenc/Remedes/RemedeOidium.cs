@@ -1,19 +1,18 @@
 public class RemedeOidium : Remede
 {
-    public RemedeOidium() : base("Traitement Oidium")
+    public RemedeOidium() : base("traitement Oidium")
     {
     }
 
-    public override void Agir(Maladie maladie, Plante plante)
+    public override void Agir (Plante plante)
     {
-        if (maladie.Nom == "Oidium")
+        foreach (Maladie maladie in plante.EstMaladeDe)
         {
-            plante.EstMaladeDe.Remove(maladie);
-            plante.Sante = 100;
-        }
-        else
-        {
-            Console.WriteLine($"{Nom} n'a aucun effet sur {maladie.Nom}.");
+            if (maladie.Nom == "Oidium")
+            {
+                plante.EstMaladeDe.Remove(maladie);
+                plante.Sante = 100;
+            }
         }
     }
 }

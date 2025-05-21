@@ -58,7 +58,7 @@ public class Potager
     {
         foreach (Plante plante in ListePlantes)
         {
-            plante.NiveauLuminosite=plante.SeuilLuminosite;
+            plante.NiveauLuminosite = plante.SeuilLuminosite;
         }
     }
 
@@ -67,9 +67,32 @@ public class Potager
         foreach (Plante plante in ListePlantes)
         {
             int tempCible = (plante.TemperatureCible[1] + plante.TemperatureCible[0]) / 2;
-            plante.NiveauLuminosite=plante.SeuilLuminosite;
+            plante.NiveauLuminosite = plante.SeuilLuminosite;
             plante.NiveauTemperature = tempCible;
             plante.NiveauHumidite = plante.SeuilHumidite;
         }
     }
+
+    public void EffetPoserRemede(int nombre)
+    {
+        Remede r;
+        if (nombre == 11)
+        {
+            r = new RemedeFusariose();
+        }
+        else if (nombre == 12)
+        {
+            r = new RemedeMildiou();
+        }
+        else
+        {
+            r = new RemedeOidium();
+        }
+        foreach (Plante plante in ListePlantes)
+        {
+            r.Agir(plante);
+        }
+        Console.WriteLine($"Vous avez utilisé votre {r.Nom}.");
+    }
+
 }
