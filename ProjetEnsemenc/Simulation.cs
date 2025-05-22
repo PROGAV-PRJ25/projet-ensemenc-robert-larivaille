@@ -99,12 +99,13 @@ public class Simulation
         else nouveau = new VersDeTerre(Pot);
         nouveau.Duree += NumeroTour;
         Pot.ListeAnimaux.Add(nouveau);
+        nouveau.EstMange();
     }
 
     public void ApparaitreHasardAnimal()
     {
         Random rng = new Random();
-        int[] tableauProbabilites = new int[] { 20, 50, 55, 60, 65, 80 }; // Tableau qui contient les valeurs des probabilités d'apparition des Animaux dans l'ordre du tableau ci-dessous.
+        int[] tableauProbabilites = new int[] { 5, 12, 14, 15, 16, 20 }; // Tableau qui contient les valeurs des probabilités d'apparition des Animaux dans l'ordre du tableau ci-dessous.
         string[] tableauAnimaux = new string[] { "Chien", "Escargot", "Coccinelle", "Abeille", "Pucerons", "VersDeTerre" };
         for (int i = 0; i < 6; i++)
         {
@@ -145,11 +146,13 @@ public class Simulation
         Pot.ListeAnimaux.Add(c);
     }
 
-    public void MajDureeAnimaux()
+    public void EvolutionAnimaux()
     {
         foreach (Animaux animal in Pot.ListeAnimaux)
         {
             if (animal.Duree == NumeroTour) animal.Disparait();
+            if ((animal.Nom != "Pucerons") && (animal.Nom != "VersDeTerre") && (animal.Nom != "Escargot")) animal.SeDeplacer();
+            animal.EstMange();
         }
     }
 
@@ -645,9 +648,7 @@ public class Simulation
     public List<string> MajAffichageAnimaux(string[,] grille)
     {
         List<string> listeAnimauxAfficher = new List<string>();
-        listeAnimauxAfficher.Add("Certains animaux ne sont pas visibles sur la grille : ");
-        int[,] grilleAnimaux = new int[grille.GetLength(0), grille.GetLength(1)];
-        // grilleAnimaux indique si un animal est déjà présent dans la grille principale.
+        listeAnimauxAfficher.Add("Certains animaux ne sont pas visibles sur la grille car ils sont sur des plantes ou autres animaux : ");
         string emoji = "";
         foreach (Animaux animal in Pot.ListeAnimaux)
         {
@@ -665,13 +666,8 @@ public class Simulation
                 if (grille[animal.X, animal.Y] == " 🔳 ")
                 {
                     grille[animal.X, animal.Y] = " " + emoji + " ";
-                    grilleAnimaux[animal.X, animal.Y] = 1;
                 }
-                else if (grilleAnimaux[animal.X, animal.Y] != 1) // Permet de ne pas affficher deux animaux sur la même case pour ne pas surcharger l'affichage.
-                {
-                    grille[animal.X, animal.Y] += emoji;
-                }
-                else
+                else // Cette partie permet de ne pas surcharger l'affichage.
                 {
                     listeAnimauxAfficher.Add($"- {emoji} | ligne : {animal.X}, colonne : {animal.Y}");
                 }
@@ -690,6 +686,13 @@ public class Simulation
             MajAffichagePlantes(grille);
             List<string> ajoutAffichage = MajAffichageAnimaux(grille); // Utiliser ajoutAffichage
             AffichageComplet(grille);
+            if (ajoutAffichage.Count >= 2)
+            {
+                foreach (string message in ajoutAffichage)
+                {
+                    Console.WriteLine(message);
+                }
+            }
             Console.WriteLine("Choisissez une action du menu principal :");
             string rep = Console.ReadLine()!;
             while (!int.TryParse(rep, out reponse))
@@ -864,7 +867,7 @@ public class Simulation
         while (simu.mode == ModeDeJeu.Urgence && !dureeEffectuee)
         {
             MajAffichagePlantes(grille);
-            List<string> ajoutAffichage = MajAffichageAnimaux(grille); // Utiliser ajoutAffichage
+            MajAffichageAnimaux(grille);
             for (int i = 0; i < lignesPotager.Count; i++)
             {
                 Console.WriteLine(lignesPotager[i]);
@@ -884,8 +887,6 @@ public class Simulation
                 ani.SeDeplacer();
             }
             actionUrgente.ProposerAction(pb, pot, simu);
-
-
         }
         simu.mode = ModeDeJeu.Classique;
         Console.WriteLine("-- Fin de l'urgence -- \n <Retour au mode de jeu classique>");
@@ -932,9 +933,9 @@ public class Simulation
         {
             if (simu.mode == ModeDeJeu.Classique)
             {
-                MajDureeAnimaux();
+                EvolutionAnimaux();
                 MajAffichagePlantes(GrillePotager);
-                List<string> ajoutAffichage = MajAffichageAnimaux(GrillePotager); // Utiliser ajoutAffichage
+                List<string> ajoutAffichage = MajAffichageAnimaux(GrillePotager);
                 MajBesoinEau();
 
                 foreach (Plante plante in pot.ListePlantes)
