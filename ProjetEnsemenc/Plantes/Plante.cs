@@ -39,8 +39,8 @@ public abstract class Plante
     // public List<Animaux> AnimauxPresents { get; set; }
     // public List<Achats> ObjetsPresents { get; set; }
 
-    public int coorX;
-    public int coorY;
+    public int coorX; //Colonne
+    public int coorY; //Ligne
     public int CoorX
     {
         get { return coorX; }

@@ -90,7 +90,11 @@ public class Simulation
         Animaux nouveau;
         if (nom == "Abeille") nouveau = new Abeille(Pot);
         else if (nom == "Chat") nouveau = new Chat(Pot);
-        else if (nom == "Chien") nouveau = new Chien(Pot);
+        else if (nom == "Chien")
+        {
+            nouveau = new Chien(Pot);
+            PresenceChien = true;
+        }
         else if (nom == "Coccinelle") nouveau = new Coccinelle(Pot);
         else if (nom == "Escargot") nouveau = new Escargot(Pot);
         else if (nom == "Oiseau") nouveau = new Oiseau(Pot);
@@ -114,7 +118,7 @@ public class Simulation
             {
                 string ani = tableauAnimaux[i];
                 CreerAnimal(ani);
-                if (ani == "VersDeTerre") ani = "Vers de terre";
+                //if (ani == "VersDeTerre") ani = "Vers de terre";
                 Console.WriteLine($"Un nouvel animal est apparu : {ani}");
             }
         }
@@ -153,6 +157,13 @@ public class Simulation
             if (animal.Duree == NumeroTour) animal.Disparait();
             if ((animal.Nom != "Pucerons") && (animal.Nom != "VersDeTerre") && (animal.Nom != "Escargot")) animal.SeDeplacer();
             animal.EstMange();
+            foreach (Plante plante in Pot.ListePlantes)
+            {
+                if ((plante.CoorX != -1) && (plante.CoorY != -1) && (plante.CoorX == animal.Y) && (plante.CoorY == animal.X))
+                {
+                    animal.Effet(plante);
+                }
+            }
         }
     }
 
@@ -652,17 +663,17 @@ public class Simulation
         string emoji = "";
         foreach (Animaux animal in Pot.ListeAnimaux)
         {
-            if (animal.X != -1 && animal.Y != -1)
+            if ((animal.X != -1) && (animal.Y != -1))
             {
                 if (animal.Nom == "Chien") emoji = "🐕";
                 if (animal.Nom == "Abeille") emoji = "🐝";
                 if (animal.Nom == "Chat") emoji = "🐈";
                 if (animal.Nom == "Coccinelle") emoji = "🐞";
                 if (animal.Nom == "Escargot") emoji = "🐌";
-                if (animal.Nom == "Oiseau") emoji = "🐦‍⬛";
-                if (animal.Nom == "Puceron") emoji = "🦗";
+                if (animal.Nom == "Oiseau") emoji = "‍🐦";
+                if (animal.Nom == "Pucerons") emoji = "🦗";
                 if (animal.Nom == "Rongeur") emoji = "🐀";
-                if (animal.Nom == "Rongeur") emoji = "🪱";
+                if (animal.Nom == "VersDeTerre") emoji = "🪱 ";
                 if (grille[animal.X, animal.Y] == " 🔳 ")
                 {
                     grille[animal.X, animal.Y] = " " + emoji + " ";
@@ -684,7 +695,7 @@ public class Simulation
         {
             ApparaitreHasardAnimal();
             MajAffichagePlantes(grille);
-            List<string> ajoutAffichage = MajAffichageAnimaux(grille); // Utiliser ajoutAffichage
+            List<string> ajoutAffichage = MajAffichageAnimaux(grille);
             AffichageComplet(grille);
             if (ajoutAffichage.Count >= 2)
             {
@@ -793,25 +804,25 @@ public class Simulation
         {
             Grele = true;
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, grele, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, grele, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageInondation = rng.Next(0, 101);
         if (tirageInondation < probaInondation)
         {
             Inondation = true;
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, inondation, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, inondation, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageSecheresse = rng.Next(0, 101);
         if (tirageSecheresse < probaSecheresse)
         {
             Secheresse = true;
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, secheresse, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, secheresse, simu.ActionUrgente, simu.Pot, simu);
         }
     }
 
-    public void TirerAuSortAnimauxUrgents(Simulation simu, Oiseau oiseau, Chat chat, Rongeur rongeur, string[,] grille)
+    public void TirerAuSortAnimauxUrgents(Simulation simu, ref Oiseau oiseau, ref Chat chat, ref Rongeur rongeur, string[,] grille)
     {
         Random rng = new Random();
         int probaOiseau = 20;
@@ -824,24 +835,30 @@ public class Simulation
         int tirageOiseau = rng.Next(0, 101);
         if (tirageOiseau < probaOiseau)
         {
+            oiseau.X = rng.Next(0, Pot.Hauteur);
+            oiseau.Y = rng.Next(0, Pot.Longueur);
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, oiseau, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, oiseau, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageChat = rng.Next(0, 101);
         if (tirageChat < probaChat)
         {
+            chat.X = rng.Next(0, Pot.Hauteur);
+            chat.Y = rng.Next(0, Pot.Longueur);
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, chat, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, chat, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageRongeur = rng.Next(0, 101);
         if (tirageRongeur <= probaRongeur)
         {
+            rongeur.X = rng.Next(0, Pot.Hauteur);
+            rongeur.Y = rng.Next(0, Pot.Longueur);
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, rongeur, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, rongeur, simu.ActionUrgente, simu.Pot, simu);
         }
     }
 
-    public void AffichageUrgence(string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
+    public void AffichageUrgence(ref string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
     {
         int duree = 1;
         Console.Clear();
@@ -852,22 +869,27 @@ public class Simulation
         if (pb is Secheresse) Console.WriteLine("☀️☀️☀️☀️☀️☀️");
         Console.WriteLine();
 
-        List<string> lignesPotager = new List<string>();
-        for (int i = 0; i < Pot.Hauteur; i++)
-        {
-            string ligne = "";
-            for (int j = 0; j < Pot.Longueur; j++)
-            {
-                ligne += grille[i, j];
-            }
-            lignesPotager.Add(ligne);
-            lignesPotager.Add("");
-        }
         bool dureeEffectuee = false;
         while (simu.mode == ModeDeJeu.Urgence && !dureeEffectuee)
         {
             MajAffichagePlantes(grille);
             MajAffichageAnimaux(grille);
+            foreach (Animaux animal in Pot.ListeAnimaux)
+            {
+                animal.EstMange();
+            }
+
+            List<string> lignesPotager = new List<string>();
+            for (int i = 0; i < Pot.Hauteur; i++)
+            {
+                string ligne = "";
+                for (int j = 0; j < Pot.Longueur; j++)
+                {
+                    ligne += grille[i, j];
+                }
+                lignesPotager.Add(ligne);
+                lignesPotager.Add("");
+            }
             for (int i = 0; i < lignesPotager.Count; i++)
             {
                 Console.WriteLine(lignesPotager[i]);
@@ -887,6 +909,11 @@ public class Simulation
                 ani.SeDeplacer();
             }
             actionUrgente.ProposerAction(pb, pot, simu);
+        }
+        if (pb is AnimauxMauvais anim)
+        {
+            anim.X = -1;
+            anim.Y = -1;
         }
         simu.mode = ModeDeJeu.Classique;
         Console.WriteLine("-- Fin de l'urgence -- \n <Retour au mode de jeu classique>");
@@ -923,8 +950,17 @@ public class Simulation
         Secheresse secheresse = new Secheresse(Pot);
         ActionUrgente = new ActionUrgente();
         Oiseau oiseau = new Oiseau(Pot);
+        oiseau.X = -1;
+        oiseau.Y = -1;
+        Pot.ListeAnimaux.Add(oiseau);
         Chat chat = new Chat(Pot);
+        chat.X = -1;
+        chat.Y = -1;
+        Pot.ListeAnimaux.Add(chat);
         Rongeur rongeur = new Rongeur(Pot);
+        rongeur.X = -1;
+        rongeur.Y = -1;
+        Pot.ListeAnimaux.Add(rongeur);
 
         string[,] GrillePotager = new string[pot.Hauteur, pot.Longueur];
         InitialisationPotager(pot, GrillePotager);
@@ -982,7 +1018,7 @@ public class Simulation
                 {
                     Random rng = new Random();
                     if (rng.Next(1, 3) == 1)  //Pour éviter d'avoir les 2 urgences 
-                        TirerAuSortAnimauxUrgents(simu, oiseau, chat, rongeur, GrillePotager);
+                        TirerAuSortAnimauxUrgents(simu, ref oiseau, ref chat, ref rongeur, GrillePotager);
                     else
                         TirerAuSortIntemperie(simu, grele, inondation, secheresse, Pot.Saison.Nom, GrillePotager);
                 }

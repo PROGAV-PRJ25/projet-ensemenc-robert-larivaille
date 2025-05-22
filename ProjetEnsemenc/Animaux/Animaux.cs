@@ -2,9 +2,9 @@ public abstract class Animaux
 {
     Random rng = new Random();
     public string Nom { get; set; }
-    public int X { get; set; }
+    public int X { get; set; } //Ligne
 
-    public int Y { get; set; }
+    public int Y { get; set; } //Colonne
 
     public int Duree { get; set; } // Combien de temps l'animal reste sur le potager au maximum, quand l'animal est créé sela devient le numero de son tour finale
 
@@ -52,30 +52,33 @@ public abstract class Animaux
 
     public void SeDeplacer()
     {
-        int direction = rng.Next(0, 4);
-        if (direction == 0) //Nord
+        if ((X != -1) && (Y != -1))
         {
-            if (X != 0) X--;
-            else X++;
-        }
-        else
-        {
-            if (direction == 1) //Sud
+            int direction = rng.Next(0, 4);
+            if (direction == 0) //Nord
             {
-                if (X != Pot.Hauteur - 1) X++;
-                else X--;
+                if (X != 0) X--;
+                else X++;
             }
             else
             {
-                if (direction == 2) //Est
+                if (direction == 1) //Sud
                 {
-                    if (Y != Pot.Longueur - 1) Y++;
-                    else Y--;
+                    if (X != Pot.Hauteur - 1) X++;
+                    else X--;
                 }
-                else //Ouest
+                else
                 {
-                    if (Y != 0) Y--;
-                    else Y++;
+                    if (direction == 2) //Est
+                    {
+                        if (Y != Pot.Longueur - 1) Y++;
+                        else Y--;
+                    }
+                    else //Ouest
+                    {
+                        if (Y != 0) Y--;
+                        else Y++;
+                    }
                 }
             }
         }
