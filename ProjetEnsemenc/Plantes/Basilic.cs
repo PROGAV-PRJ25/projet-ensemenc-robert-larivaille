@@ -43,7 +43,10 @@ public class Basilic : PlanteAnnuelle
         else
             this.ScoreTerrain = 20;
 
-        // Il restera à initialiser les coordonnées
-
+    }
+    public Basilic() : base()
+    {
+        this.SaisondeSemis = Saison.Printemps;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
     }
 }

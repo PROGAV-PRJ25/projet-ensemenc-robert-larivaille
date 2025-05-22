@@ -8,4 +8,8 @@ public abstract class PlanteAnnuelle : Plante
         this.TerrainPlant = ter;
         this.EsperanceDeVie = 12;
     }
+    public PlanteAnnuelle() : base()
+    {
+        //Pour faire fonctionner la méthode AssocierGrainePlante
+    }
 }

@@ -39,8 +39,11 @@ public class Artichaut : PlanteVivace
         }
         else
             this.ScoreTerrain = 50;
-
-        // Il restera à initialiser les coordonnées
+    }
+    public Artichaut() : base()
+    {
+        this.SaisondeSemis = Saison.Printemps;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
     }
 
 }

@@ -33,9 +33,13 @@ public class Oignon : PlanteAnnuelle
             this.ScoreTerrain = 75;
         }
         else
-            this.ScoreTerrain = 0; // A corriger
+            this.ScoreTerrain = 40;
 
-        // Il restera à initialiser les coordonnées
 
+    }
+    public Oignon() : base()
+    {
+        this.SaisondeSemis = Saison.Automne;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
     }
 }

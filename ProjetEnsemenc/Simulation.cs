@@ -79,6 +79,7 @@ public class Simulation
         achatsPossibles.Add(new AchatRemedeFusariose());
         achatsPossibles.Add(new AchatRemedeMildiou());
         achatsPossibles.Add(new AchatRemedeOidium());
+        ActionUrgente = new ActionUrgente();
 
     }
 
@@ -153,31 +154,52 @@ public class Simulation
         else if (plante.Espece == "Thym") return RecTh;
         else return RecTo;
     }
+    public Plante AssocierGrainePlante(Graine graine)
+    {
+        switch (graine.Espece)
+        {
+            case "Artichaut": return new Artichaut(); //Instances créés juste pour accéder aux propriétés
+            case "Aubergine": return new Aubergine();
+            case "Basilic": return new Basilic();
+            case "Oignon": return new Oignon();
+            case "Olivier": return new Olivier();
+            case "Poivron": return new Poivron();
+            case "Roquette": return new Roquette();
+            case "Thym": return new Thym();
+            case "Tomate": return new Tomate();
+            default: return null;
+        }
+    }
 
     public void Planter(Simulation simu)
     {
         bool presenceGraine = false;
         foreach (Graine graine in Pot.SacDeGraines)
         {
-            if (graine.Quantite != 0)
+            Plante plante = AssocierGrainePlante(graine);
+            if (plante != null && plante.SaisondeSemis == Pot.Saison.Nom)
             {
-                presenceGraine = true;
+                if (graine.Quantite != 0)
+                {
+                    presenceGraine = true;
+                }
             }
         }
         if (!presenceGraine)
         {
-            Console.WriteLine("Vous ne possédez aucune graine donc vous ne pouvez rien planter. ");
+            Console.WriteLine("Vous ne possédez aucune graine que vous pouvez planter en cette saison. ");
         }
         else
         {
             int numero = 0;
-            Console.WriteLine("Vous possédez les graines suivantes :");
+            Console.WriteLine("Vous possédez et pouvez planter les graines suivantes en cette saison :");
             foreach (Graine graine in Pot.SacDeGraines)
             {
                 if (graine.Quantite != 0)
                 {
                     Console.WriteLine($"- {numero}. {graine.Espece} : {graine.Quantite} unités");
                 }
+
                 numero++;
             }
             Console.WriteLine("Quel est le numéro de la graine que vous voulez planter ? ");
@@ -444,6 +466,7 @@ public class Simulation
                 if (PresenceChien && (numeroAAcheter - 1 == 3))
                 {
                     Console.WriteLine("Vous ne pouvez acheter qu'un chien. Effectuez un autre achat.");
+                    return;
                 }
                 else
                 {
@@ -461,9 +484,13 @@ public class Simulation
         bool presenceAchat = false;
         for (int i = 0; i < ListeAchats.Count(); i++)
         {
-            if (ListeAchats[i] != 0)
+            //On ignore les items que l'on ne peut pas poser
+            if ((i != 1) && (i != 3) && (i != 6) && (i != 8) && (i != 10))
             {
-                presenceAchat = true;
+                if (ListeAchats[i] != 0)
+                {
+                    presenceAchat = true;
+                }
             }
         }
         if (!presenceAchat)
@@ -483,12 +510,15 @@ public class Simulation
                 numero++;
             }
             Console.WriteLine("Vous ne pouvez utiliser les baches, pompes et tuyau d'arrosage qu'en cas d'intempéries ; ils n'apparaissent pas dans la liste ci-dessus.");
+            Console.WriteLine("Même chose pour le chien et l'épouvantail qui ne sont utilisable qu'en cas d'animaux urgent à faire fuir");
+            Console.WriteLine("Pour planter une graine, référez vous à l'action (1) du menu principal");
             Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
             string reponse = Console.ReadLine()!;
             int numeroAPoser;
             while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
             {
                 Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+                reponse = Console.ReadLine()!;
             }
             if (numeroAPoser == 0)
             {
@@ -864,6 +894,7 @@ public class Simulation
                     VerifierEsperanceDeVie(plante);
                     ImpactAchatPose();
                     plante.ImpactConditions();
+                    plante.ProbabiliteTomberMalade();
                     plante.Contamination();
                     if (NumeroTour % plante.TempsCroissance == 0)
                         plante.Grandir();
@@ -906,7 +937,8 @@ public class Simulation
             }
 
         }
-        Console.WriteLine("FIN DE LA PARTIE.");
+        Console.WriteLine("-- FIN DE LA PARTIE --");
+        Console.WriteLine(" Merci d'avoir joué ! A très vite ;)");
     }
 
 

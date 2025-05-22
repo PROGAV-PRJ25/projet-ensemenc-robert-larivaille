@@ -43,4 +43,9 @@ public class Tomate : PlanteAnnuelle
         else
             this.ScoreTerrain = 50;
     }
+    public Tomate() : base()
+    {
+        this.SaisondeSemis = Saison.Printemps;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
+    }
 }

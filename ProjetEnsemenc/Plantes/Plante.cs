@@ -1,4 +1,6 @@
 
+using System.Globalization;
+
 public abstract class Plante
 {
     public string Espece { get; set; }
@@ -69,6 +71,9 @@ public abstract class Plante
         TourPlantation = simu.NumeroTour;
         QteProduite = 0;
     }
+    public Plante() { } //Pour faire fonctionner la méthode AssocierGrainePlante
+
+
 
     public void MettreAJourPlantesAutour()
     {
@@ -266,6 +271,19 @@ public abstract class Plante
         {
             EstMaladeDe.Add(maladie);
             Console.WriteLine($"{Espece} a attrapé {maladie.Nom} !");
+        }
+    }
+
+    public void ProbabiliteTomberMalade()
+    {
+        Random rng = new Random();
+        int proba = rng.Next(0, 101);
+        for (int i = 0; i < MaladiesPotentielles.Count(); i++)
+        {
+            if (proba <= ProbaMaladies[i])
+            {
+                AttraperMaladie(MaladiesPotentielles[i]);
+            }
         }
     }
 
