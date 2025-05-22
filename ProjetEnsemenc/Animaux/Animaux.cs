@@ -6,7 +6,7 @@ public abstract class Animaux
 
     public int Y { get; set; }
 
-    public int Duree { get; set; } // Combien de temps l'animal reste sur le potager au maximum
+    public int Duree { get; set; } // Combien de temps l'animal reste sur le potager au maximum, quand l'animal est créé sela devient le numero de son tour finale
 
     public Potager Pot { get; set; }
 

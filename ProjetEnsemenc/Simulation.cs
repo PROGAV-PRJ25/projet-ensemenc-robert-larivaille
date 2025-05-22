@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.Marshalling;
+
 public enum ModeDeJeu
 {
     Classique,
@@ -85,15 +87,18 @@ public class Simulation
     //Animaux :  
     public void CreerAnimal(string nom)
     {
-        if (nom == "Abeille") Pot.ListeAnimaux.Add(new Abeille(Pot));
-        if (nom == "Chat") Pot.ListeAnimaux.Add(new Chat(Pot));
-        if (nom == "Chien") Pot.ListeAnimaux.Add(new Chien(Pot));
-        if (nom == "Coccinelle") Pot.ListeAnimaux.Add(new Coccinelle(Pot));
-        if (nom == "Escargot") Pot.ListeAnimaux.Add(new Escargot(Pot));
-        if (nom == "Oiseau") Pot.ListeAnimaux.Add(new Oiseau(Pot));
-        if (nom == "Pucerons") Pot.ListeAnimaux.Add(new Pucerons(Pot));
-        if (nom == "Rongeur") Pot.ListeAnimaux.Add(new Rongeur(Pot));
-        if (nom == "VersDeTerre") Pot.ListeAnimaux.Add(new VersDeTerre(Pot));
+        Animaux nouveau;
+        if (nom == "Abeille") nouveau = new Abeille(Pot);
+        else if (nom == "Chat") nouveau = new Chat(Pot);
+        else if (nom == "Chien") nouveau = new Chien(Pot);
+        else if (nom == "Coccinelle") nouveau = new Coccinelle(Pot);
+        else if (nom == "Escargot") nouveau = new Escargot(Pot);
+        else if (nom == "Oiseau") nouveau = new Oiseau(Pot);
+        else if (nom == "Pucerons") nouveau = new Pucerons(Pot);
+        else if (nom == "Rongeur") nouveau = new Rongeur(Pot);
+        else nouveau = new VersDeTerre(Pot);
+        nouveau.Duree += NumeroTour;
+        Pot.ListeAnimaux.Add(nouveau);
     }
 
     public void ApparaitreHasardAnimal()
@@ -114,6 +119,7 @@ public class Simulation
         }
     }
 
+    // Mettre ApparaitreHasardAnimal dans la simu et gérer affichage des animaux
 
     public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être acheté et poser sur la case souhaitée.
     {
@@ -139,6 +145,13 @@ public class Simulation
         Pot.ListeAnimaux.Add(c);
     }
 
+    public void MajDureeAnimaux()
+    {
+        foreach (Animaux animal in Pot.ListeAnimaux)
+        {
+            if (animal.Duree == NumeroTour) animal.Disparait();
+        }
+    }
 
     //Plantes, Graines, Recoltes :
     public void CreerPlante(string espece, int y, int x, Simulation simu)
@@ -629,12 +642,53 @@ public class Simulation
         }
     }
 
+    public List<string> MajAffichageAnimaux(string[,] grille)
+    {
+        List<string> listeAnimauxAfficher = new List<string>();
+        listeAnimauxAfficher.Add("Certains animaux ne sont pas visibles sur la grille : ");
+        int[,] grilleAnimaux = new int[grille.GetLength(0), grille.GetLength(1)];
+        // grilleAnimaux indique si un animal est déjà présent dans la grille principale.
+        string emoji = "";
+        foreach (Animaux animal in Pot.ListeAnimaux)
+        {
+            if (animal.X != -1 && animal.Y != -1)
+            {
+                if (animal.Nom == "Chien") emoji = "🐕";
+                if (animal.Nom == "Abeille") emoji = "🐝";
+                if (animal.Nom == "Chat") emoji = "🐈";
+                if (animal.Nom == "Coccinelle") emoji = "🐞";
+                if (animal.Nom == "Escargot") emoji = "🐌";
+                if (animal.Nom == "Oiseau") emoji = "🐦‍⬛";
+                if (animal.Nom == "Puceron") emoji = "🦗";
+                if (animal.Nom == "Rongeur") emoji = "🐀";
+                if (animal.Nom == "Rongeur") emoji = "🪱";
+                if (grille[animal.X, animal.Y] == " 🔳 ")
+                {
+                    grille[animal.X, animal.Y] = " " + emoji + " ";
+                    grilleAnimaux[animal.X, animal.Y] = 1;
+                }
+                else if (grilleAnimaux[animal.X, animal.Y] != 1) // Permet de ne pas affficher deux animaux sur la même case pour ne pas surcharger l'affichage.
+                {
+                    grille[animal.X, animal.Y] += emoji;
+                }
+                else
+                {
+                    listeAnimauxAfficher.Add($"- {emoji} | ligne : {animal.X}, colonne : {animal.Y}");
+                }
+            }
+        }
+        return listeAnimauxAfficher;
+    }
+
+
     public void ChoisirActionsTour(ref bool jeuEnCours, ref string[,] grille, Simulation simu)
     {
         int reponse;
         do
         {
+            ApparaitreHasardAnimal();
             MajAffichagePlantes(grille);
+            List<string> ajoutAffichage = MajAffichageAnimaux(grille); // Utiliser ajoutAffichage
             AffichageComplet(grille);
             Console.WriteLine("Choisissez une action du menu principal :");
             string rep = Console.ReadLine()!;
@@ -810,6 +864,7 @@ public class Simulation
         while (simu.mode == ModeDeJeu.Urgence && !dureeEffectuee)
         {
             MajAffichagePlantes(grille);
+            List<string> ajoutAffichage = MajAffichageAnimaux(grille); // Utiliser ajoutAffichage
             for (int i = 0; i < lignesPotager.Count; i++)
             {
                 Console.WriteLine(lignesPotager[i]);
@@ -877,7 +932,9 @@ public class Simulation
         {
             if (simu.mode == ModeDeJeu.Classique)
             {
+                MajDureeAnimaux();
                 MajAffichagePlantes(GrillePotager);
+                List<string> ajoutAffichage = MajAffichageAnimaux(GrillePotager); // Utiliser ajoutAffichage
                 MajBesoinEau();
 
                 foreach (Plante plante in pot.ListePlantes)
@@ -920,11 +977,14 @@ public class Simulation
                 }
 
                 ChoisirActionsTour(ref jeuEnCours, ref GrillePotager, simu);
-                Random rng = new Random();
-                if (rng.Next(1, 3) == 1)  //Pour éviter d'avoir les 2 urgences 
-                    TirerAuSortAnimauxUrgents(simu, oiseau, chat, rongeur, GrillePotager);
-                else
-                    TirerAuSortIntemperie(simu, grele, inondation, secheresse, Pot.Saison.Nom, GrillePotager);
+                if (jeuEnCours)
+                {
+                    Random rng = new Random();
+                    if (rng.Next(1, 3) == 1)  //Pour éviter d'avoir les 2 urgences 
+                        TirerAuSortAnimauxUrgents(simu, oiseau, chat, rongeur, GrillePotager);
+                    else
+                        TirerAuSortIntemperie(simu, grele, inondation, secheresse, Pot.Saison.Nom, GrillePotager);
+                }
             }
 
         }
