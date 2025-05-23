@@ -119,15 +119,13 @@ public class Simulation
             {
                 string ani = tableauAnimaux[i];
                 CreerAnimal(ani);
-                //if (ani == "VersDeTerre") ani = "Vers de terre";
+                if (ani == "VersDeTerre") ani = "Vers de terre";
                 Console.WriteLine($"Un nouvel animal est apparu : {ani}");
             }
         }
     }
 
-    // Mettre ApparaitreHasardAnimal dans la simu et gérer affichage des animaux
-
-    public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être acheté et poser sur la case souhaitée.
+    public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être achetées et posées sur la case souhaitée.
     {
         Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
         string reponseX = Console.ReadLine()!;
@@ -180,7 +178,7 @@ public class Simulation
             terrain = Console.ReadLine()!;
         }
         if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(y, x, Pot, ter, simu));
-        if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(y, x, Pot, ter, simu));
+        else if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(y, x, Pot, ter, simu));
         if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(y, x, Pot, ter, simu));
         if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(y, x, Pot, ter, simu));
         if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(y, x, Pot, ter, simu));
@@ -357,7 +355,7 @@ public class Simulation
     }
 
 
-    // Achats
+    // Achats : 
     public void AjouterAchat(int numero, int quantite)
     {
         ListeAchats[numero] += quantite;
@@ -380,7 +378,6 @@ public class Simulation
         }
         return nombreUnites;
     }
-
 
     public bool PayerAchat(double prixTotal)
     {
@@ -615,6 +612,7 @@ public class Simulation
         if (PresenceSerre) Pot.EffetSerre();
     }
 
+
     // Initialisation, actions et affichage : 
     public void InitialisationPotager(Potager Pot, string[,] grille)
     {
@@ -635,7 +633,6 @@ public class Simulation
         Console.WriteLine("---");
 
     }
-
 
 
     public void MajAffichagePlantes(string[,] grille)
@@ -689,7 +686,7 @@ public class Simulation
     public List<string> MajAffichageAnimaux(string[,] grille)
     {
         List<string> listeAnimauxAfficher = new List<string>();
-        listeAnimauxAfficher.Add("Certains animaux ne sont pas visibles sur la grille car ils sont sur des plantes ou autres animaux : ");
+        listeAnimauxAfficher.Add("Certains animaux ne sont pas visibles sur la grille car ils sont sur des plantes ou d'autres animaux : ");
         string emoji = "";
         foreach (Animaux animal in Pot.ListeAnimaux)
         {
@@ -907,7 +904,7 @@ public class Simulation
         if (saison == Saison.Automne || saison == Saison.Printemps)
             probaInondation = 20;
         if (simu.PresenceArrosageAutomatique)
-            probaSecheresse = 0;  //les plantes ne sont plus affectées => plus d'urgence
+            probaSecheresse = 0;  //Les plantes ne sont plus affectées => plus d'urgence
         int tirageGrele = rng.Next(0, 101);
         if (tirageGrele < probaGrele) // Inférieur stricte pour si proba de 0
         {
@@ -982,8 +979,8 @@ public class Simulation
         while (simu.mode == ModeDeJeu.Urgence && !dureeEffectuee)
         {
             MajAffichagePlantes(grille);
-            MajAffichageAnimaux(grille);
-            foreach (Animaux animal in Pot.ListeAnimaux)
+            MajAffichageAnimaux(grille); //On ne récupère pas la liste renvoyée car en urgence on n'indique pas le positionnement des animaux non visibles.
+            foreach (Animaux animal in Pot.ListeAnimaux) // Comme l'animal d'urgence se déplace il faut vérifier si des animaux sont mangés.
             {
                 animal.EstMange();
             }
@@ -1127,7 +1124,7 @@ public class Simulation
                 if (jeuEnCours)
                 {
                     Random rng = new Random();
-                    if (rng.Next(1, 3) == 1)  //Pour éviter d'avoir les 2 urgences 
+                    if (rng.Next(1, 3) == 1)  //Pour éviter d'avoir les 2 urgences.
                         TirerAuSortAnimauxUrgents(simu, ref oiseau, ref chat, ref rongeur, GrillePotager);
                     else
                         TirerAuSortIntemperie(simu, grele, inondation, secheresse, Pot.Saison.Nom, GrillePotager);
