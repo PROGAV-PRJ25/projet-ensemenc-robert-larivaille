@@ -526,7 +526,7 @@ public class Simulation
     public void Acheter(Simulation simu)
     {
         Console.WriteLine($" Vous possédez {Argent} ");
-        Console.WriteLine(" Vous pouvez achetez : \n1. un arrosage automatique, \n2. une bache, \n3. des coccinelle, \n4. un chien, \n5. un epouvantail, \n6. du fertilisant, \n7. des graines, \n8. des lampes UV, \n9. une pompe, \n10. une serre,\n11. un tuyau d'arrosage, \n12. du remede anti fusariose, \n13. du remede anti mildiou, \n14. du remede anti Oidium ");
+        Console.WriteLine(" Vous pouvez achetez : \n1. Un arrosage automatique \n2. Une bache \n3. Des coccinelles \n4. Un chien \n5. Un epouvantail \n6. Du fertilisant \n7. Des graines \n8. Des lampes UV \n9. Une pompe \n10. Une serre\n11. Un tuyau d'arrosage \n12. Du remede anti Fusariose \n13. Du remede anti Mildiou \n14. Du remede anti Oidium ");
         Console.WriteLine("Entrez les numéros des achats que vous souhaitez faire un par un. Entrez 1000 pour arreter les achats. ");
         string reponse = Console.ReadLine()!;
         int numeroAAcheter = -1;
