@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.Marshalling;
+
 public enum ModeDeJeu
 {
     Classique,
@@ -50,6 +52,7 @@ public class Simulation
     public Simulation(int hauteur, int largeur)
     {
         Saisons saison = new Saisons(Saison.Printemps);
+        saison.ChangerTemperature();
         Pot = new Potager(hauteur, largeur, saison, saison.TemperatureDeSaison()); //Rentrer params
         mode = ModeDeJeu.Classique;
         Argent = 1000;
@@ -83,42 +86,47 @@ public class Simulation
 
     }
 
-    //Plantes, Graines, Recoltes :
-    public void CreerPlante(string espece, int y, int x, Simulation simu)
-    {
-        Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
-        string terrain = Console.ReadLine()!;
-        Terrain ter;
-        while (!Enum.TryParse<Terrain>(terrain, true, out ter))
-        {
-            Console.WriteLine("Entrée invalide. Veuillez saisir un terrain valide (Argile, Sable, Terre ou Calcaire) :");
-            terrain = Console.ReadLine()!;
-        }
-        if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(y, x, Pot, ter, simu));
-        if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(y, x, Pot, ter, simu));
-        if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(y, x, Pot, ter, simu));
-        if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(y, x, Pot, ter, simu));
-        if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(y, x, Pot, ter, simu));
-        if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(y, x, Pot, ter, simu));
-        if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(y, x, Pot, ter, simu));
-        if (espece == "Thym") Pot.ListePlantes.Add(new Thym(y, x, Pot, ter, simu));
-        if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
-    }
-    //Animaux : 
+    //Animaux :  
     public void CreerAnimal(string nom)
     {
-        if (nom == "Abeille") Pot.ListeAnimaux.Add(new Abeille(Pot));
-        if (nom == "Chat") Pot.ListeAnimaux.Add(new Chat(Pot));
-        if (nom == "Chien") Pot.ListeAnimaux.Add(new Chien(Pot));
-        if (nom == "Coccinelle") Pot.ListeAnimaux.Add(new Coccinelle(Pot));
-        if (nom == "Escargot") Pot.ListeAnimaux.Add(new Escargot(Pot));
-        if (nom == "Oiseau") Pot.ListeAnimaux.Add(new Oiseau(Pot));
-        if (nom == "Pucerons") Pot.ListeAnimaux.Add(new Pucerons(Pot));
-        if (nom == "Rongeur") Pot.ListeAnimaux.Add(new Rongeur(Pot));
-        if (nom == "VersDeTerre") Pot.ListeAnimaux.Add(new VersDeTerre(Pot));
+        Animaux nouveau;
+        if (nom == "Abeille") nouveau = new Abeille(Pot);
+        else if (nom == "Chat") nouveau = new Chat(Pot);
+        else if (nom == "Chien")
+        {
+            nouveau = new Chien(Pot);
+            PresenceChien = true;
+        }
+        else if (nom == "Coccinelle") nouveau = new Coccinelle(Pot);
+        else if (nom == "Escargot") nouveau = new Escargot(Pot);
+        else if (nom == "Oiseau") nouveau = new Oiseau(Pot);
+        else if (nom == "Pucerons") nouveau = new Pucerons(Pot);
+        else if (nom == "Rongeur") nouveau = new Rongeur(Pot);
+        else nouveau = new VersDeTerre(Pot);
+        nouveau.Duree += NumeroTour;
+        Pot.ListeAnimaux.Add(nouveau);
+        nouveau.EstMange();
     }
 
-    public void PoserCoccinelle()
+    public void ApparaitreHasardAnimal()
+    {
+        Random rng = new Random();
+        int[] tableauProbabilites = new int[] { 5, 12, 14, 15, 16, 20 }; // Tableau qui contient les valeurs des probabilités d'apparition des Animaux dans l'ordre du tableau ci-dessous.
+        string[] tableauAnimaux = new string[] { "Chien", "Escargot", "Coccinelle", "Abeille", "Pucerons", "VersDeTerre" };
+        for (int i = 0; i < 6; i++)
+        {
+            int tirage = rng.Next(0, 101);
+            if (tirage < tableauProbabilites[i])
+            {
+                string ani = tableauAnimaux[i];
+                CreerAnimal(ani);
+                if (ani == "VersDeTerre") ani = "Vers de terre";
+                Console.WriteLine($"Un nouvel animal est apparu : {ani}");
+            }
+        }
+    }
+
+    public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être achetées et posées sur la case souhaitée.
     {
         Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
         string reponseX = Console.ReadLine()!;
@@ -140,6 +148,45 @@ public class Simulation
         c.X = x;
         c.Y = y;
         Pot.ListeAnimaux.Add(c);
+    }
+
+    public void EvolutionAnimaux()
+    {
+        foreach (Animaux animal in Pot.ListeAnimaux)
+        {
+            if (animal.Duree == NumeroTour) animal.Disparait();
+            if ((animal.Nom != "Pucerons") && (animal.Nom != "VersDeTerre") && (animal.Nom != "Escargot")) animal.SeDeplacer();
+            animal.EstMange();
+            foreach (Plante plante in Pot.ListePlantes)
+            {
+                if ((plante.CoorX != -1) && (plante.CoorY != -1) && (plante.CoorX == animal.Y) && (plante.CoorY == animal.X))
+                {
+                    animal.Effet(plante);
+                }
+            }
+        }
+    }
+
+    //Plantes, Graines, Recoltes :
+    public void CreerPlante(string espece, int y, int x, Simulation simu)
+    {
+        Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
+        string terrain = Console.ReadLine()!;
+        Terrain ter;
+        while (!Enum.TryParse<Terrain>(terrain, true, out ter))
+        {
+            Console.WriteLine("Entrée invalide. Veuillez saisir un terrain valide (Argile, Sable, Terre ou Calcaire) :");
+            terrain = Console.ReadLine()!;
+        }
+        if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(y, x, Pot, ter, simu));
+        else if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(y, x, Pot, ter, simu));
+        if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(y, x, Pot, ter, simu));
+        if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(y, x, Pot, ter, simu));
+        if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(y, x, Pot, ter, simu));
+        if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(y, x, Pot, ter, simu));
+        if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(y, x, Pot, ter, simu));
+        if (espece == "Thym") Pot.ListePlantes.Add(new Thym(y, x, Pot, ter, simu));
+        if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
     }
 
     public Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
@@ -308,7 +355,8 @@ public class Simulation
             plante.EstMorte();
     }
 
-    // Achats
+
+    // Achats : 
     public void AjouterAchat(int numero, int quantite)
     {
         ListeAchats[numero] += quantite;
@@ -331,7 +379,6 @@ public class Simulation
         }
         return nombreUnites;
     }
-
 
     public bool PayerAchat(double prixTotal)
     {
@@ -487,7 +534,7 @@ public class Simulation
             //On ignore les items que l'on ne peut pas poser
             if ((i != 1) && (i != 3) && (i != 6) && (i != 8) && (i != 10))
             {
-                if (ListeAchats[i] != 0)
+                if (ListeAchats[i] > 0)
                 {
                     presenceAchat = true;
                 }
@@ -515,11 +562,21 @@ public class Simulation
             Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
             string reponse = Console.ReadLine()!;
             int numeroAPoser;
-            while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
+            bool achatPermis = false;
+            do
             {
-                Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
-                reponse = Console.ReadLine()!;
-            }
+                while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
+                {
+                    Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+                    reponse = Console.ReadLine()!;
+                }
+                if (ListeAchats[numeroAPoser] > 0) achatPermis = true;
+                if (!achatPermis)
+                {
+                    Console.WriteLine("Vous pouvez poser uniquement ce que vous possédez. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+                    reponse = Console.ReadLine()!;
+                }
+            } while (!achatPermis);
             if (numeroAPoser == 0)
             {
                 Pot.EffetArrosageAutomatique();
@@ -552,7 +609,6 @@ public class Simulation
             }
             else if ((numeroAPoser == 11) || (numeroAPoser == 12) || (numeroAPoser == 13))
             {
-                //
                 Console.WriteLine("Vous avez posé un  remède.");
                 Pot.EffetPoserRemede(numeroAPoser); //Le Console.WriteLine pour dire qu'on a utilisé un remède est dans la méthode Pot.EffetPoserRemede.
             }
@@ -565,6 +621,7 @@ public class Simulation
         if (PresenceArrosageAutomatique) Pot.EffetArrosageAutomatique();
         if (PresenceSerre) Pot.EffetSerre();
     }
+
 
     // Initialisation, actions et affichage : 
     public void InitialisationPotager(Potager Pot, string[,] grille)
@@ -586,7 +643,6 @@ public class Simulation
         Console.WriteLine("---");
 
     }
-
 
 
     public void MajAffichagePlantes(string[,] grille)
@@ -637,13 +693,54 @@ public class Simulation
         }
     }
 
+    public List<string> MajAffichageAnimaux(string[,] grille)
+    {
+        List<string> listeAnimauxAfficher = new List<string>();
+        listeAnimauxAfficher.Add("Certains animaux ne sont pas visibles sur la grille car ils sont sur des plantes ou d'autres animaux : ");
+        string emoji = "";
+        foreach (Animaux animal in Pot.ListeAnimaux)
+        {
+            if ((animal.X != -1) && (animal.Y != -1))
+            {
+                if (animal.Nom == "Chien") emoji = "🐕";
+                if (animal.Nom == "Abeille") emoji = "🐝";
+                if (animal.Nom == "Chat") emoji = "🐈";
+                if (animal.Nom == "Coccinelle") emoji = "🐞";
+                if (animal.Nom == "Escargot") emoji = "🐌";
+                if (animal.Nom == "Oiseau") emoji = "‍🐦";
+                if (animal.Nom == "Pucerons") emoji = "🦗";
+                if (animal.Nom == "Rongeur") emoji = "🐀";
+                if (animal.Nom == "VersDeTerre") emoji = "🪱 ";
+                if (grille[animal.X, animal.Y] == " 🔳 ")
+                {
+                    grille[animal.X, animal.Y] = " " + emoji + " ";
+                }
+                else // Cette partie permet de ne pas surcharger l'affichage.
+                {
+                    listeAnimauxAfficher.Add($"- {emoji} | ligne : {animal.X}, colonne : {animal.Y}");
+                }
+            }
+        }
+        return listeAnimauxAfficher;
+    }
+
+
     public void ChoisirActionsTour(ref bool jeuEnCours, ref string[,] grille, Simulation simu)
     {
         int reponse;
         do
         {
+            ApparaitreHasardAnimal();
             MajAffichagePlantes(grille);
+            List<string> ajoutAffichage = MajAffichageAnimaux(grille);
             AffichageComplet(grille);
+            if (ajoutAffichage.Count >= 2)
+            {
+                foreach (string message in ajoutAffichage)
+                {
+                    Console.WriteLine(message);
+                }
+            }
             Console.WriteLine("Choisissez une action du menu principal :");
             string rep = Console.ReadLine()!;
             while (!int.TryParse(rep, out reponse))
@@ -817,31 +914,31 @@ public class Simulation
         if (saison == Saison.Automne || saison == Saison.Printemps)
             probaInondation = 20;
         if (simu.PresenceArrosageAutomatique)
-            probaSecheresse = 0;  //les plantes ne sont plus affectées => plus d'urgence
+            probaSecheresse = 0;  //Les plantes ne sont plus affectées => plus d'urgence
         int tirageGrele = rng.Next(0, 101);
         if (tirageGrele < probaGrele) // Inférieur stricte pour si proba de 0
         {
             Grele = true;
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, grele, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, grele, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageInondation = rng.Next(0, 101);
         if (tirageInondation < probaInondation)
         {
             Inondation = true;
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, inondation, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, inondation, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageSecheresse = rng.Next(0, 101);
         if (tirageSecheresse < probaSecheresse)
         {
             Secheresse = true;
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, secheresse, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, secheresse, simu.ActionUrgente, simu.Pot, simu);
         }
     }
 
-    public void TirerAuSortAnimauxUrgents(Simulation simu, Oiseau oiseau, Chat chat, Rongeur rongeur, string[,] grille)
+    public void TirerAuSortAnimauxUrgents(Simulation simu, ref Oiseau oiseau, ref Chat chat, ref Rongeur rongeur, string[,] grille)
     {
         Random rng = new Random();
         int probaOiseau = 20;
@@ -854,24 +951,30 @@ public class Simulation
         int tirageOiseau = rng.Next(0, 101);
         if (tirageOiseau < probaOiseau)
         {
+            oiseau.X = rng.Next(0, Pot.Hauteur);
+            oiseau.Y = rng.Next(0, Pot.Longueur);
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, oiseau, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, oiseau, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageChat = rng.Next(0, 101);
         if (tirageChat < probaChat)
         {
+            chat.X = rng.Next(0, Pot.Hauteur);
+            chat.Y = rng.Next(0, Pot.Longueur);
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, chat, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, chat, simu.ActionUrgente, simu.Pot, simu);
         }
         int tirageRongeur = rng.Next(0, 101);
         if (tirageRongeur <= probaRongeur)
         {
+            rongeur.X = rng.Next(0, Pot.Hauteur);
+            rongeur.Y = rng.Next(0, Pot.Longueur);
             simu.mode = ModeDeJeu.Urgence;
-            AffichageUrgence(grille, rongeur, simu.ActionUrgente, simu.Pot, simu);
+            AffichageUrgence(ref grille, rongeur, simu.ActionUrgente, simu.Pot, simu);
         }
     }
 
-    public void AffichageUrgence(string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
+    public void AffichageUrgence(ref string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
     {
         int duree = 1;
         Console.Clear();
@@ -882,21 +985,27 @@ public class Simulation
         if (pb is Secheresse) Console.WriteLine("☀️☀️☀️☀️☀️☀️");
         Console.WriteLine();
 
-        List<string> lignesPotager = new List<string>();
-        for (int i = 0; i < Pot.Hauteur; i++)
-        {
-            string ligne = "";
-            for (int j = 0; j < Pot.Longueur; j++)
-            {
-                ligne += grille[i, j];
-            }
-            lignesPotager.Add(ligne);
-            lignesPotager.Add("");
-        }
         bool dureeEffectuee = false;
         while (simu.mode == ModeDeJeu.Urgence && !dureeEffectuee)
         {
             MajAffichagePlantes(grille);
+            MajAffichageAnimaux(grille); //On ne récupère pas la liste renvoyée car en urgence on n'indique pas le positionnement des animaux non visibles.
+            foreach (Animaux animal in Pot.ListeAnimaux) // Comme l'animal d'urgence se déplace il faut vérifier si des animaux sont mangés.
+            {
+                animal.EstMange();
+            }
+
+            List<string> lignesPotager = new List<string>();
+            for (int i = 0; i < Pot.Hauteur; i++)
+            {
+                string ligne = "";
+                for (int j = 0; j < Pot.Longueur; j++)
+                {
+                    ligne += grille[i, j];
+                }
+                lignesPotager.Add(ligne);
+                lignesPotager.Add("");
+            }
             for (int i = 0; i < lignesPotager.Count; i++)
             {
                 Console.WriteLine(lignesPotager[i]);
@@ -916,8 +1025,11 @@ public class Simulation
                 ani.SeDeplacer();
             }
             actionUrgente.ProposerAction(pb, pot, simu);
-
-
+        }
+        if (pb is AnimauxMauvais anim)
+        {
+            anim.X = -1;
+            anim.Y = -1;
         }
         simu.mode = ModeDeJeu.Classique;
         Console.WriteLine("-- Fin de l'urgence -- \n <Retour au mode de jeu classique>");
@@ -954,8 +1066,17 @@ public class Simulation
         Secheresse secheresse = new Secheresse(Pot);
         ActionUrgente = new ActionUrgente();
         Oiseau oiseau = new Oiseau(Pot);
+        oiseau.X = -1;
+        oiseau.Y = -1;
+        Pot.ListeAnimaux.Add(oiseau);
         Chat chat = new Chat(Pot);
+        chat.X = -1;
+        chat.Y = -1;
+        Pot.ListeAnimaux.Add(chat);
         Rongeur rongeur = new Rongeur(Pot);
+        rongeur.X = -1;
+        rongeur.Y = -1;
+        Pot.ListeAnimaux.Add(rongeur);
 
         string[,] GrillePotager = new string[pot.Hauteur, pot.Longueur];
         InitialisationPotager(pot, GrillePotager);
@@ -964,7 +1085,9 @@ public class Simulation
         {
             if (simu.mode == ModeDeJeu.Classique)
             {
+                EvolutionAnimaux();
                 MajAffichagePlantes(GrillePotager);
+                List<string> ajoutAffichage = MajAffichageAnimaux(GrillePotager);
                 MajBesoinEau();
 
                 foreach (Plante plante in pot.ListePlantes)
@@ -1006,13 +1129,17 @@ public class Simulation
                     Pot.Saison.ChangerBesoinEau();
                     Pot.Saison.ChangerTemperature();
                 }
+                Pot.Temperature = Pot.Saison.TemperatureDeSaison();
 
                 ChoisirActionsTour(ref jeuEnCours, ref GrillePotager, simu);
-                Random rng = new Random();
-                if (rng.Next(1, 3) == 1)  //Pour éviter d'avoir les 2 urgences 
-                    TirerAuSortAnimauxUrgents(simu, oiseau, chat, rongeur, GrillePotager);
-                else
-                    TirerAuSortIntemperie(simu, grele, inondation, secheresse, Pot.Saison.Nom, GrillePotager);
+                if (jeuEnCours)
+                {
+                    Random rng = new Random();
+                    if (rng.Next(1, 3) == 1)  //Pour éviter d'avoir les 2 urgences.
+                        TirerAuSortAnimauxUrgents(simu, ref oiseau, ref chat, ref rongeur, GrillePotager);
+                    else
+                        TirerAuSortIntemperie(simu, grele, inondation, secheresse, Pot.Saison.Nom, GrillePotager);
+                }
             }
 
         }

@@ -73,7 +73,7 @@ public class Saisons
     {
         int temp;
         Random rng = new Random();
-        temp = rng.Next(Temperature[0], Temperature[1] + 1);
+        temp = rng.Next(Temperature[Temperature.Count - 2], Temperature[Temperature.Count - 1] + 1);
         return temp;
     }
 

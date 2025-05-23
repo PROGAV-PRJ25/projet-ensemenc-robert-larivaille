@@ -10,8 +10,7 @@ public class Inondation : Intemperie
     {
         foreach (Animaux animal in Pot.ListeAnimaux)
         {
-            if (animal.Nom != "Chien") animal.Disparait();
-            if (animal.Nom != "Escargot") animal.Disparait();
+            if ((animal.Nom == "Chien") || (animal.Nom == "Escargot")) animal.Disparait();
         }
         foreach (Plante plante in Pot.ListePlantes)
         {
