@@ -213,8 +213,7 @@ public class Simulation
             case "Poivron": return new Poivron();
             case "Roquette": return new Roquette();
             case "Thym": return new Thym();
-            case "Tomate": return new Tomate();
-            default: return null;
+            default: return new Tomate(); ;
         }
     }
 
@@ -224,13 +223,14 @@ public class Simulation
         foreach (Graine graine in Pot.SacDeGraines)
         {
             Plante plante = AssocierGrainePlante(graine);
-            if (plante != null && plante.SaisondeSemis == Pot.Saison.Nom)
+            if (plante.SaisondeSemis == Pot.Saison.Nom)
             {
                 if (graine.Quantite != 0)
                 {
                     presenceGraine = true;
                 }
             }
+            if (plante == null) Console.WriteLine("Plante inconnue, ça c'est fort");
         }
         if (!presenceGraine)
         {
@@ -242,7 +242,7 @@ public class Simulation
             Console.WriteLine("Vous possédez et pouvez planter les graines suivantes en cette saison :");
             foreach (Graine graine in Pot.SacDeGraines)
             {
-                if (graine.Quantite != 0)
+                if (graine.Quantite != 0 && AssocierGrainePlante(graine).SaisondeSemis == Pot.Saison.Nom)
                 {
                     Console.WriteLine($"- {numero}. {graine.Espece} : {graine.Quantite} unités");
                 }
@@ -274,42 +274,50 @@ public class Simulation
             }
             Console.WriteLine("A quel numéro de colonne voulez-vous la planter ? ");
             string reponseX = Console.ReadLine()!;
+            Console.WriteLine("A quel numéro de ligne voulez-vous la planter ? ");
+            string reponseY = Console.ReadLine()!;
             int x;
+            int y;
             bool espacement;
             do
             {
+                while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Longueur))
+                {
+                    Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez planter ?");
+                    reponseX = Console.ReadLine()!;
+                }
+                while (!int.TryParse(reponseY, out y) || (y < 0) || (y >= Pot.Hauteur))
+                {
+                    Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la ligne où vous voulez planter ?");
+                    reponseY = Console.ReadLine()!;
+                }
+
                 espacement = true;
                 foreach (Plante p in Pot.ListePlantes)
                 {
                     if (p.Espece == Pot.SacDeGraines[numeroAPlanter].Espece)
                     {
-                        if (Math.Abs(p.CoorX - Convert.ToInt16(reponseX)) < p.Espacement)
+                        int px = p.CoorX;
+                        int py = p.CoorY;
+                        int distance = Math.Abs(px - x) + Math.Abs(py - y);
+
+                        if (distance <= p.Espacement)
                         {
                             espacement = false;
-                            break;
                         }
                     }
                 }
-                if (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Longueur))
+                if (!espacement)
                 {
-                    Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez planter ? ");
+                    Console.WriteLine("Votre graine ne peut pas être plantée aussi proche d'une plante de la même espèce. Veuillez choisir une autre position.");
+                    Console.WriteLine("A quel numéro de colonne voulez-vous la planter ?");
                     reponseX = Console.ReadLine()!;
-                }
-                else if (!espacement)
-                {
-                    Console.WriteLine("Votre graine ne peut pas être plantée aussi proche d'une plante de la même espèce. Quel est le numéro de la colonne où vous voulez planter ? ");
-                    reponseX = Console.ReadLine()!;
+                    Console.WriteLine("A quel numéro de ligne voulez-vous la planter ?");
+                    reponseY = Console.ReadLine()!;
                 }
             }
-            while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Longueur) || !espacement);
-            Console.WriteLine("A quel numéro de ligne voulez-vous la planter ? ");
-            string reponseY = Console.ReadLine()!;
-            int y;
-            while (!int.TryParse(reponseY, out y) || (y < 0) || (y >= Pot.Hauteur))
-            {
-                Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la ligne où vous voulez planter ? ");
-                reponseY = Console.ReadLine()!;
-            }
+            while (!espacement);
+
             Pot.SacDeGraines[numeroAPlanter].Quantite--;
             CreerPlante(Pot.SacDeGraines[numeroAPlanter].Espece, y, x, simu);
         }
@@ -542,7 +550,6 @@ public class Simulation
                     EffectuerAchat(numeroAAcheter - 1);
                     break;
                 }
-                numeroAAcheter = -1;
             }
         }
         if (ListeAchats[4] != 0) { PresenceEpouvantail = true; }
@@ -1028,63 +1035,9 @@ public class Simulation
 
     public void AffichageUrgence(ref string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
     {
-        int duree = 1;
-        Console.Clear();
-        Console.WriteLine("--- URGENCE ---");
-        Console.WriteLine($"Urgence : {pb}");
-        if (pb is Grele) Console.WriteLine("⛈️⛈️⛈️⛈️⛈️⛈️");
-        if (pb is Inondation) Console.WriteLine("🌊🌊🌊🌊🌊🌊");
-        if (pb is Secheresse) Console.WriteLine("☀️☀️☀️☀️☀️☀️");
-        Console.WriteLine();
-
-        bool dureeEffectuee = false;
-        while (simu.mode == ModeDeJeu.Urgence && !dureeEffectuee)
-        {
-            MajAffichagePlantes(grille);
-            MajAffichageAnimaux(grille); //On ne récupère pas la liste renvoyée car en urgence on n'indique pas le positionnement des animaux non visibles.
-            foreach (Animaux animal in Pot.ListeAnimaux) // Comme l'animal d'urgence se déplace il faut vérifier si des animaux sont mangés.
-            {
-                animal.EstMange();
-            }
-
-            List<string> lignesPotager = new List<string>();
-            for (int i = 0; i < Pot.Hauteur; i++)
-            {
-                string ligne = "";
-                for (int j = 0; j < Pot.Longueur; j++)
-                {
-                    ligne += grille[i, j];
-                }
-                lignesPotager.Add(ligne);
-                lignesPotager.Add("");
-            }
-            for (int i = 0; i < lignesPotager.Count; i++)
-            {
-                Console.WriteLine(lignesPotager[i]);
-            }
-            if (pb is Intemperie intemp)
-            {
-                intemp.EffetIntemperie();
-                duree++;
-                if (duree >= intemp.Duree) { dureeEffectuee = true; }
-            }
-            if (pb is AnimauxMauvais ani)
-            {
-                foreach (Plante plante in Pot.ListePlantes)
-                {
-                    ani.Effet(plante);
-                }
-                ani.SeDeplacer();
-            }
-            actionUrgente.ProposerAction(pb, pot, simu);
-        }
-        if (pb is AnimauxMauvais anim)
-        {
-            anim.X = -1;
-            anim.Y = -1;
-        }
-        simu.mode = ModeDeJeu.Classique;
-        Console.WriteLine("-- Fin de l'urgence -- \n <Retour au mode de jeu classique>");
+        int timeoutMs = 3000;
+        int tickMs = 500;
+        actionUrgente.GérerUrgenceAvecTimeout(pb, pot, simu, grille, timeoutMs, tickMs);
     }
 
     public void Simuler(Potager pot, Simulation simu)

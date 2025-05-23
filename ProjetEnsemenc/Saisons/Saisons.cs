@@ -1,6 +1,6 @@
 public class Saisons
 {
-    public Potager Pot { get; set; }
+    public Potager? Pot { get; set; }
 
     public Saison Nom { get; set; }
     public List<int> Luminosite { get; set; }

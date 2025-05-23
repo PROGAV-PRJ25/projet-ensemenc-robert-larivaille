@@ -70,6 +70,9 @@ public abstract class Plante
         NbRecolte = 0;
         TourPlantation = simu.NumeroTour;
         QteProduite = 0;
+        ProbaMaladies = new List<int>();
+        MaladiesPotentielles = new List<Maladie>();
+        TemperatureCible = new List<int>();
     }
     public Plante() { } //Pour faire fonctionner la méthode AssocierGrainePlante
 
@@ -134,14 +137,14 @@ public abstract class Plante
     public void Contamination()
     {
         Random rng = new Random();
-        int proba = 0;
+        int proba;
         if (EstMaladeDe.Count() != 0) // SI la liste n'est pas vide
         {
             foreach (Plante plante in PlantesAutour)
             {
-                for (int i = 0; i <= EstMaladeDe.Count(); i++) // On parcours la liste de maladies que la plante a
+                for (int i = 0; i < EstMaladeDe.Count(); i++) // On parcours la liste de maladies que la plante a
                 {
-                    for (int j = 0; j <= plante.MaladiesPotentielles.Count(); j++) // Et la liste de maladie que chaque plante autour peut attraper
+                    for (int j = 0; j < plante.MaladiesPotentielles.Count(); j++) // Et la liste de maladie que chaque plante autour peut attraper
                     {
                         if (EstMaladeDe[i] == plante.MaladiesPotentielles[j]) //on les compare et si c'est les même
                         {
