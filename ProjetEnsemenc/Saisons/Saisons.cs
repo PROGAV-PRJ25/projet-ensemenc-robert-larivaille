@@ -77,4 +77,12 @@ public class Saisons
         return temp;
     }
 
+    public int LuminositeDeSaison()
+    {
+        int lum;
+        Random rng = new Random();
+        lum = rng.Next(Luminosite[Luminosite.Count - 2], Luminosite[Luminosite.Count - 1] + 1);
+        return lum;
+    }
+
 }
