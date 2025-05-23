@@ -228,17 +228,39 @@ public class Simulation
             Console.WriteLine("A quel numéro de colonne voulez-vous la planter ? ");
             string reponseX = Console.ReadLine()!;
             int x;
-            while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Longueur))
+            bool espacement;
+            do
             {
-                Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la ligne où vous voulez planter ? ");
-                reponseX = Console.ReadLine()!;
+                espacement = true;
+                foreach (Plante p in Pot.ListePlantes)
+                {
+                    if (p.Espece == Pot.SacDeGraines[numeroAPlanter].Espece)
+                    {
+                        if (Math.Abs(p.CoorX - Convert.ToInt16(reponseX)) < p.Espacement)
+                        {
+                            espacement = false;
+                            break;
+                        }
+                    }
+                }
+                if (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Longueur))
+                {
+                    Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez planter ? ");
+                    reponseX = Console.ReadLine()!;
+                }
+                else if (!espacement)
+                {
+                    Console.WriteLine("Votre graine ne peut pas être plantée aussi proche d'une plante de la même espèce. Quel est le numéro de la colonne où vous voulez planter ? ");
+                    reponseX = Console.ReadLine()!;
+                }
             }
+            while (!int.TryParse(reponseX, out x) || (x < 0) || (x >= Pot.Longueur) || !espacement);
             Console.WriteLine("A quel numéro de ligne voulez-vous la planter ? ");
             string reponseY = Console.ReadLine()!;
             int y;
             while (!int.TryParse(reponseY, out y) || (y < 0) || (y >= Pot.Hauteur))
             {
-                Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la colonne où vous voulez planter ? ");
+                Console.WriteLine("Vous n'avez pas entré un numéro de ligne valide. Quel est le numéro de la ligne où vous voulez planter ? ");
                 reponseY = Console.ReadLine()!;
             }
             Pot.SacDeGraines[numeroAPlanter].Quantite--;
