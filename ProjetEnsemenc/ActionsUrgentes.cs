@@ -62,6 +62,7 @@ public class ActionUrgente
                 Console.WriteLine("Vous pouvez : ");
                 Console.WriteLine("5 - Mettre une bâche (contre : Grêle) \n6 - Installer une pompe (contre : Inondation) \n7 - Utiliser le tuyau d'arrosage (contre : Sécheresse) \n8 - installer l'arrosage automatique (contre : Sécheresse)");
             }
+            Console.WriteLine($"Ecrivez un numéro puis appuyez sur entrée (appuyer deux fois si ça ne fonctionne pas).");
             Console.WriteLine($"Vous avez {timeoutMs / 1000.0} secondes pour agir !");
 
             // Attente de la saisie utilisateur
