@@ -4,14 +4,14 @@ using System.Globalization;
 public abstract class Plante
 {
     public string Espece { get; set; }
-    public Potager Pot;
-    public Terrain TerrainPlant { get; set; }
+    protected Potager Pot;
+    protected Terrain TerrainPlant { get; set; }
     public Saison SaisondeSemis { get; set; }
     public Saison SaisondeRecolte { get; set; }
     public int TourPlantation { get; set; }
     public int Espacement { get; set; }
-    public bool Comestible { get; set; }
-    public int QuotaCroissance { get; set; }
+    protected bool Comestible { get; set; }
+    protected int QuotaCroissance { get; set; }
     public int Taille { get; set; } // à 1 par défaut
     public int TailleMax { get; set; }
     public int TempsCroissance { get; set; }
@@ -22,27 +22,21 @@ public abstract class Plante
     public int SeuilLuminosite { get; set; }
     public List<int> TemperatureCible { get; set; }
     public int NiveauTemperature { get; set; }  // Celle du potager par défaut 
-    public List<Maladie> MaladiesPotentielles { get; set; }
-    public List<int> ProbaMaladies { get; set; }
+    protected List<Maladie> MaladiesPotentielles { get; set; }
+    protected List<int> ProbaMaladies { get; set; }
     public int Sante { get; set; }  // à 100 par défaut
     public int EsperanceDeVie { get; set; } //En mois
     public List<Maladie> EstMaladeDe { get; set; } = new List<Maladie>();
-
-    public int QteMaxProduite { get; set; }
-    public int QteProduite { get; set; }
+    protected int QteMaxProduite { get; set; }
+    private int QteProduite { get; set; }
     public int NbRecoltePossible { get; set; } //Compris entre 1 et 3 -> Nb fois où l'on peut récolter dans la saison
     public int NbRecolte { get; set; }
-    public int ScoreCondition { get; set; }
-    public int ScoreTerrain { get; set; }
+    private int ScoreCondition { get; set; }
+    protected int ScoreTerrain { get; set; }
 
-    public List<Plante> PlantesAutour = new List<Plante>();
-
-    // Faire en sorte que les objets et animaux sachent sur quelle plante ils sont plutôt
-    // public List<Animaux> AnimauxPresents { get; set; }
-    // public List<Achats> ObjetsPresents { get; set; }
-
-    public int coorX; //Ligne
-    public int coorY; //Colonne
+    private List<Plante> PlantesAutour = new List<Plante>();
+    private int coorX; //Ligne
+    private int coorY; //Colonne
     public int CoorX
     {
         get { return coorX; }
@@ -95,7 +89,7 @@ public abstract class Plante
         }
     }
 
-    public void CalculerQteProduite()
+    private void CalculerQteProduite()
     {
         int pas;
         pas = QteMaxProduite / TailleMax;
@@ -124,7 +118,7 @@ public abstract class Plante
         }
     }
 
-    public int CalculerQuotaCroissance()
+    private int CalculerQuotaCroissance()
     {
         int quota = 0;
         foreach (Plante plante in PlantesAutour)
@@ -201,7 +195,7 @@ public abstract class Plante
         QteMaxProduite = Convert.ToInt32(augmentation);
     }
 
-    public int CalculerScoreCondition()
+    private int CalculerScoreCondition()
     {
         int scoreEau;
         int scoreTemp;
@@ -268,7 +262,7 @@ public abstract class Plante
         else if (score >= 350)
             QteProduite *= 2;
     }
-    public void AttraperMaladie(Maladie maladie)
+    private void AttraperMaladie(Maladie maladie)
     {
         if (MaladiesPotentielles.Contains(maladie) && !EstMaladeDe.Contains(maladie))
         {

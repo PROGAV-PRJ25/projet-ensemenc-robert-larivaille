@@ -11,8 +11,8 @@ public abstract class Animaux
     public Potager Pot { get; set; }
     public int TourApparition { get; set; }
 
-    public int ProbaApparition { get; set; }
-    public List<string> Predateurs { get; set; }
+    protected int ProbaApparition { get; set; }
+    protected List<string> Predateurs { get; set; }
 
     public Animaux(int probaApparition, Potager pot, int duree, Simulation simu)
     {

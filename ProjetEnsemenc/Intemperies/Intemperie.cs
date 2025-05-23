@@ -1,7 +1,7 @@
 public abstract class Intemperie
 {
     public Potager Pot { get; set; }
-    public int Numero { get; set; }
+    protected int Numero { get; set; }
     public int Duree { get; set; }
 
     public Intemperie(Potager pot)

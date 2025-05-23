@@ -28,10 +28,10 @@ public enum ChoixOuiNon
 public class Simulation
 {
     public Potager Pot { get; set; }
-    public double Argent { get; set; }
+    private double Argent { get; set; }
     public int NumeroTour { get; set; }
     public ModeDeJeu mode { get; set; }
-    public List<Achats> achatsPossibles = new List<Achats>();
+    private List<Achats> achatsPossibles = new List<Achats>();
     public List<int> ListeAchats { get; set; } //Nombre de chaque achat qui n'a pas encore été utilisé pour dans l'odre : Arrosage automatique, Bache, Coccinelle, Chien, Epouvantail, Fertilisant, Graine, LampeUV, Pompe, Serre, tuyau d'arrosage, RemedeFusariose, Remede Mildiou, Remede Oidium
 
     public bool PresenceChien { get; set; }
@@ -45,10 +45,7 @@ public class Simulation
     public bool Inondation { get; set; }
     public bool Secheresse { get; set; }
 
-    public ActionUrgente ActionUrgente { get; set; }
-
-
-
+    private ActionUrgente ActionUrgente { get; set; }
     public Simulation(int hauteur, int largeur)
     {
         Saisons saison = new Saisons(Saison.Printemps);
@@ -87,7 +84,7 @@ public class Simulation
     }
 
     //Animaux :  
-    public void CreerAnimal(string nom, Simulation simu)
+    private void CreerAnimal(string nom, Simulation simu)
     {
         Animaux nouveau;
         if (nom == "Abeille") nouveau = new Abeille(Pot, simu);
@@ -108,7 +105,7 @@ public class Simulation
         nouveau.EstMange();
     }
 
-    public void ApparaitreHasardAnimal(Simulation simu)
+    private void ApparaitreHasardAnimal(Simulation simu)
     {
         Random rng = new Random();
         int[] tableauProbabilites = new int[] { 5, 12, 14, 15, 16, 20 }; // Tableau qui contient les valeurs des probabilités d'apparition des Animaux dans l'ordre du tableau ci-dessous.
@@ -126,7 +123,7 @@ public class Simulation
         }
     }
 
-    public void PoserCoccinelle(Simulation simu) //Cas particulier des coccinelles qui peuvent être achetées et posées sur la case souhaitée.
+    private void PoserCoccinelle(Simulation simu) //Cas particulier des coccinelles qui peuvent être achetées et posées sur la case souhaitée.
     {
         Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
         string reponseX = Console.ReadLine()!;
@@ -150,7 +147,7 @@ public class Simulation
         Pot.ListeAnimaux.Add(c);
     }
 
-    public void EvolutionAnimaux()
+    private void EvolutionAnimaux()
     {
         foreach (Animaux animal in Pot.ListeAnimaux)
         {
@@ -168,7 +165,7 @@ public class Simulation
     }
 
     //Plantes, Graines, Recoltes :
-    public void CreerPlante(string espece, int y, int x, Simulation simu)
+    private void CreerPlante(string espece, int y, int x, Simulation simu)
     {
         Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
         string terrain = Console.ReadLine()!;
@@ -189,7 +186,7 @@ public class Simulation
         else if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
     }
 
-    public Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
+    private Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
     {
         if (plante.Espece == "Artichaut") return RecAr;
         else if (plante.Espece == "Aubergine") return RecAu;
@@ -201,7 +198,7 @@ public class Simulation
         else if (plante.Espece == "Thym") return RecTh;
         else return RecTo;
     }
-    public Plante AssocierGrainePlante(Graine graine)
+    private Plante AssocierGrainePlante(Graine graine)
     {
         switch (graine.Espece)
         {
@@ -217,7 +214,7 @@ public class Simulation
         }
     }
 
-    public void Planter(Simulation simu)
+    private void Planter(Simulation simu)
     {
         bool presenceGraine = false;
         foreach (Graine graine in Pot.SacDeGraines)
@@ -324,7 +321,7 @@ public class Simulation
 
     }
 
-    public void Arroser()
+    private void Arroser()
     {
         Console.WriteLine("---");
         Console.WriteLine("Voici l'état d'humidité de vos plantes : ");
@@ -366,7 +363,7 @@ public class Simulation
         }
     }
 
-    public void MajBesoinEau()
+    private void MajBesoinEau()
     {
         foreach (Plante plante in Pot.ListePlantes)
         {
@@ -379,7 +376,7 @@ public class Simulation
         }
     }
 
-    public void VerifierEsperanceDeVie(Plante plante)
+    private void VerifierEsperanceDeVie(Plante plante)
     {
         if (plante.EsperanceDeVie < NumeroTour - plante.TourPlantation)
             plante.EstMorte();
@@ -387,17 +384,17 @@ public class Simulation
 
 
     // Achats : 
-    public void AjouterAchat(int numero, int quantite)
+    private void AjouterAchat(int numero, int quantite)
     {
         ListeAchats[numero] += quantite;
     }
 
-    public void RetirerAchat(int numero, int quantite)
+    private void RetirerAchat(int numero, int quantite)
     {
         ListeAchats[numero] -= quantite;
     }
 
-    public int DemanderNombreAchats()
+    private int DemanderNombreAchats()
     {
         Console.WriteLine("Combien d'unités voulez-vous acheter ?");
         int nombreUnites = -1;
@@ -410,7 +407,7 @@ public class Simulation
         return nombreUnites;
     }
 
-    public bool PayerAchat(double prixTotal)
+    private bool PayerAchat(double prixTotal)
     {
         Console.WriteLine($"Le prix pour cet achat est {prixTotal}");
         Console.WriteLine($"Vous avez un solde de {Argent}");
@@ -442,7 +439,7 @@ public class Simulation
         }
     }
 
-    public void AcheterGraine(Simulation simu)
+    private void AcheterGraine(Simulation simu)
     {
         int numero = 0;
         Console.WriteLine("Vous pouvez acheter les graines suivantes :");
@@ -474,7 +471,7 @@ public class Simulation
         }
     }
 
-    public void EffectuerAchat(int numero, Simulation simu)
+    private void EffectuerAchat(int numero, Simulation simu)
     {
         Achats achatSouhaite = achatsPossibles[numero];
         if (achatSouhaite.Nature == Natures.Remede)
@@ -523,7 +520,7 @@ public class Simulation
         }
     }
 
-    public void Acheter(Simulation simu)
+    private void Acheter(Simulation simu)
     {
         Console.WriteLine($" Vous possédez {Argent} ");
         Console.WriteLine(" Vous pouvez achetez : \n1. Un arrosage automatique \n2. Une bache \n3. Des coccinelles \n4. Un chien \n5. Un epouvantail \n6. Du fertilisant \n7. Des graines \n8. Des lampes UV \n9. Une pompe \n10. Une serre\n11. Un tuyau d'arrosage \n12. Du remede anti Fusariose \n13. Du remede anti Mildiou \n14. Du remede anti Oidium ");
@@ -555,7 +552,7 @@ public class Simulation
         if (ListeAchats[4] != 0) { PresenceEpouvantail = true; }
     }
 
-    public void PoserAchat(Simulation simu)
+    private void PoserAchat(Simulation simu)
     {
         bool presenceAchat = false;
         for (int i = 0; i < ListeAchats.Count(); i++)
@@ -644,7 +641,7 @@ public class Simulation
         }
     }
 
-    public void ImpactAchatPose() //Effectue l'impact pour les achats déjà posé
+    private void ImpactAchatPose() //Effectue l'impact pour les achats déjà posé
     {
         if (PresenceLampeUV) Pot.EffetLampeUV();
         if (PresenceArrosageAutomatique) Pot.EffetArrosageAutomatique();
@@ -653,7 +650,7 @@ public class Simulation
 
 
     // Initialisation, actions et affichage : 
-    public void InitialisationPotager(Potager Pot, string[,] grille)
+    private void InitialisationPotager(Potager Pot, string[,] grille)
     {
         for (int i = 0; i < Pot.Hauteur; i++)
         {
@@ -664,7 +661,7 @@ public class Simulation
         }
     }
 
-    public void MajConditionsPotager()
+    private void MajConditionsPotager()
     {
         Console.WriteLine("---");
         Console.WriteLine("-- Statuts du potager --");
@@ -754,7 +751,7 @@ public class Simulation
     }
 
 
-    public void ChoisirActionsTour(ref bool jeuEnCours, ref string[,] grille, Simulation simu)
+    private void ChoisirActionsTour(ref bool jeuEnCours, ref string[,] grille, Simulation simu)
     {
         int reponse;
         do
@@ -788,7 +785,7 @@ public class Simulation
         if (reponse == 7) jeuEnCours = false;
     }
 
-    public void AfficherWiki()
+    private void AfficherWiki()
     {
         Console.WriteLine("Bienvenue dans le Wiki, tu trouveras ici toutes les informations nécessaires pour prendre soin de ton super potager !");
         Console.WriteLine(@"
@@ -895,7 +892,7 @@ public class Simulation
 
     }
 
-    public void AffichageComplet(string[,] grille)
+    private void AffichageComplet(string[,] grille)
     {
         //Console.Clear();
         Console.WriteLine("--- Statuts du potager ---");
@@ -960,7 +957,7 @@ public class Simulation
         }
     }
 
-    public void TirerAuSortIntemperie(Simulation simu, Grele grele, Inondation inondation, Secheresse secheresse, Saison saison, string[,] grille)
+    private void TirerAuSortIntemperie(Simulation simu, Grele grele, Inondation inondation, Secheresse secheresse, Saison saison, string[,] grille)
     {
         Random rng = new Random();
         int probaGrele = 10;
@@ -997,7 +994,7 @@ public class Simulation
         }
     }
 
-    public void TirerAuSortAnimauxUrgents(Simulation simu, ref Oiseau oiseau, ref Chat chat, ref Rongeur rongeur, string[,] grille)
+    private void TirerAuSortAnimauxUrgents(Simulation simu, ref Oiseau oiseau, ref Chat chat, ref Rongeur rongeur, string[,] grille)
     {
         Random rng = new Random();
         int probaOiseau = 20;
@@ -1033,7 +1030,7 @@ public class Simulation
         }
     }
 
-    public void AffichageUrgence(ref string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
+    private void AffichageUrgence(ref string[,] grille, object pb, ActionUrgente actionUrgente, Potager pot, Simulation simu)
     {
         int timeoutMs = 3000;
         int tickMs = 500;

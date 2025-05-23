@@ -114,7 +114,7 @@ public class ActionUrgente
         Console.WriteLine("-- Fin de l'urgence -- \n <Retour au mode de jeu classique>");
         Thread.Sleep(1000);
     }
-    public void FaireBruit(object Sujet, Simulation simu)
+    private void FaireBruit(object Sujet, Simulation simu)
     {
         if (Sujet is Oiseau oiseau)
         {
@@ -134,7 +134,7 @@ public class ActionUrgente
         }
     }
 
-    public void PoserEpouvantail(object Sujet, Simulation simu)
+    private void PoserEpouvantail(object Sujet, Simulation simu)
     {
         if (Sujet is Oiseau oiseau)
         {
@@ -148,7 +148,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void FaireFuirChat(object Sujet, Simulation simu)
+    private void FaireFuirChat(object Sujet, Simulation simu)
     {
         if (Sujet is Chat chat)
         {
@@ -161,7 +161,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void AdopterChien(object Sujet, Simulation simu)
+    private void AdopterChien(object Sujet, Simulation simu)
     {
         if (Sujet is Rongeur rongeur)
         {
@@ -175,7 +175,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void PoserBache(object Sujet, Simulation simu)
+    private void PoserBache(object Sujet, Simulation simu)
     {
         if ((Sujet is Grele) && simu.ListeAchats[1] > 0)
         {
@@ -192,7 +192,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerPompe(object Sujet, Simulation simu)
+    private void InstallerPompe(object Sujet, Simulation simu)
     {
         if ((Sujet is Inondation) && simu.ListeAchats[8] > 0)
         {
@@ -209,7 +209,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void Arroser(object Sujet, Potager pot, Simulation simu)
+    private void Arroser(object Sujet, Potager pot, Simulation simu)
     {
         if ((Sujet is Secheresse) && simu.ListeAchats[10] > 0)
         {
@@ -225,7 +225,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerArosageAuto(object Sujet, Potager pot, Simulation simu)
+    private void InstallerArosageAuto(object Sujet, Potager pot, Simulation simu)
     {
         if ((Sujet is Secheresse) && simu.ListeAchats[0] > 0)
         {
