@@ -930,8 +930,17 @@ public class Simulation
             lignesPotager.Add(ligne);
             lignesPotager.Add("");
         }
+        lignesPotager.Add("");
+        lignesPotager.Add("-- Menu Principal --");
+        lignesPotager.Add("(1) Planter une graine");
+        lignesPotager.Add("(2) Faire un Achat");
+        lignesPotager.Add("(3) Arroser");
+        lignesPotager.Add("(4) Poser un item");
+        lignesPotager.Add("(5) Afficher le Wiki");
+        lignesPotager.Add("(6) Avancer dans le temps");
+        lignesPotager.Add("(7) Quitter le jeu");
 
-        // status, récoltes, menu
+        // status, récoltes
         List<string> lignesDroite = new List<string>();
         lignesDroite.Add("-- Récoltes : --");
         foreach (Recolte recolte in Pot.Inventaire)
@@ -951,31 +960,18 @@ public class Simulation
                 lignesDroite.Add($"  | Humidité {plante.NiveauHumidite}, Luminosité {plante.NiveauLuminosite}, Température : {plante.NiveauTemperature}");
             }
         }
-        lignesDroite.Add("");
-        lignesDroite.Add("-- Menu Principal --");
-        lignesDroite.Add("(1) Planter une graine");
-        lignesDroite.Add("(2) Faire un Achat");
-        lignesDroite.Add("(3) Arroser");
-        lignesDroite.Add("(4) Poser un item de votre inventaire");
-        lignesDroite.Add("(5) Afficher le Wiki");
-        lignesDroite.Add("(6) Avancer dans le temps");
-        lignesDroite.Add("(7) Quitter le jeu");
+
 
         int largeurAffichage = Pot.Longueur * 5;
         int maxLignes = Math.Max(lignesPotager.Count, lignesDroite.Count);
 
-        // Afficher potager et stats, ligne par ligne, tant qu'il y a des lignes de potager
-        for (int i = 0; i < lignesPotager.Count; i++)
+        for (int i = 0; i < maxLignes; i++)
         {
-            string gauche = lignesPotager[i];
+            string gauche = i < lignesPotager.Count ? lignesPotager[i] : "";
             string droite = i < lignesDroite.Count ? lignesDroite[i] : "";
             Console.WriteLine(string.Format("{0,-" + largeurAffichage + "}   {1}", gauche, droite));
         }
-        // Si la partie droite est plus longue, continuer à l'afficher seule
-        for (int i = lignesPotager.Count; i < lignesDroite.Count; i++)
-        {
-            Console.WriteLine($"{new string(' ', largeurAffichage)}   {lignesDroite[i]}");
-        }
+
         Console.WriteLine("");
         Console.WriteLine("Objets posés :");
         foreach (Achats obj in ObjetsPoses)
