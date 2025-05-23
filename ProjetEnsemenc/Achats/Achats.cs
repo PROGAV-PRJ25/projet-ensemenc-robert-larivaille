@@ -29,10 +29,10 @@ public class Achats
 {
     public Achat Nom { get; set; }
     public Natures Nature { get; set; }
-    public int Numero { get; set; }
+    protected int Numero { get; set; }
     public double Prix { get; set; }
     public bool PrixVariant { get; set; } //Pour certain achat le prix varie selon la taille du potager, pour ceux-ci le prix ci-dessus est donné par case unitaire.
-    
+
     public Achats(Achat nom, Natures nature, int numero, double prix, bool prixVariant)
     {
         Nom = nom;

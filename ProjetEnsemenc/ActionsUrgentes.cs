@@ -1,76 +1,123 @@
-
 public class ActionUrgente
 {
 
 
     public ActionUrgente() { }
-    public string? ReadLineWithTimeout(int timeoutMs)
+
+    public void GererUrgenceAvecTimeout(object pb, Potager pot, Simulation simu, string[,] grille, int timeoutMs, int tickMs)
     {
-        var task = Task.Run(() => Console.ReadLine());
-        if (task.Wait(timeoutMs))
-            return task.Result;
-        return null; // Timeout
-    }
-    public void ProposerAction(object Sujet, Potager Pot, Simulation simu)
-    {
-        if (Sujet is Animaux)
+        int ticks = timeoutMs / tickMs;
+        int duree = 1;
+        bool urgenceFinie = false;
+        string? saisie = null;
+        var saisieTask = Task.Run(() => Console.ReadLine());
+
+        while (!urgenceFinie)
         {
-            Console.WriteLine("Vous pouvez : ");
-            Console.WriteLine("1 - Faire du bruit (contre : Oiseaux et Rongeurs) \n2 - Poser un épouvantail (Plus aucun oiseau) \n3 - Faire fuir le chat (contre : Chat) \n4 - Adopter un chien (plus aucun rongeur)");
-        }
-        else if (Sujet is Intemperie)
-        {
-            Console.WriteLine("Vous pouvez : ");
-            Console.WriteLine("5 - Mettre une bâche (contre : Grêle) \n6 - Installer une pompe (contre : Inondation) \n7 - Utiliser le tuyau d'arrosage (contre : Sécheresse) \n8 - installer l'arrosage automatique (contre : Sécheresse)");
+            Console.Clear();
+            Console.WriteLine("--- URGENCE ---");
+            Console.WriteLine($"Urgence : {pb}");
+            if (pb is Grele) Console.WriteLine("⛈️⛈️⛈️⛈️⛈️⛈️");
+            if (pb is Inondation) Console.WriteLine("🌊🌊🌊🌊🌊🌊");
+            if (pb is Secheresse) Console.WriteLine("☀️☀️☀️☀️☀️☀️");
+            simu.MajAffichagePlantes(grille);
+            simu.MajAffichageAnimaux(grille);
+
+            // Effets récurrents
+            if (pb is Intemperie intemp)
+            {
+                intemp.EffetIntemperie();
+                duree++;
+                if (duree > intemp.Duree) urgenceFinie = true;
+            }
+            else if (pb is AnimauxMauvais ani)
+            {
+                foreach (Plante plante in pot.ListePlantes)
+                    ani.Effet(plante);
+                ani.SeDeplacer();
+            }
+
+            //Maj potager
+            simu.MajAffichagePlantes(grille);
+            simu.MajAffichageAnimaux(grille);
+            //Affichage
+            for (int i = 0; i < pot.Hauteur; i++)
+            {
+                for (int j = 0; j < pot.Longueur; j++)
+                {
+                    Console.Write(grille[i, j]);
+                }
+                Console.WriteLine("");
+            }
+            Thread.Sleep(200);
+
+            // Affichage des actions possibles
+            if (pb is Animaux)
+            {
+                Console.WriteLine("Vous pouvez : ");
+                Console.WriteLine("1 - Faire du bruit (contre : Oiseaux et Rongeurs) \n2 - Poser un épouvantail (Plus aucun oiseau) \n3 - Faire fuir le chat (contre : Chat) \n4 - Adopter un chien (plus aucun rongeur)");
+            }
+            else if (pb is Intemperie)
+            {
+                Console.WriteLine("Vous pouvez : ");
+                Console.WriteLine("5 - Mettre une bâche (contre : Grêle) \n6 - Installer une pompe (contre : Inondation) \n7 - Utiliser le tuyau d'arrosage (contre : Sécheresse) \n8 - installer l'arrosage automatique (contre : Sécheresse)");
+            }
+            Console.WriteLine($"Vous avez {timeoutMs / 1000.0} secondes pour agir !");
+
+            // Attente de la saisie utilisateur
+            for (int t = 0; t < ticks; t++)
+            {
+                if (saisieTask.IsCompleted)
+                {
+                    saisie = saisieTask.Result;
+                    break;
+                }
+                Thread.Sleep(tickMs);
+            }
+
+            // Si le joueur a répondu
+            if (saisieTask.IsCompleted && saisie != null)
+            {
+                int choix;
+                if (int.TryParse(saisie, out choix) && choix > 0 && choix < 9)
+                {
+                    if (pb is Animaux)
+                    {
+                        if (choix == 1) { FaireBruit(pb, simu); urgenceFinie = true; }
+                        else if (choix == 2) { PoserEpouvantail(pb, simu); urgenceFinie = true; }
+                        else if (choix == 3) { FaireFuirChat(pb, simu); urgenceFinie = true; }
+                        else if (choix == 4) { AdopterChien(pb, simu); urgenceFinie = true; }
+                    }
+                    else if (pb is Intemperie)
+                    {
+                        if (choix == 5) { PoserBache(pb, simu); urgenceFinie = true; }
+                        else if (choix == 6) { InstallerPompe(pb, simu); urgenceFinie = true; }
+                        else if (choix == 7) { Arroser(pb, pot, simu); urgenceFinie = true; }
+                        else if (choix == 8) { InstallerArosageAuto(pb, pot, simu); urgenceFinie = true; }
+                    }
+                    return;
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Entrée invalide. Veuillez entrer un nombre entre 1 et 8.");
+                saisie = null;
+                saisieTask = Task.Run(() => Console.ReadLine());
+            }
         }
 
-        string? saisie = ReadLineWithTimeout(4000);
-        if (saisie == null)
+        // Fin de l'urgence
+        if (pb is AnimauxMauvais anim)
         {
-            // Si aucune saisie on fait passer le temps
-            return;
+            anim.X = -1;
+            anim.Y = -1;
         }
-        int choix;
-        if (!int.TryParse(saisie, out choix))
-        {
-            // Saisie invalide, on ignore et on laisse la boucle continuer
-            return;
-        }
-        if (choix == 1)
-        {
-            FaireBruit(Sujet, simu);
-        }
-        else if (choix == 2)
-        {
-            PoserEpouvantail(Sujet, simu);
-        }
-        else if (choix == 3)
-        {
-            FaireFuirChat(Sujet, simu);
-        }
-        else if (choix == 4)
-        {
-            AdopterChien(Sujet, simu);
-        }
-        else if (choix == 5)
-        {
-            PoserBache(Sujet, simu);
-        }
-        else if (choix == 6)
-        {
-            InstallerPompe(Sujet, simu);
-        }
-        else if (choix == 7)
-        {
-            Arroser(Sujet, Pot, simu);
-        }
-        else if (choix == 8)
-        {
-            InstallerArosageAuto(Sujet, Pot, simu);
-        }
+        simu.mode = ModeDeJeu.Classique;
+        Console.WriteLine("-- Fin de l'urgence -- \n <Retour au mode de jeu classique>");
+        Thread.Sleep(1000);
     }
-
-    public void FaireBruit(object Sujet, Simulation simu)
+    private void FaireBruit(object Sujet, Simulation simu)
     {
         if (Sujet is Oiseau oiseau)
         {
@@ -90,7 +137,7 @@ public class ActionUrgente
         }
     }
 
-    public void PoserEpouvantail(object Sujet, Simulation simu)
+    private void PoserEpouvantail(object Sujet, Simulation simu)
     {
         if (Sujet is Oiseau oiseau)
         {
@@ -104,7 +151,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void FaireFuirChat(object Sujet, Simulation simu)
+    private void FaireFuirChat(object Sujet, Simulation simu)
     {
         if (Sujet is Chat chat)
         {
@@ -117,7 +164,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void AdopterChien(object Sujet, Simulation simu)
+    private void AdopterChien(object Sujet, Simulation simu)
     {
         if (Sujet is Rongeur rongeur)
         {
@@ -131,7 +178,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void PoserBache(object Sujet, Simulation simu)
+    private void PoserBache(object Sujet, Simulation simu)
     {
         if ((Sujet is Grele) && simu.ListeAchats[1] > 0)
         {
@@ -148,7 +195,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerPompe(object Sujet, Simulation simu)
+    private void InstallerPompe(object Sujet, Simulation simu)
     {
         if ((Sujet is Inondation) && simu.ListeAchats[8] > 0)
         {
@@ -165,7 +212,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void Arroser(object Sujet, Potager pot, Simulation simu)
+    private void Arroser(object Sujet, Potager pot, Simulation simu)
     {
         if ((Sujet is Secheresse) && simu.ListeAchats[10] > 0)
         {
@@ -181,7 +228,7 @@ public class ActionUrgente
             Console.WriteLine("Aucun Effet");
         }
     }
-    public void InstallerArosageAuto(object Sujet, Potager pot, Simulation simu)
+    private void InstallerArosageAuto(object Sujet, Potager pot, Simulation simu)
     {
         if ((Sujet is Secheresse) && simu.ListeAchats[0] > 0)
         {

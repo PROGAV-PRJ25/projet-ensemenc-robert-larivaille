@@ -1,8 +1,8 @@
 public class Chien : AnimauxBons
 {
-    public Chien ( Potager pot) : base( 5, pot, 3000 )
+    public Chien(Potager pot, Simulation simu) : base(5, pot, 3000, simu)
     {
-        this.Nom="Chien";
+        this.Nom = "Chien";
     }
 
     public override void Effet(Plante plante)

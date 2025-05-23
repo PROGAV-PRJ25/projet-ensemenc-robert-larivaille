@@ -1,10 +1,10 @@
 public class Saisons
 {
-    public Potager Pot { get; set; }
+    private Potager? Pot { get; set; }
 
     public Saison Nom { get; set; }
-    public List<int> Luminosite { get; set; }
-    public List<int> Temperature { get; set; }
+    private List<int> Luminosite { get; set; }
+    private List<int> Temperature { get; set; }
 
     public Saisons(Saison nom)
     {
@@ -75,6 +75,14 @@ public class Saisons
         Random rng = new Random();
         temp = rng.Next(Temperature[Temperature.Count - 2], Temperature[Temperature.Count - 1] + 1);
         return temp;
+    }
+
+    public int LuminositeDeSaison()
+    {
+        int lum;
+        Random rng = new Random();
+        lum = rng.Next(Luminosite[Luminosite.Count - 2], Luminosite[Luminosite.Count - 1] + 1);
+        return lum;
     }
 
 }
