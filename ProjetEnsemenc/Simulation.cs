@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
 
 public enum ModeDeJeu
@@ -33,7 +34,7 @@ public class Simulation
     public ModeDeJeu mode { get; set; }
     private List<Achats> achatsPossibles = new List<Achats>();
     public List<int> ListeAchats { get; set; } //Nombre de chaque achat qui n'a pas encore été utilisé pour dans l'odre : Arrosage automatique, Bache, Coccinelle, Chien, Epouvantail, Fertilisant, Graine, LampeUV, Pompe, Serre, tuyau d'arrosage, RemedeFusariose, Remede Mildiou, Remede Oidium
-
+    private List<Achats> ObjetsPoses = new List<Achats>();
     public bool PresenceChien { get; set; }
     public bool PresenceEpouvantail { get; set; } // Indique si un epouvantail est présent sur le jeu (acheté et posé)
     public bool PresenceArrosageAutomatique { get; set; }
@@ -170,7 +171,7 @@ public class Simulation
         Console.WriteLine("Sur quel terrain voulez-vous la planter ? (Argile, Sable, Terre ou Calcaire)");
         string terrain = Console.ReadLine()!;
         Terrain ter;
-        while (!Enum.TryParse<Terrain>(terrain, true, out ter))
+        while (!Enum.TryParse<Terrain>(terrain, true, out ter) || int.TryParse(terrain, out _))
         {
             Console.WriteLine("Entrée invalide. Veuillez saisir un terrain valide (Argile, Sable, Terre ou Calcaire) :");
             terrain = Console.ReadLine()!;
@@ -404,6 +405,7 @@ public class Simulation
         {
             Console.WriteLine("Réponse invalide ");
             Console.WriteLine("Entrez le nombre d'unités.");
+            reponse = Console.ReadLine()!;
         }
         return nombreUnites;
     }
@@ -422,7 +424,7 @@ public class Simulation
             Console.WriteLine("Confirmez l'achat : Entrez Oui ou Non");
             string reponse = Console.ReadLine()!;
             ChoixOuiNon choix;
-            while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix))
+            while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix) || int.TryParse(reponse, out _))
             {
                 Console.WriteLine("Entrée invalide. Veuillez saisir un choix valide : Oui, Non");
                 reponse = Console.ReadLine()!;
@@ -639,6 +641,7 @@ public class Simulation
                 Console.WriteLine("Vous avez posé un  remède.");
                 Pot.EffetPoserRemede(numeroAPoser); //Le Console.WriteLine pour dire qu'on a utilisé un remède est dans la méthode Pot.EffetPoserRemede.
             }
+            ObjetsPoses.Add(achatsPossibles[numeroAPoser]);
         }
     }
 
@@ -770,7 +773,7 @@ public class Simulation
             }
             Console.WriteLine("Choisissez une action du menu principal :");
             string rep = Console.ReadLine()!;
-            while (!int.TryParse(rep, out reponse))
+            while (!int.TryParse(rep, out reponse) || reponse > 7 || reponse <= 0)
             {
                 Console.WriteLine("Vous n'avez pas entré un nombre valide. Que voulez-vous faire ? ");
                 rep = Console.ReadLine()!;
@@ -888,6 +891,8 @@ public class Simulation
             {
                 if (saisie == 1000)
                     continuer = false;
+                else
+                    Console.WriteLine("Tape 1000 pour revenir au menu principal.");
             }
             else
             {
@@ -899,16 +904,25 @@ public class Simulation
 
     private void AffichageComplet(string[,] grille)
     {
-        //Console.Clear();
         Console.WriteLine("--- Statuts du potager ---");
         Console.WriteLine($"Saison : {Pot.Saison.Nom}, Température : {Pot.Temperature}, Luminosité : {Pot.Luminosite}");
         Console.WriteLine();
 
-        // Construire les lignes du potager (gauche)
+        //Affichage Potager 
+
         List<string> lignesPotager = new List<string>();
+        //Ajout numéros de colonne
+        string numColonnes = "    "; // Espace pour l'alignement avec les numéros de ligne
+        for (int j = 0; j < Pot.Longueur; j++)
+        {
+            numColonnes += $"{j,3} "; //Affiche les nums sur 3 caractères pour alignement
+        }
+        lignesPotager.Add(numColonnes);
+        lignesPotager.Add("");
+
         for (int i = 0; i < Pot.Hauteur; i++)
         {
-            string ligne = "";
+            string ligne = $"{i,2}  ";
             for (int j = 0; j < Pot.Longueur; j++)
             {
                 ligne += grille[i, j];
@@ -917,7 +931,7 @@ public class Simulation
             lignesPotager.Add("");
         }
 
-        // Construire les lignes de droite (récoltes, statuts, menu)
+        // status, récoltes, menu
         List<string> lignesDroite = new List<string>();
         lignesDroite.Add("-- Récoltes : --");
         foreach (Recolte recolte in Pot.Inventaire)
@@ -947,21 +961,28 @@ public class Simulation
         lignesDroite.Add("(6) Avancer dans le temps");
         lignesDroite.Add("(7) Quitter le jeu");
 
-        int largeurAffichage = Pot.Longueur * 4;
+        int largeurAffichage = Pot.Longueur * 5;
         int maxLignes = Math.Max(lignesPotager.Count, lignesDroite.Count);
 
-        // 1. Afficher potager + droite, ligne par ligne, tant qu'il y a des lignes de potager
+        // Afficher potager et stats, ligne par ligne, tant qu'il y a des lignes de potager
         for (int i = 0; i < lignesPotager.Count; i++)
         {
             string gauche = lignesPotager[i];
             string droite = i < lignesDroite.Count ? lignesDroite[i] : "";
             Console.WriteLine(string.Format("{0,-" + largeurAffichage + "}   {1}", gauche, droite));
         }
-        // 2. Si la partie droite est plus longue, continuer à l'afficher seule
+        // Si la partie droite est plus longue, continuer à l'afficher seule
         for (int i = lignesPotager.Count; i < lignesDroite.Count; i++)
         {
             Console.WriteLine($"{new string(' ', largeurAffichage)}   {lignesDroite[i]}");
         }
+        Console.WriteLine("");
+        Console.WriteLine("Objets posés :");
+        foreach (Achats obj in ObjetsPoses)
+        {
+            Console.WriteLine($"     - {obj.Nom} ");
+        }
+        Console.WriteLine("");
     }
 
     private void TirerAuSortIntemperie(Simulation simu, Grele grele, Inondation inondation, Secheresse secheresse, Saison saison, string[,] grille)

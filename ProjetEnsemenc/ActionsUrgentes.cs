@@ -64,7 +64,7 @@ public class ActionUrgente
             }
             Console.WriteLine($"Vous avez {timeoutMs / 1000.0} secondes pour agir !");
 
-            // Attente de la saisie utilisateur pendant timeoutMs ms
+            // Attente de la saisie utilisateur
             for (int t = 0; t < ticks; t++)
             {
                 if (saisieTask.IsCompleted)
@@ -79,7 +79,7 @@ public class ActionUrgente
             if (saisieTask.IsCompleted && saisie != null)
             {
                 int choix;
-                if (int.TryParse(saisie, out choix))
+                if (int.TryParse(saisie, out choix) && choix > 0 && choix < 9)
                 {
                     if (pb is Animaux)
                     {
@@ -95,12 +95,15 @@ public class ActionUrgente
                         else if (choix == 7) { Arroser(pb, pot, simu); urgenceFinie = true; }
                         else if (choix == 8) { InstallerArosageAuto(pb, pot, simu); urgenceFinie = true; }
                     }
+                    return;
                 }
-                break;
+
             }
             else
             {
+                Console.WriteLine("Entrée invalide. Veuillez entrer un nombre entre 1 et 8.");
                 saisie = null;
+                saisieTask = Task.Run(() => Console.ReadLine());
             }
         }
 

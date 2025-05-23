@@ -105,7 +105,7 @@ public abstract class Plante
         Console.WriteLine($"Voulez-vous récolter {Espece} ? (Oui ou Non)");
         string reponse = Console.ReadLine()!;
         ChoixOuiNon choix;
-        while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix))
+        while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix) || int.TryParse(reponse, out _))
         {
             Console.WriteLine("Entrée invalide. Veuillez saisir un choix valide : Oui, Non");
             reponse = Console.ReadLine()!;

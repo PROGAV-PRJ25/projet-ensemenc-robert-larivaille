@@ -9,6 +9,8 @@ while (!hauteurValide)
         Console.WriteLine("Veuillez entrer un nombre entier valide.");
     else if (hauteur > 12)
         Console.WriteLine("Vous ne pouvez pas entrer une hauteur supérieure à 12");
+    else if (hauteur <= 0)
+        Console.WriteLine("Vous ne pouvez pas entrer une hauteur inférieure 1");
     else
         hauteurValide = true;
 }
@@ -25,6 +27,8 @@ while (!largeurValide)
         Console.WriteLine("Veuillez entrer un nombre entier valide.");
     else if (largeur > 12)
         Console.WriteLine("Vous ne pouvez pas entrer une hauteur supérieure à 12");
+    else if (largeur <= 0)
+        Console.WriteLine("Vous ne pouvez pas entrer une largeur inférieure 1");
     else
         largeurValide = true;
 }
