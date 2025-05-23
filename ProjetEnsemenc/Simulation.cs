@@ -52,6 +52,7 @@ public class Simulation
     public Simulation(int hauteur, int largeur)
     {
         Saisons saison = new Saisons(Saison.Printemps);
+        saison.ChangerTemperature();
         Pot = new Potager(hauteur, largeur, saison, saison.TemperatureDeSaison()); //Rentrer params
         mode = ModeDeJeu.Classique;
         Argent = 1000;
@@ -608,7 +609,6 @@ public class Simulation
             }
             else if ((numeroAPoser == 11) || (numeroAPoser == 12) || (numeroAPoser == 13))
             {
-                //
                 Console.WriteLine("Vous avez posé un  remède.");
                 Pot.EffetPoserRemede(numeroAPoser); //Le Console.WriteLine pour dire qu'on a utilisé un remède est dans la méthode Pot.EffetPoserRemede.
             }
@@ -1129,6 +1129,7 @@ public class Simulation
                     Pot.Saison.ChangerBesoinEau();
                     Pot.Saison.ChangerTemperature();
                 }
+                Pot.Temperature = Pot.Saison.TemperatureDeSaison();
 
                 ChoisirActionsTour(ref jeuEnCours, ref GrillePotager, simu);
                 if (jeuEnCours)
