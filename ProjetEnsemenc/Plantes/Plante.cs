@@ -293,7 +293,7 @@ public abstract class Plante
         message = $"Statuts {Espece} : Taille :{Taille}, Santé {Sante}\n Conditions : Humidité {NiveauHumidite}, Luminosité {NiveauLuminosite}, Température : {NiveauTemperature}";
         if (EstMaladeDe.Count() != 0)
         {
-            message += $"- Maladies : {EstMaladeDe}";
+            message += $"- Maladies : {string.Join(", ", EstMaladeDe.Select(m => m.Nom))}";
         }
         if (CalculerScoreCondition() < 250)
         {

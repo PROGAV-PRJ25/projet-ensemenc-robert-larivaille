@@ -739,6 +739,36 @@ public class Simulation
 ╚═════════════════════════════════════════════════════════╩════════════╩═════════╩══════════╩══════════╩══════════╝
 ");
 
+        Console.WriteLine(@"
+╔════════════════════╦═══════════════════╦══════════════════════╦═════════════════════╦═══════════════════╗
+║ Animaux bééfiques  ║ Abeille           ║ Chien                ║ Coccinelle          ║ Vers de terre     ║
+╠════════════════════╬═══════════════════╬══════════════════════╬═════════════════════╬═══════════════════╣
+║ Probabilité        ║ 15%               ║ 5%                   ║ 14%                 ║ 20%               ║
+║ Durée (nb tours)   ║ Infini            ║ Infini               ║ 3                   ║ Infini            ║
+║ Urgence            ║ Non               ║ Non                  ║ Non                 ║ Non               ║
+║ Prédateurs         ║ Aucun             ║ Aucun                ║ Aucun               ║ Oiseau            ║
+╠════════════════════╬═══════════════════╬══════════════════════╬═════════════════════╬═══════════════════╣
+║ Effet              ║ Augmente la santé ║ Empêche l’apparition ║ Chasse les pucerons ║ Augmente le score ║
+║                    ║ de la plante de 5 ║ de chats et de       ║                     ║ de terrain de la  ║
+║                    ║                   ║ rongeurs             ║                     ║ plante de 5       ║
+╚════════════════════╩═══════════════════╩══════════════════════╩═════════════════════╩═══════════════════╝
+");
+
+        Console.WriteLine(@"
+╔════════════════════╦══════════╦════════╦════════════╦══════════╦════════════════════════════════╗
+║ Animaux Néfastes   ║ Escargot ║ Oiseau ║ Pucerons   ║ Rongeur  ║ Chat                           ║
+╠════════════════════╬══════════╬════════╬════════════╬══════════╬════════════════════════════════╣
+║ Probabilité        ║ 12%      ║ 20%    ║ 16%        ║ 10%      ║ 7%                             ║
+║ Durée (nb tours)   ║ 8        ║ /      ║ 3          ║ /        ║ /                              ║
+║ Urgence            ║ Non      ║ Oui    ║ Non        ║ Oui      ║ Oui                            ║
+║ Prédateurs         ║ Aucun    ║ Chat   ║ Coccinelle ║ Chat     ║ Aucun                          ║
+╠════════════════════╬══════════╩════════╩════════════╩══════════╬════════════════════════════════╣
+║ Effet              ║ Mange la plante sur laquelle il se trouve ║ Ecrase les plantes de taille 1 ║
+╚════════════════════╩═══════════════════════════════════════════╩════════════════════════════════╝
+");
+
+
+
 
         Console.WriteLine("");
         Console.WriteLine("Entre 1000 pour revenir au menu principal.");
