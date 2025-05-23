@@ -23,14 +23,14 @@ public class Saisons
             {
                 foreach (Plante plante in Pot.ListePlantes)
                 {
-                    plante.BesoinEau += 2;
+                    plante.BesoinEau -= 2;
                 }
             }
             else
             {
                 foreach (Plante plante in Pot.ListePlantes)
                 {
-                    plante.BesoinEau -= 2;
+                    plante.BesoinEau += 2;
                 }
             }
         }

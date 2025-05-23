@@ -40,8 +40,10 @@ public class Aubergine : PlanteVivace
         else
             this.ScoreTerrain = 50;
 
-        // Il restera à initialiser les coordonnées
-
     }
-
+    public Aubergine() : base()
+    {
+        this.SaisondeSemis = Saison.Printemps;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
+    }
 }

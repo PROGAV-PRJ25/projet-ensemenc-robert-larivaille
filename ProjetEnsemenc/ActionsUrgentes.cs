@@ -1,7 +1,7 @@
 
 public class ActionUrgente
 {
-    public object Sujet { get; set; }
+
 
     public ActionUrgente() { }
     public string? ReadLineWithTimeout(int timeoutMs)

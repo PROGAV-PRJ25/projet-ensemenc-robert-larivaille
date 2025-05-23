@@ -7,4 +7,8 @@ public abstract class PlanteVivace : Plante
         this.CoorY = CoorY;
         this.TerrainPlant = ter;
     }
+    public PlanteVivace() : base()
+    {
+        //Pour faire fonctionner la méthode AssocierGrainePlante
+    }
 }

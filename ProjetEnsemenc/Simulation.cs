@@ -81,6 +81,7 @@ public class Simulation
         achatsPossibles.Add(new AchatRemedeFusariose());
         achatsPossibles.Add(new AchatRemedeMildiou());
         achatsPossibles.Add(new AchatRemedeOidium());
+        ActionUrgente = new ActionUrgente();
 
     }
 
@@ -201,31 +202,52 @@ public class Simulation
         else if (plante.Espece == "Thym") return RecTh;
         else return RecTo;
     }
+    public Plante AssocierGrainePlante(Graine graine)
+    {
+        switch (graine.Espece)
+        {
+            case "Artichaut": return new Artichaut(); //Instances créés juste pour accéder aux propriétés
+            case "Aubergine": return new Aubergine();
+            case "Basilic": return new Basilic();
+            case "Oignon": return new Oignon();
+            case "Olivier": return new Olivier();
+            case "Poivron": return new Poivron();
+            case "Roquette": return new Roquette();
+            case "Thym": return new Thym();
+            case "Tomate": return new Tomate();
+            default: return null;
+        }
+    }
 
     public void Planter(Simulation simu)
     {
         bool presenceGraine = false;
         foreach (Graine graine in Pot.SacDeGraines)
         {
-            if (graine.Quantite != 0)
+            Plante plante = AssocierGrainePlante(graine);
+            if (plante != null && plante.SaisondeSemis == Pot.Saison.Nom)
             {
-                presenceGraine = true;
+                if (graine.Quantite != 0)
+                {
+                    presenceGraine = true;
+                }
             }
         }
         if (!presenceGraine)
         {
-            Console.WriteLine("Vous ne possédez aucune graine donc vous ne pouvez rien planter. ");
+            Console.WriteLine("Vous ne possédez aucune graine que vous pouvez planter en cette saison. ");
         }
         else
         {
             int numero = 0;
-            Console.WriteLine("Vous possédez les graines suivantes :");
+            Console.WriteLine("Vous possédez et pouvez planter les graines suivantes en cette saison :");
             foreach (Graine graine in Pot.SacDeGraines)
             {
                 if (graine.Quantite != 0)
                 {
                     Console.WriteLine($"- {numero}. {graine.Espece} : {graine.Quantite} unités");
                 }
+
                 numero++;
             }
             Console.WriteLine("Quel est le numéro de la graine que vous voulez planter ? ");
@@ -493,6 +515,7 @@ public class Simulation
                 if (PresenceChien && (numeroAAcheter - 1 == 3))
                 {
                     Console.WriteLine("Vous ne pouvez acheter qu'un chien. Effectuez un autre achat.");
+                    return;
                 }
                 else
                 {
@@ -510,9 +533,13 @@ public class Simulation
         bool presenceAchat = false;
         for (int i = 0; i < ListeAchats.Count(); i++)
         {
-            if (ListeAchats[i] != 0)
+            //On ignore les items que l'on ne peut pas poser
+            if ((i != 1) && (i != 3) && (i != 6) && (i != 8) && (i != 10))
             {
-                presenceAchat = true;
+                if (ListeAchats[i] != 0)
+                {
+                    presenceAchat = true;
+                }
             }
         }
         if (!presenceAchat)
@@ -532,12 +559,15 @@ public class Simulation
                 numero++;
             }
             Console.WriteLine("Vous ne pouvez utiliser les baches, pompes et tuyau d'arrosage qu'en cas d'intempéries ; ils n'apparaissent pas dans la liste ci-dessus.");
+            Console.WriteLine("Même chose pour le chien et l'épouvantail qui ne sont utilisable qu'en cas d'animaux urgent à faire fuir");
+            Console.WriteLine("Pour planter une graine, référez vous à l'action (1) du menu principal");
             Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
             string reponse = Console.ReadLine()!;
             int numeroAPoser;
             while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
             {
                 Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+                reponse = Console.ReadLine()!;
             }
             if (numeroAPoser == 0)
             {
@@ -715,10 +745,88 @@ public class Simulation
             if (reponse == 2) Acheter();
             if (reponse == 3) Arroser();
             if (reponse == 4) PoserAchat();
+            if (reponse == 6) AfficherWiki();
         }
-        while (reponse != 5 && reponse != 6);
+        while (reponse != 5 && reponse != 7);
         if (reponse == 5) NumeroTour += 1;
-        if (reponse == 6) jeuEnCours = false;
+        if (reponse == 7) jeuEnCours = false;
+    }
+
+    public void AfficherWiki()
+    {
+        Console.WriteLine("Bienvenue dans le Wiki, tu trouveras ici toutes les informations nécessaires pour prendre soin de ton super potager !");
+        Console.WriteLine(@"
+╔═════════════════════════════════════════════════════════╦════════════╦════════════╦════════════╦════════════╗
+║ Plantes Vivaces                                         ║ Artichaut  ║ Aubergine  ║  Olivier   ║ Thym       ║
+╠═════════════════════════════════════════════════════════╬════════════╬════════════╬════════════╬════════════╣
+║ Terrain préféré                                         ║ Terre      ║ Terre      ║ Terre      ║ Calcaire   ║
+║ Saison de semis                                         ║ Printemps  ║ Printemps  ║ Automne    ║ Printemps  ║
+║ Saison de récolte                                       ║ Automne    ║ Été        ║ Automne    ║ Été        ║
+║ Espacement (1 = 50 cm)                                  ║ 3          ║ 1          ║ 14         ║ 1          ║
+║ Quota Croissance (somme taille max des plantes autour)  ║ 10         ║ 20         ║ 8          ║ 30         ║
+║ Taille maximale de la plante                            ║ 4          ║ 4          ║ 5          ║ 2          ║
+║ Temps de croissance (tours)                             ║ 3          ║ 3          ║ 12         ║ 3          ║
+║ Humidité préférée                                       ║ 60%        ║ 50%        ║ 40%        ║ 50%        ║
+║ Luminosité préférée                                     ║ 90%        ║ 80%        ║ 85%        ║ 90%        ║
+║ Température préférée                                    ║ 15-25°C    ║ 20-28°C    ║ 20-30°C    ║ 15-25°C    ║
+╠═════════════════════════════════════════════════════════╬════════════╬════════════╬════════════╬════════════╣
+║ Maladies que la plante peut attraper                    ║ Mildiou    ║ Mildiou    ║ Mildiou    ║ Oidium     ║
+║ Probabilité d’attraper ces maladies                     ║ 15%        ║ 30%        ║ 40%        ║ 15%        ║
+╠═════════════════════════════════════════════════════════╬════════════╬════════════╬════════════╬════════════╣
+║ Espérance de vie (nb de tours)                          ║ 55         ║ 40         ║ 200        ║ 44         ║
+║ Quantité produite par plant                             ║ 5          ║ 2          ║ 5000       ║ 20         ║
+║ Récoltes possibles par saison                           ║ 2          ║ 3          ║ 1          ║ 2          ║
+╚═════════════════════════════════════════════════════════╩════════════╩════════════╩════════════╩════════════╝
+");
+
+        Console.WriteLine(@"
+╔═════════════════════════════════════════════════════════╦════════════╦═════════╦══════════╦══════════╦══════════╗
+║ Plantes Annuelles                                       ║ Basilic    ║ Oignon  ║ Poivron  ║ Roquette ║ Tomate   ║
+╠═════════════════════════════════════════════════════════╬════════════╬═════════╬══════════╬══════════╬══════════╣
+║ Terrain préféré                                         ║ Terre      ║ Terre   ║ Terre    ║ Terre    ║ Terre    ║
+║ Saison de semis                                         ║ Printemps  ║ Automne ║ Hiver    ║ Été      ║ Printemps║
+║ Saison de récolte                                       ║ Été        ║ Été     ║ été      ║ Automne  ║ Été      ║
+║ Espacement (1 = 50 cm)                                  ║ 0          ║ 0       ║ 1        ║ 0        ║ 1        ║
+║ Quota Croissance (somme taille max des plantes autour)  ║ 18         ║ 20      ║ 15       ║ 25       ║ 30       ║
+║ Taille maximale de la plante                            ║ 2          ║ 2       ║ 3        ║ 3        ║ 3        ║
+║ Temps de croissance (tours)                             ║ 3          ║ 3       ║ 2        ║ 2        ║ 4        ║
+║ Besoins en eau                                          ║ 5          ║ 5       ║ 10       ║ 5        ║ 10       ║
+║ Humidité préférée                                       ║ 60%        ║ 70%     ║ 80%      ║ 65%      ║ 80%      ║
+║ Luminosité préférée                                     ║ 85%        ║ 90%     ║ 90%      ║ 70%      ║ 90%      ║
+║ Zone de température préférée                            ║ 20-25°C    ║ 5-38°C  ║ 20-28°C  ║ 10-20°C  ║ 15-30°C  ║
+╠═════════════════════════════════════════════════════════╬════════════╬═════════╬══════════╬══════════╬══════════╣
+║ Maladies que la plante peut attraper                    ║ Fusariose, ║ Mildiou ║ Mildiou, ║ Mildiou  ║ Mildiou, ║
+║                                                         ║ Mildiou,   ║         ║ Oidium   ║          ║ Oidium   ║
+║                                                         ║ Oidium     ║         ║          ║          ║          ║
+╠═════════════════════════════════════════════════════════╬════════════╬═════════╬══════════╬══════════╬══════════╣
+║ Probabilités d’attraper ces maladies                    ║ 35%,10%,20%║ 20%     ║ 35%,25%  ║ 30%      ║ 50%,20%  ║
+╠═════════════════════════════════════════════════════════╬════════════╬═════════╬══════════╬══════════╬══════════╣
+║ Espérance de vie (nb de tours)                          ║ 12         ║ 12      ║ 12       ║ 12       ║ 12       ║
+║ Quantité produite par plant                             ║ 20         ║ 1       ║ 6        ║ 10       ║ 30       ║
+║ Récoltes possibles par saison                           ║ 3          ║ 1       ║ 3        ║ 3        ║ 3        ║
+╚═════════════════════════════════════════════════════════╩════════════╩═════════╩══════════╩══════════╩══════════╝
+");
+
+
+        Console.WriteLine("");
+        Console.WriteLine("Entre 1000 pour revenir au menu principal.");
+
+        bool continuer = true;
+        int saisie;
+        while (continuer)
+        {
+            string reponse = Console.ReadLine()!;
+            if (Int32.TryParse(reponse, out saisie))
+            {
+                if (saisie == 1000)
+                    continuer = false;
+            }
+            else
+            {
+                Console.WriteLine("Réponse invalide. Entrez un numéro valide ou 1000 pour arrêter.");
+            }
+        }
+
     }
 
     public void AffichageComplet(string[,] grille)
@@ -766,7 +874,8 @@ public class Simulation
         lignesDroite.Add("(3) Arroser");
         lignesDroite.Add("(4) Poser un item de votre inventaire");
         lignesDroite.Add("(5) Avancer dans le temps");
-        lignesDroite.Add("(6) Quitter le jeu");
+        lignesDroite.Add("(6) Afficher le Wiki");
+        lignesDroite.Add("(7) Quitter le jeu");
 
         int largeurAffichage = Pot.Longueur * 4;
         int maxLignes = Math.Max(lignesPotager.Count, lignesDroite.Count);
@@ -980,6 +1089,7 @@ public class Simulation
                     VerifierEsperanceDeVie(plante);
                     ImpactAchatPose();
                     plante.ImpactConditions();
+                    plante.ProbabiliteTomberMalade();
                     plante.Contamination();
                     if (NumeroTour % plante.TempsCroissance == 0)
                         plante.Grandir();
@@ -1025,7 +1135,8 @@ public class Simulation
             }
 
         }
-        Console.WriteLine("FIN DE LA PARTIE.");
+        Console.WriteLine("-- FIN DE LA PARTIE --");
+        Console.WriteLine(" Merci d'avoir joué ! A très vite ;)");
     }
 
 
