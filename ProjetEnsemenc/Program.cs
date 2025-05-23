@@ -10,7 +10,7 @@ while (!hauteurValide)
     else if (hauteur > 12)
         Console.WriteLine("Vous ne pouvez pas entrer une hauteur supérieure à 12");
     else if (hauteur <= 3)
-        Console.WriteLine("Vous ne pouvez pas entrer une hauteur inférieure 1");
+        Console.WriteLine("Vous ne pouvez pas entrer une hauteur inférieure à 4");
     else
         hauteurValide = true;
 }
@@ -28,7 +28,7 @@ while (!largeurValide)
     else if (largeur > 12)
         Console.WriteLine("Vous ne pouvez pas entrer une hauteur supérieure à 12");
     else if (largeur <= 3)
-        Console.WriteLine("Vous ne pouvez pas entrer une largeur inférieure 1");
+        Console.WriteLine("Vous ne pouvez pas entrer une largeur inférieure à 4");
     else
         largeurValide = true;
 }
