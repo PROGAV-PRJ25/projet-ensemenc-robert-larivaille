@@ -1,6 +1,6 @@
 public class Basilic : PlanteAnnuelle
 {
-    public Basilic(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu)
+    public Basilic(int coorY, int coorX, Potager pot, Terrain ter, Simulation simu) : base(coorY, coorX, pot, ter, simu)
     {
         this.Espece = "Basilic";
         this.SaisondeSemis = Saison.Printemps;

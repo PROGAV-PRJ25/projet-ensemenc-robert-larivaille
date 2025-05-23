@@ -1,6 +1,6 @@
 public class Poivron : PlanteAnnuelle
 {
-    public Poivron(int coorX, int coorY, Potager pot, Terrain ter, Simulation simu) : base(coorX, coorY, pot, ter, simu) // Selon caractéristiques du poivron rouge
+    public Poivron(int coorY, int coorX, Potager pot, Terrain ter, Simulation simu) : base(coorY, coorX, pot, ter, simu) // Selon caractéristiques du poivron rouge
     {
         this.Espece = "Poivron";
         this.SaisondeSemis = Saison.Hiver;

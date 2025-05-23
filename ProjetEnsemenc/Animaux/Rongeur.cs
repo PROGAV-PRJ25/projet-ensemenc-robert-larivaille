@@ -1,9 +1,9 @@
 public class Rongeur : AnimauxMangeurs
 {
-    public Rongeur ( Potager pot) : base( 10, pot , -1 , true)
+    public Rongeur(Potager pot, Simulation simu) : base(10, pot, -1, true, simu)
     {
         this.Predateurs.Add("Chat");
-        this.Nom="Rongeur";
+        this.Nom = "Rongeur";
     }
 
 }
