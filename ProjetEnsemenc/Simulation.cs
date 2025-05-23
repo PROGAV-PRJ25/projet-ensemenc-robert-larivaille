@@ -533,7 +533,7 @@ public class Simulation
             //On ignore les items que l'on ne peut pas poser
             if ((i != 1) && (i != 3) && (i != 6) && (i != 8) && (i != 10))
             {
-                if (ListeAchats[i] != 0)
+                if (ListeAchats[i] > 0)
                 {
                     presenceAchat = true;
                 }
@@ -561,11 +561,21 @@ public class Simulation
             Console.WriteLine("Quel est le numéro de l'achat que vous voulez utiliser ? ");
             string reponse = Console.ReadLine()!;
             int numeroAPoser;
-            while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
+            bool achatPermis = false;
+            do
             {
-                Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
-                reponse = Console.ReadLine()!;
-            }
+                while (!Int32.TryParse(reponse, out numeroAPoser) || (numeroAPoser < 0) || (numeroAPoser >= ListeAchats.Count))
+                {
+                    Console.WriteLine("Vous n'avez pas entré un nombre valide. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+                    reponse = Console.ReadLine()!;
+                }
+                if (ListeAchats[numeroAPoser] > 0) achatPermis = true;
+                if (!achatPermis)
+                {
+                    Console.WriteLine("Vous pouvez poser uniquement ce que vous possédez. Quel est le numéro de l'achat que vous voulez utiliser ? ");
+                    reponse = Console.ReadLine()!;
+                }
+            } while (!achatPermis);
             if (numeroAPoser == 0)
             {
                 Pot.EffetArrosageAutomatique();
