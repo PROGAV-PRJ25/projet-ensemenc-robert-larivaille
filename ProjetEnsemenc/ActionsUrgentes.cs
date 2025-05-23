@@ -4,7 +4,7 @@ public class ActionUrgente
 
     public ActionUrgente() { }
 
-    public void GérerUrgenceAvecTimeout(object pb, Potager pot, Simulation simu, string[,] grille, int timeoutMs, int tickMs)
+    public void GererUrgenceAvecTimeout(object pb, Potager pot, Simulation simu, string[,] grille, int timeoutMs, int tickMs)
     {
         int ticks = timeoutMs / tickMs;
         int duree = 1;

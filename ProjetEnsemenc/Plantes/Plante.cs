@@ -18,7 +18,7 @@ public abstract class Plante
     public int BesoinEau { get; set; }
     public int NiveauHumidite { get; set; } // Optimal à la plantation
     public int SeuilHumidite { get; set; }
-    public int NiveauLuminosite { get; set; } //Optimal à la planta°
+    public int NiveauLuminosite { get; set; } //Optimal à la plantation
     public int SeuilLuminosite { get; set; }
     public List<int> TemperatureCible { get; set; }
     public int NiveauTemperature { get; set; }  // Celle du potager par défaut 
@@ -115,6 +115,7 @@ public abstract class Plante
             CalculerQteProduite();
             recolte.Quantite += QteProduite;
             NbRecolte++;
+            this.EstMorte();
         }
     }
 

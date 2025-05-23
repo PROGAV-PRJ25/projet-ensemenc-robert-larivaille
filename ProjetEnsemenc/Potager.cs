@@ -2,6 +2,7 @@ public class Potager
 {
     public Saisons Saison { get; set; }
     public int Temperature { get; set; }
+    public int Luminosite { get; set; }
     public int Hauteur { get; set; }
     public int Longueur { get; set; }
     public List<Plante> ListePlantes { get; set; }
@@ -9,7 +10,7 @@ public class Potager
     public List<Graine> SacDeGraines { get; set; }
     public List<Recolte> Inventaire { get; set; }
 
-    public Potager(int hauteur, int longueur, Saisons saison, int temperature)
+    public Potager(int hauteur, int longueur, Saisons saison, int temperature, int luminosite)
     {
         ListePlantes = new List<Plante>();
         ListeAnimaux = new List<Animaux>();
@@ -19,6 +20,7 @@ public class Potager
         Longueur = longueur;
         Temperature = temperature;
         Saison = saison;
+        Luminosite=luminosite;
         SacDeGraines.Add(new Graine("Artichaut", 0));
         SacDeGraines.Add(new Graine("Aubergine", 0));
         SacDeGraines.Add(new Graine("Basilic", 0));
