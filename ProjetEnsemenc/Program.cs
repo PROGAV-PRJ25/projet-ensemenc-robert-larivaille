@@ -1,15 +1,32 @@
 ﻿Console.WriteLine("Déterminez la hauteur du potager");
-int hauteur;
-while (!int.TryParse(Console.ReadLine(), out hauteur))
+int hauteur = -1;
+string inputHauteur;
+bool hauteurValide = false;
+while (!hauteurValide)
 {
-    Console.WriteLine("Veuillez entrer un nombre entier valide.");
+    inputHauteur = Console.ReadLine()!;
+    if (!int.TryParse(inputHauteur, out hauteur))
+        Console.WriteLine("Veuillez entrer un nombre entier valide.");
+    else if (hauteur > 12)
+        Console.WriteLine("Vous ne pouvez pas entrer une hauteur supérieure à 12");
+    else
+        hauteurValide = true;
 }
 
+
 Console.WriteLine("Déterminez la largeur du potager");
-int largeur;
-while (!int.TryParse(Console.ReadLine(), out largeur))
+int largeur = -1;
+string inputLargeur;
+bool largeurValide = false;
+while (!largeurValide)
 {
-    Console.WriteLine("Veuillez entrer un nombre entier valide.");
+    inputLargeur = Console.ReadLine()!;
+    if (!int.TryParse(inputLargeur, out largeur))
+        Console.WriteLine("Veuillez entrer un nombre entier valide.");
+    else if (largeur > 12)
+        Console.WriteLine("Vous ne pouvez pas entrer une hauteur supérieure à 12");
+    else
+        largeurValide = true;
 }
 
 

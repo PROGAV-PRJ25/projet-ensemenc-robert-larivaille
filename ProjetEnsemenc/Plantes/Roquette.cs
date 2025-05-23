@@ -38,8 +38,10 @@ public class Roquette : PlanteAnnuelle
         }
         else
             this.ScoreTerrain = 50;
-
-
-
+    }
+    public Roquette() : base()
+    {
+        this.SaisondeSemis = Saison.Ete;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
     }
 }

@@ -1,20 +1,19 @@
 public class RemedeFusariose : Remede
 {
-    public RemedeFusariose() : base("Traitement Fusariose")
+    public RemedeFusariose() : base("traitement Fusariose")
     {
 
     }
 
-    public override void Agir(Maladie maladie, Plante plante)
+    public override void Agir(Plante plante)
     {
-        if (maladie.Nom == "Fusariose")
+        foreach (Maladie maladie in plante.EstMaladeDe)
         {
-            plante.EstMaladeDe.Remove(maladie);
-            plante.Sante = 100;
-        }
-        else
-        {
-            Console.WriteLine($"{Nom} n'a aucun effet sur {maladie.Nom}.");
+            if (maladie.Nom == "Fusariose")
+            {
+                plante.EstMaladeDe.Remove(maladie);
+                plante.Sante = 100;
+            }
         }
     }
 }

@@ -1,4 +1,6 @@
 
+using System.Globalization;
+
 public abstract class Plante
 {
     public string Espece { get; set; }
@@ -58,7 +60,7 @@ public abstract class Plante
         }
     }
 
-    public Plante(int x, int y, Potager pot, Terrain terrain, Simulation simu)
+    public Plante(int y, int x, Potager pot, Terrain terrain, Simulation simu)
     {
         Pot = pot;
         CoorX = x;
@@ -69,6 +71,9 @@ public abstract class Plante
         TourPlantation = simu.NumeroTour;
         QteProduite = 0;
     }
+    public Plante() { } //Pour faire fonctionner la méthode AssocierGrainePlante
+
+
 
     public void MettreAJourPlantesAutour()
     {
@@ -100,33 +105,19 @@ public abstract class Plante
 
     public void DonnerRecolte(Potager pot, Recolte recolte)
     {
-        if (pot.Saison.Nom == SaisondeRecolte)
+        Console.WriteLine($"Voulez-vous récolter {Espece} ? (Oui ou Non)");
+        string reponse = Console.ReadLine()!;
+        ChoixOuiNon choix;
+        while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix))
         {
-            Console.WriteLine($"Voulez-vous récolter {Espece} ? (Oui ou Non)");
-            string reponse = Console.ReadLine()!;
-            ChoixOuiNon choix;
-            while (!Enum.TryParse<ChoixOuiNon>(reponse, true, out choix))
-            {
-                Console.WriteLine("Entrée invalide. Veuillez saisir un choix valide : Oui, Non");
-                reponse = Console.ReadLine()!;
-            }
-            if (choix == ChoixOuiNon.Oui)
-            {
-                if (NbRecolte < NbRecoltePossible)
-                {
-                    CalculerQteProduite();
-                    recolte.Quantite += QteProduite;
-                    NbRecolte++;
-                }
-                else if (QteProduite == 0)
-                {
-                    Console.WriteLine("La plante n'a rien produit pour l'instant");
-                }
-                else if (NbRecolte >= NbRecoltePossible)
-                    Console.WriteLine($"Vous avez déjà récolté {NbRecoltePossible} fois {Espece}");
-
-            }
-
+            Console.WriteLine("Entrée invalide. Veuillez saisir un choix valide : Oui, Non");
+            reponse = Console.ReadLine()!;
+        }
+        if (choix == ChoixOuiNon.Oui)
+        {
+            CalculerQteProduite();
+            recolte.Quantite += QteProduite;
+            NbRecolte++;
         }
     }
 
@@ -258,8 +249,12 @@ public abstract class Plante
 
     public void ImpactConditions()
     {
+        foreach (Maladie maladie in EstMaladeDe)
+        {
+            maladie.EffetMaladie(this);
+        }
         int score = CalculerScoreCondition();
-        if (score < 200)
+        if ((score < 200) || (Sante < 40))
         {
             EstMorte();
         }
@@ -276,6 +271,19 @@ public abstract class Plante
         {
             EstMaladeDe.Add(maladie);
             Console.WriteLine($"{Espece} a attrapé {maladie.Nom} !");
+        }
+    }
+
+    public void ProbabiliteTomberMalade()
+    {
+        Random rng = new Random();
+        int proba = rng.Next(0, 101);
+        for (int i = 0; i < MaladiesPotentielles.Count(); i++)
+        {
+            if (proba <= ProbaMaladies[i])
+            {
+                AttraperMaladie(MaladiesPotentielles[i]);
+            }
         }
     }
 

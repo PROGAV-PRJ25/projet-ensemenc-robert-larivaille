@@ -43,7 +43,10 @@ public class Poivron : PlanteAnnuelle
         else
             this.ScoreTerrain = 20;
 
-        // Il restera à initialiser les coordonnées
-
+    }
+    public Poivron() : base()
+    {
+        this.SaisondeSemis = Saison.Hiver;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
     }
 }

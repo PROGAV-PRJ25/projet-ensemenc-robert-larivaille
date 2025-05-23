@@ -41,5 +41,9 @@ public class Thym : PlanteVivace
             this.ScoreTerrain = 50;
 
     }
-
+    public Thym() : base()
+    {
+        this.SaisondeSemis = Saison.Printemps;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
+    }
 }

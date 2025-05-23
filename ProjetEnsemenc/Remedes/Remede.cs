@@ -5,5 +5,5 @@ public abstract class Remede
     {
         Nom = nom;
     }
-    public abstract void Agir(Maladie maladie, Plante plante);
+    public abstract void Agir(Plante plante);
 }

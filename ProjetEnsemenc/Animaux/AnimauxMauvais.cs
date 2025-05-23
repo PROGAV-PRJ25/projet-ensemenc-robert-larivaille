@@ -1,6 +1,5 @@
 public abstract class AnimauxMauvais : Animaux
 {
-    public int Criticite { get; set; }
 
     public bool Urgence { get; set; }
 

@@ -7,15 +7,15 @@ public class Olivier : PlanteVivace
         this.SaisondeSemis = Saison.Automne;
         this.SaisondeRecolte = Saison.Automne;
         this.TerrainPlant = ter;
-        this.Espacement = 14; //7m entre chaque olivier
+        this.Espacement = 14;
         this.Comestible = true;
         this.QuotaCroissance = 8;
-        this.EsperanceDeVie = 200; //50 ans d'espérance de vie
+        this.EsperanceDeVie = 200;
         this.NbRecoltePossible = 1;
         this.Taille = 1;
         this.TailleMax = 5;
-        this.TempsCroissance = 12; //1 an pour passer à la taille supérieure
-        this.BesoinEau = 5; // 5 au départ puis quand taille 3 atteinte passe à 2
+        this.TempsCroissance = 12;
+        this.BesoinEau = 5;
         this.SeuilHumidite = 40;
         this.NiveauHumidite = 40;
         this.SeuilLuminosite = 85;
@@ -24,7 +24,7 @@ public class Olivier : PlanteVivace
         this.MaladiesPotentielles = new List<Maladie> { new Mildiou("Mildiou") };
         this.ProbaMaladies = new List<int> { 40 };
         this.Sante = 100;
-        this.QteMaxProduite = 5000; //5000 olives par an
+        this.QteMaxProduite = 5000;
 
         if (TerrainPlant == Terrain.Terre)
         {
@@ -41,7 +41,10 @@ public class Olivier : PlanteVivace
         else
             this.ScoreTerrain = 40;
 
-        // Il restera à initialiser les coordonnées
-
+    }
+    public Olivier() : base()
+    {
+        this.SaisondeSemis = Saison.Automne;
+        //Pour faire fonctionner la méthode AssocierGrainePlante
     }
 }
