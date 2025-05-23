@@ -87,28 +87,28 @@ public class Simulation
     }
 
     //Animaux :  
-    public void CreerAnimal(string nom)
+    public void CreerAnimal(string nom, Simulation simu)
     {
         Animaux nouveau;
-        if (nom == "Abeille") nouveau = new Abeille(Pot);
-        else if (nom == "Chat") nouveau = new Chat(Pot);
+        if (nom == "Abeille") nouveau = new Abeille(Pot, simu);
+        else if (nom == "Chat") nouveau = new Chat(Pot, simu);
         else if (nom == "Chien")
         {
-            nouveau = new Chien(Pot);
+            nouveau = new Chien(Pot, simu);
             PresenceChien = true;
         }
-        else if (nom == "Coccinelle") nouveau = new Coccinelle(Pot);
-        else if (nom == "Escargot") nouveau = new Escargot(Pot);
-        else if (nom == "Oiseau") nouveau = new Oiseau(Pot);
-        else if (nom == "Pucerons") nouveau = new Pucerons(Pot);
-        else if (nom == "Rongeur") nouveau = new Rongeur(Pot);
-        else nouveau = new VersDeTerre(Pot);
+        else if (nom == "Coccinelle") nouveau = new Coccinelle(Pot, simu);
+        else if (nom == "Escargot") nouveau = new Escargot(Pot, simu);
+        else if (nom == "Oiseau") nouveau = new Oiseau(Pot, simu);
+        else if (nom == "Pucerons") nouveau = new Pucerons(Pot, simu);
+        else if (nom == "Rongeur") nouveau = new Rongeur(Pot, simu);
+        else nouveau = new VersDeTerre(Pot, simu);
         nouveau.Duree += NumeroTour;
         Pot.ListeAnimaux.Add(nouveau);
         nouveau.EstMange();
     }
 
-    public void ApparaitreHasardAnimal()
+    public void ApparaitreHasardAnimal(Simulation simu)
     {
         Random rng = new Random();
         int[] tableauProbabilites = new int[] { 5, 12, 14, 15, 16, 20 }; // Tableau qui contient les valeurs des probabilités d'apparition des Animaux dans l'ordre du tableau ci-dessous.
@@ -119,14 +119,14 @@ public class Simulation
             if (tirage < tableauProbabilites[i])
             {
                 string ani = tableauAnimaux[i];
-                CreerAnimal(ani);
+                CreerAnimal(ani, simu);
                 if (ani == "VersDeTerre") ani = "Vers de terre";
                 Console.WriteLine($"Un nouvel animal est apparu : {ani}");
             }
         }
     }
 
-    public void PoserCoccinelle() //Cas particulier des coccinelles qui peuvent être achetées et posées sur la case souhaitée.
+    public void PoserCoccinelle(Simulation simu) //Cas particulier des coccinelles qui peuvent être achetées et posées sur la case souhaitée.
     {
         Console.WriteLine("A quel numéro de ligne voulez-vous poser vos coccinelles ?");
         string reponseX = Console.ReadLine()!;
@@ -144,7 +144,7 @@ public class Simulation
             Console.WriteLine("Vous n'avez pas entré un numéro de colonne valide. Quel est le numéro de la colonne où vous voulez poser vos coccinelles ? ");
             reponseY = Console.ReadLine()!;
         }
-        Coccinelle c = new Coccinelle(Pot);
+        Coccinelle c = new Coccinelle(Pot, simu);
         c.X = x;
         c.Y = y;
         Pot.ListeAnimaux.Add(c);
@@ -154,12 +154,12 @@ public class Simulation
     {
         foreach (Animaux animal in Pot.ListeAnimaux)
         {
-            if (animal.Duree == NumeroTour) animal.Disparait();
+            if (NumeroTour - animal.TourApparition > animal.Duree) animal.Disparait();
             if ((animal.Nom != "Pucerons") && (animal.Nom != "VersDeTerre") && (animal.Nom != "Escargot")) animal.SeDeplacer();
             animal.EstMange();
             foreach (Plante plante in Pot.ListePlantes)
             {
-                if ((plante.CoorX != -1) && (plante.CoorY != -1) && (plante.CoorX == animal.Y) && (plante.CoorY == animal.X))
+                if ((plante.CoorX != -1) && (plante.CoorY != -1) && (plante.CoorY == animal.Y) && (plante.CoorX == animal.X))
                 {
                     animal.Effet(plante);
                 }
@@ -180,13 +180,13 @@ public class Simulation
         }
         if (espece == "Artichaut") Pot.ListePlantes.Add(new Artichaut(y, x, Pot, ter, simu));
         else if (espece == "Aubergine") Pot.ListePlantes.Add(new Aubergine(y, x, Pot, ter, simu));
-        if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(y, x, Pot, ter, simu));
-        if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(y, x, Pot, ter, simu));
-        if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(y, x, Pot, ter, simu));
-        if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(y, x, Pot, ter, simu));
-        if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(y, x, Pot, ter, simu));
-        if (espece == "Thym") Pot.ListePlantes.Add(new Thym(y, x, Pot, ter, simu));
-        if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
+        else if (espece == "Basilic") Pot.ListePlantes.Add(new Basilic(y, x, Pot, ter, simu));
+        else if (espece == "Oignon") Pot.ListePlantes.Add(new Oignon(y, x, Pot, ter, simu));
+        else if (espece == "Olivier") Pot.ListePlantes.Add(new Olivier(y, x, Pot, ter, simu));
+        else if (espece == "Poivron") Pot.ListePlantes.Add(new Poivron(y, x, Pot, ter, simu));
+        else if (espece == "Roquette") Pot.ListePlantes.Add(new Roquette(y, x, Pot, ter, simu));
+        else if (espece == "Thym") Pot.ListePlantes.Add(new Thym(y, x, Pot, ter, simu));
+        else if (espece == "Tomate") Pot.ListePlantes.Add(new Tomate(y, x, Pot, ter, simu));
     }
 
     public Recolte AssocierRecoltePlante(Plante plante, Recolte RecAr, Recolte RecAu, Recolte RecB, Recolte RecO, Recolte RecOl, Recolte RecP, Recolte RecR, Recolte RecTh, Recolte RecTo)
@@ -442,7 +442,7 @@ public class Simulation
         }
     }
 
-    public void AcheterGraine()
+    public void AcheterGraine(Simulation simu)
     {
         int numero = 0;
         Console.WriteLine("Vous pouvez acheter les graines suivantes :");
@@ -462,7 +462,7 @@ public class Simulation
         }
         if (numeroAAcheter == numero)
         {
-            Acheter();
+            Acheter(simu);
             return;
         }
         int nombreUnites = DemanderNombreAchats();
@@ -474,7 +474,7 @@ public class Simulation
         }
     }
 
-    public void EffectuerAchat(int numero)
+    public void EffectuerAchat(int numero, Simulation simu)
     {
         Achats achatSouhaite = achatsPossibles[numero];
         if (achatSouhaite.Nature == Natures.Remede)
@@ -512,18 +512,18 @@ public class Simulation
                 if (achatSouhaite.Nom == Achat.Chien)
                 {
                     PresenceChien = true;
-                    CreerAnimal("Chien");
+                    CreerAnimal("Chien", simu);
                     Console.WriteLine(" Vous possédez maintenant un chien");
                 }
             }
         }
         else
         {
-            AcheterGraine();
+            AcheterGraine(simu);
         }
     }
 
-    public void Acheter()
+    public void Acheter(Simulation simu)
     {
         Console.WriteLine($" Vous possédez {Argent} ");
         Console.WriteLine(" Vous pouvez achetez : \n1. un arrosage automatique, \n2. une bache, \n3. des coccinelle, \n4. un chien, \n5. un epouvantail, \n6. du fertilisant, \n7. des graines, \n8. des lampes UV, \n9. une pompe, \n10. une serre,\n11. un tuyau d'arrosage, \n12. du remede anti fusariose, \n13. du remede anti mildiou, \n14. du remede anti Oidium ");
@@ -547,7 +547,7 @@ public class Simulation
                 }
                 else
                 {
-                    EffectuerAchat(numeroAAcheter - 1);
+                    EffectuerAchat(numeroAAcheter - 1, simu);
                     break;
                 }
             }
@@ -555,7 +555,7 @@ public class Simulation
         if (ListeAchats[4] != 0) { PresenceEpouvantail = true; }
     }
 
-    public void PoserAchat()
+    public void PoserAchat(Simulation simu)
     {
         bool presenceAchat = false;
         for (int i = 0; i < ListeAchats.Count(); i++)
@@ -613,7 +613,7 @@ public class Simulation
             }
             else if (numeroAPoser == 2)
             {
-                PoserCoccinelle();
+                PoserCoccinelle(simu);
                 Console.WriteLine("Vous avez posé des coccinelles.");
             }
             else if (numeroAPoser == 4)
@@ -759,7 +759,7 @@ public class Simulation
         int reponse;
         do
         {
-            ApparaitreHasardAnimal();
+            ApparaitreHasardAnimal(simu);
             MajAffichagePlantes(grille);
             List<string> ajoutAffichage = MajAffichageAnimaux(grille);
             AffichageComplet(grille);
@@ -778,9 +778,9 @@ public class Simulation
                 rep = Console.ReadLine()!;
             }
             if (reponse == 1) Planter(simu);
-            if (reponse == 2) Acheter();
+            if (reponse == 2) Acheter(simu);
             if (reponse == 3) Arroser();
-            if (reponse == 4) PoserAchat();
+            if (reponse == 4) PoserAchat(simu);
             if (reponse == 6) AfficherWiki();
         }
         while (reponse != 5 && reponse != 7);
@@ -1070,15 +1070,15 @@ public class Simulation
         Inondation inondation = new Inondation(Pot);
         Secheresse secheresse = new Secheresse(Pot);
         ActionUrgente = new ActionUrgente();
-        Oiseau oiseau = new Oiseau(Pot);
+        Oiseau oiseau = new Oiseau(Pot, simu);
         oiseau.X = -1;
         oiseau.Y = -1;
         Pot.ListeAnimaux.Add(oiseau);
-        Chat chat = new Chat(Pot);
+        Chat chat = new Chat(Pot, simu);
         chat.X = -1;
         chat.Y = -1;
         Pot.ListeAnimaux.Add(chat);
-        Rongeur rongeur = new Rongeur(Pot);
+        Rongeur rongeur = new Rongeur(Pot, simu);
         rongeur.X = -1;
         rongeur.Y = -1;
         Pot.ListeAnimaux.Add(rongeur);

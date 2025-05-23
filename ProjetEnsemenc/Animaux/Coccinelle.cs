@@ -1,8 +1,8 @@
 public class Coccinelle : AnimauxBons
 {
-    public Coccinelle ( Potager pot) : base( 14 , pot, 3)
+    public Coccinelle(Potager pot, Simulation simu) : base(14, pot, 3, simu)
     {
-        this.Nom="Coccinelle" ;
+        this.Nom = "Coccinelle";
     }
 
     public override void Effet(Plante plante)

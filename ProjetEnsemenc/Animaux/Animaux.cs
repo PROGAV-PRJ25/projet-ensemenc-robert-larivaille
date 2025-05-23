@@ -9,11 +9,12 @@ public abstract class Animaux
     public int Duree { get; set; } // Combien de temps l'animal reste sur le potager au maximum, quand l'animal est créé sela devient le numero de son tour finale
 
     public Potager Pot { get; set; }
+    public int TourApparition { get; set; }
 
     public int ProbaApparition { get; set; }
     public List<string> Predateurs { get; set; }
 
-    public Animaux(int probaApparition, Potager pot, int duree)
+    public Animaux(int probaApparition, Potager pot, int duree, Simulation simu)
     {
         Nom = "Animal";
         ProbaApparition = probaApparition;
@@ -22,6 +23,7 @@ public abstract class Animaux
         X = rng.Next(0, Pot.Hauteur);
         Y = rng.Next(0, Pot.Longueur);
         Predateurs = new List<string>();
+        TourApparition = simu.NumeroTour;
     }
 
     public void Disparait()
