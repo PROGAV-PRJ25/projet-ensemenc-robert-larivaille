@@ -1,6 +1,5 @@
 
 using System.Globalization;
-
 public abstract class Plante
 {
     public string Espece { get; set; }
@@ -53,7 +52,7 @@ public abstract class Plante
             coorY = value;
         }
     }
-
+#pragma warning disable CS8618
     public Plante(int y, int x, Potager pot, Terrain terrain, Simulation simu)
     {
         Pot = pot;
@@ -70,7 +69,7 @@ public abstract class Plante
     }
     public Plante() { } //Pour faire fonctionner la méthode AssocierGrainePlante
 
-
+#pragma warning restore CS8618
 
     public void MettreAJourPlantesAutour()
     {
