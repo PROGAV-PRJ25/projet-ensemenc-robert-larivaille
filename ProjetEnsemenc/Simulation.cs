@@ -778,10 +778,10 @@ public class Simulation
             if (reponse == 2) Acheter(simu);
             if (reponse == 3) Arroser();
             if (reponse == 4) PoserAchat(simu);
-            if (reponse == 6) AfficherWiki();
+            if (reponse == 5) AfficherWiki();
         }
-        while (reponse != 5 && reponse != 7);
-        if (reponse == 5) NumeroTour += 1;
+        while (reponse != 6 && reponse != 7);
+        if (reponse == 6) NumeroTour += 1;
         if (reponse == 7) jeuEnCours = false;
     }
 
@@ -936,8 +936,8 @@ public class Simulation
         lignesDroite.Add("(2) Faire un Achat");
         lignesDroite.Add("(3) Arroser");
         lignesDroite.Add("(4) Poser un item de votre inventaire");
-        lignesDroite.Add("(5) Avancer dans le temps");
-        lignesDroite.Add("(6) Afficher le Wiki");
+        lignesDroite.Add("(5) Afficher le Wiki");
+        lignesDroite.Add("(6) Avancer dans le temps");
         lignesDroite.Add("(7) Quitter le jeu");
 
         int largeurAffichage = Pot.Longueur * 4;
